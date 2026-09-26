@@ -1,1 +1,28 @@
-{"schema":"sato.template-status/v1","cells":[]}
+{
+  "schema": "sato.template-status/v1",
+  "cells": [
+    {
+      "template": "base-guarded-trader",
+      "framework": "plain-ts",
+      "lane": "pinned",
+      "last_run": "2026-09-26",
+      "last_green": "2026-09-26",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.56.9"
+      },
+      "history": [
+        {
+          "date": "2026-09-26",
+          "result": "green"
+        }
+      ]
+    }
+  ]
+}
