@@ -1,0 +1,220 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://aggregator-api.kyberswap.com/base/api/v1/routes?tokenIn=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913&tokenOut=0x4200000000000000000000000000000000000006&amountIn=1000000000"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "code": 0,
+      "message": "successfully",
+      "data": {
+        "routeSummary": {
+          "tokenIn": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+          "amountIn": "1000000000",
+          "amountInUsd": "999.6219814650185",
+          "tokenOut": "0x4200000000000000000000000000000000000006",
+          "amountOut": "373559876336087320",
+          "amountOutUsd": "999.6605279019798",
+          "gas": "1353198",
+          "gasPrice": "6000000",
+          "gasUsd": "0.021727257867794038",
+          "l1FeeUsd": "0.000031552768495088596",
+          "extraFee": {
+            "feeAmount": "",
+            "chargeFeeBy": "",
+            "isInBps": false,
+            "feeReceiver": ""
+          },
+          "route": [
+            [
+              {
+                "pool": "elfomofi_0xb20000000000000000000078ee7ce2fe4908108c_0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+                "tokenIn": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+                "tokenOut": "0xb20000000000000000000078ee7ce2fe4908108c",
+                "swapAmount": "100580000",
+                "amountOut": "44801343",
+                "exchange": "elfomofi",
+                "poolType": "elfomofi",
+                "poolExtra": {
+                  "approvalAddress": "0xf0f0F0F0FB0d738452EfD03A28e8be14C76d5f73",
+                  "blockNumber": 51833647
+                },
+                "extra": {
+                  "_ce": {
+                    "prCnt": 1,
+                    "tgtAmtOut": "44801343",
+                    "ces": [
+                      {
+                        "pool": "0x853f5f1b92b16714fe6cda67caad0856b83c7ab9",
+                        "tokenIn": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+                        "tokenOut": "0xb20000000000000000000078ee7ce2fe4908108c",
+                        "swapAmount": "100580000",
+                        "amountOut": "44755710",
+                        "exchange": "aerodrome-cl-3",
+                        "poolType": "slipstream",
+                        "poolExtra": {
+                          "swapFee": 500,
+                          "priceLimit": "4295558253",
+                          "blockNumber": 51833641
+                        },
+                        "extra": {
+                          "rAI": "0",
+                          "nSqrtRx96": "52863579644688715052331662972",
+                          "nT": -8093
+                        }
+                      }
+                    ]
+                  },
+                  "_cs": "7238670901999823845",
+                  "_ts": "1790456647",
+                  "ri": "09a0d011YxBJPLxr"
+                }
+              },
+              {
+                "pool": "0x3154fe746060a121d877ade8c2c7dc31a1cffe96",
+                "tokenIn": "0xb20000000000000000000078ee7ce2fe4908108c",
+                "tokenOut": "0x4200000000000000000000000000000000000006",
+                "swapAmount": "44801343",
+                "amountOut": "37578420793893232",
+                "exchange": "1010-prop",
+                "poolType": "1010-prop",
+                "poolExtra": {
+                  "approvalAddress": "0x4a8e34cfe4f643132e8de0e9752054a9ac862816",
+                  "blockNumber": 51833644
+                },
+                "extra": {
+                  "_ce": {
+                    "prCnt": 0,
+                    "tgtAmtOut": "37578420793893232",
+                    "ces": [
+                      {
+                        "pool": "0x20e5fad2661ee9eb0c04824524030af31943b62d",
+                        "tokenIn": "0xb20000000000000000000078ee7ce2fe4908108c",
+                        "tokenOut": "0x4200000000000000000000000000000000000006",
+                        "swapAmount": "44801343",
+                        "amountOut": "37570470493970339",
+                        "exchange": "aerodrome-cl-3",
+                        "poolType": "uniswapv3",
+                        "poolExtra": {
+                          "swapFee": 500,
+                          "priceLimit": "1459840076248373162167899255275506587012164559122",
+                          "blockNumber": 51833615
+                        },
+                        "extra": {
+                          "rAI": "0",
+                          "nSqrtRx96": "2735298726039267836804434",
+                          "nT": -205488
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            [
+              {
+                "pool": "0xb4cb800910b228ed3d0834cf79d697127bbb00e5",
+                "tokenIn": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+                "tokenOut": "0x4200000000000000000000000000000000000006",
+                "swapAmount": "53790000",
+                "amountOut": "20092435979834664",
+                "exchange": "uniswapv3",
+                "poolType": "uniswapv3",
+                "poolExtra": {
+                  "swapFee": 100,
+                  "priceLimit": "1461446703485210103287273052203988822378723970341",
+                  "blockNumber": 51833649
+                },
+                "extra": {
+                  "_ss": {
+                    "pool": "0x258be4ea05f674e0b26aa71dfc08e0c87c499fb0",
+                    "tokenIn": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+                    "tokenOut": "0x4200000000000000000000000000000000000006",
+                    "swapAmount": "53790000",
+                    "amountOut": "20093265956584411",
+                    "exchange": "metric-propamm",
+                    "poolType": "metric-propamm",
+                    "poolExtra": {
+                      "swapDir": false,
+                      "priceProvider": "",
+                      "blockNumber": 51833597
+                    },
+                    "extra": null
+                  },
+                  "nSqrtRx96": "4099196036792579898135701",
+                  "nT": -197396,
+                  "rAI": "0"
+                }
+              }
+            ],
+            [
+              {
+                "pool": "0xd899ccae4c48889fd3d7040f3d05a552bfdcd2a5",
+                "tokenIn": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+                "tokenOut": "0x4200000000000000000000000000000000000006",
+                "swapAmount": "845630000",
+                "amountOut": "315889019562359424",
+                "exchange": "1010-prop",
+                "poolType": "1010-prop",
+                "poolExtra": {
+                  "approvalAddress": "0x4a8e34cfe4f643132e8de0e9752054a9ac862816",
+                  "blockNumber": 51833644
+                },
+                "extra": {
+                  "_ce": {
+                    "prCnt": 1,
+                    "tgtAmtOut": "315889019562359424",
+                    "ces": [
+                      {
+                        "pool": "0x72ab388e2e2f6facef59e3c3fa2c4e29011c2d38",
+                        "tokenIn": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+                        "tokenOut": "0x4200000000000000000000000000000000000006",
+                        "swapAmount": "845630000",
+                        "amountOut": "315848688712122904",
+                        "exchange": "pancake-v3",
+                        "poolType": "pancake-v3",
+                        "poolExtra": {
+                          "swapFee": 100,
+                          "priceLimit": "1461446703485210103287273052203988822378723970341",
+                          "blockNumber": 51833646
+                        },
+                        "extra": {
+                          "rAI": "0",
+                          "nSqrtRx96": "4099326968932415581320305",
+                          "nT": -197396
+                        }
+                      },
+                      {
+                        "pool": "0x258be4ea05f674e0b26aa71dfc08e0c87c499fb0",
+                        "tokenIn": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
+                        "tokenOut": "0x4200000000000000000000000000000000000006",
+                        "swapAmount": "845630000",
+                        "amountOut": "315884769946123580",
+                        "exchange": "metric-propamm",
+                        "poolType": "metric-propamm",
+                        "poolExtra": {
+                          "swapDir": false,
+                          "priceProvider": "",
+                          "blockNumber": 51833597
+                        },
+                        "extra": null
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          ],
+          "routerAddress": "0x6131B5fae19EA4f9D964eAc0408E4408b66337b5",
+          "routeID": "09a0d011YxBJPLxr",
+          "checksum": "7238670901999823845",
+          "timestamp": 1790456647
+        },
+        "routerAddress": "0x6131B5fae19EA4f9D964eAc0408E4408b66337b5"
+      },
+      "requestId": "09a0d011-6310-493c-bc6b-38ce7d4c87d5"
+    }
+  },
+  "recorded_at": "2026-09-26T21:04:07.518Z"
+}
