@@ -79,7 +79,10 @@ runs:
       run: |
         set -o pipefail
         start_anvil() {
-          anvil --fork-url "$1" --fork-block-number "${{ inputs.fork-block }}" --port 8547 --silent &
+          # anvil's own output goes to a file, never to the tee pipe below: a
+          # background process holding the pipe open keeps this step running.
+          anvil --fork-url "$1" --fork-block-number "${{ inputs.fork-block }}" --port 8547 --silent \
+            < /dev/null >> "$LOG_DIR/anvil.log" 2>&1 &
           echo $! > "$RUNNER_TEMP/anvil.pid"
           for _ in $(seq 1 90); do
             if curl -s -A "SatoHub-templates-ci/1.0" -H 'content-type: application/json' \
