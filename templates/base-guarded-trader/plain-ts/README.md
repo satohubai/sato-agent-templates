@@ -4,6 +4,8 @@
 
 A TypeScript agent on Base. It reads market data (block, gas, the Chainlink ETH/USD feed), decides with a small `Model` interface, and runs every intent through the Sato Kit (`@satohub/kit`): quote, prepare an unsigned transaction, simulate it, and check it against `policy.json` before anything could be signed.
 
+> **The kit is a vendored preview.** `@satohub/kit` 0.1.0 is not on npm yet; `vendor/` holds a preview build (the source commit is in `vendor/README.md`) and `package.json` installs it from there. When the kit is published, this template moves to the npm package at an exact version.
+
 **The kit's pre-flight explains every refusal; enforcement lives in the signer.** `policy.json` is read in this process, so anyone who can edit the process can edit the policy. On testnet the managed wallet enforces its own policy where the key lives.
 
 The badge shows the last date this template passed the nightly checks in [`status.json`](https://github.com/satohubai/sato-agent-templates/blob/main/status.json): install, typecheck, the fixture run, the tests, a fork check at a pinned Base block and a dependency custody check. It is a dated result, not a review.
@@ -26,11 +28,11 @@ Mainnet is not offered by this template.
 ### Fork
 
 ```sh
-anvil --fork-url https://mainnet.base.org --port 8545 &
-ANVIL_RPC_URL=http://127.0.0.1:8545 npm start -- --mode fork
+anvil --fork-url https://mainnet.base.org --fork-block-number 51800000 --port 8547 &
+ANVIL_RPC_URL=http://127.0.0.1:8547 npm start -- --mode fork
 ```
 
-`--record` writes every RPC answer the run needed into `fixtures/rpc.json`, which is how the fixtures are refreshed.
+To refresh the fixtures, run `npx tsx scripts/record-fixtures.ts` and then `npm start -- --mode fork --record` against that fork. `--record` writes every RPC answer the run needed into `fixtures/rpc.json` and every venue request and response (Sato Swap in recommend and build-tx mode, LI.FI) into `fixtures/http/`. Recording builds intents for the fixed address `0x…dEaD` (no key is held for it here) so the recordings are reproducible; the venue calls are live and send the user-agent `sato-template/base-guarded-trader@0.1.0`. In fixture mode an unrecorded request throws; it never reaches the network.
 
 ### Testnet with a CDP wallet
 
@@ -45,13 +47,17 @@ Without those variables, testnet mode refuses to start.
 
 1. **Read.** Block and gas price from the RPC; the Chainlink ETH/USD round through the kit's `chain.read`.
 2. **Decide.** `MockModel` (deterministic, no network) proposes the configured trade and one deliberately oversized trade. Replace it with anything that implements `Model` in `src/model.ts`.
-3. **Quote.** `swap.quote`. Sato Swap is the labelled default and a quote with no Sato fee is shown alongside it. The fee disclosure is printed word for word.
-4. **Prepare.** `swap.prepare` builds the unsigned transaction; the kit simulates it and runs the pre-flight. The run prints the prepared intent: its id, one-sentence summary, simulation result, fee disclosure and every refusal as `REFUSED rule=<id> limit=<value> observed=<value>`.
+3. **Quote.** `swap.quote`. Sato Swap is the labelled default and a LI.FI quote with no Sato fee is shown alongside it, in request order and unranked. Each fee disclosure is printed word for word.
+4. **Prepare.** `swap.prepare` builds the unsigned transaction (when the taker's allowance is short, that is the exact-amount approval, never an unlimited one); the kit simulates it and runs the pre-flight. The run prints the prepared intent: its id, one-sentence summary, simulation result, fee disclosure and every refusal as `REFUSED rule=<id> limit=<value> observed=<value>`.
 5. **Report.** `out/report.json` (shape in `schemas/output.json`). The run exits non-zero if the oversized intent was not refused.
 
 ## Venue and fee
 
-Sato Swap is the labelled default. Its fee is disclosed on every quote and printed verbatim, and a no-Sato-fee quote is shown alongside so you can compare. To skip Sato entirely, set `"venue": "direct"` in `config.json`; the kit then quotes the venue directly and makes no Sato call.
+Sato Swap is the labelled default. Its fee is disclosed on every quote and printed verbatim, and a no-Sato-fee quote is shown alongside so you can compare. To skip Sato entirely, set `"venue": "direct"` in `config.json`; the kit then quotes LI.FI only and makes no Sato call.
+
+### USD values for the caps
+
+The USD caps need the trade's USD value. The kit uses a venue's own figure when the venue returns one (LI.FI does; the Sato Swap response does not). Where it has none, `src/pricing.ts` fills it from named sources before the kit's own pre-flight runs: USDC is counted at 1.00 USD (an assumption, not a price read) and WETH at the Chainlink ETH/USD answer the run read. "Spent today" is what this process executed today, so it is 0 in fixture and fork runs and does not survive a restart; the managed wallet's policy is what enforces a daily limit. Any other token stays unknown, and `unknown_verdict: "refuse"` refuses it.
 
 ## policy.json
 
@@ -89,6 +95,7 @@ A refusal names its rule id, the limit and the value observed. The kit's pre-fli
 | `src/model.ts` | the `Model` interface and `MockModel` |
 | `src/runtime.ts` | builds the kit for each mode (signer, RPC, fetch) |
 | `src/kit-io.ts` | the kit action ids and input shapes, in one place |
+| `src/pricing.ts` | the USD facts for the caps, handed to the kit's pre-flight |
 | `src/fixtures.ts` | the offline transport and fetch; anything unrecorded throws |
 | `scripts/fork-check.ts` | the nightly fork check at block 51800000 (`npm run fork-check`) |
 | `fixtures/` | recorded RPC answers and venue quotes |

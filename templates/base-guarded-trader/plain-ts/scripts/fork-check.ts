@@ -17,7 +17,7 @@ import { encodeFunctionData, parseUnits } from "viem";
 import type { PreparedIntent } from "@satohub/kit";
 import { buildRuntime, FORK_FUNDING_WEI, type Runtime } from "../src/runtime.js";
 import { loadPolicy } from "../src/policy.js";
-import { ACTIONS, type ChainReadInput, type SwapInput } from "../src/kit-io.js";
+import { ACTIONS, fragment, type ChainReadInput, type ChainReadOutput, type SwapInput } from "../src/kit-io.js";
 import { ERC20_ABI, FEED_ABI, TOKENS } from "../src/tokens.js";
 import { EXPECTED, PINNED_BLOCK } from "./fork-expected.js";
 
@@ -70,27 +70,29 @@ async function main() {
 
   await step("kit.runtime", async () => {
     rt = await buildRuntime({ mode: "fork", policy, fixturesDir: new URL("../fixtures", import.meta.url).pathname, env: process.env, recordedQuotes: true });
-    const bal = await rt.client.getBalance({ address: rt.taker! });
+    const bal = await rt.client.getBalance({ address: await rt.signer!.address("base") });
     eq("throwaway key balance", bal, FORK_FUNDING_WEI);
-    return `throwaway ${rt.signer!.kind} key ${rt.taker}, funded ${bal} wei by anvil_setBalance`;
+    return `throwaway ${rt.signer!.kind} key ${await rt.signer!.address("base")}, funded ${bal} wei by anvil_setBalance`;
   });
 
   await step("kit.chain_read", async () => {
     if (!rt) throw new Error("no runtime");
-    const block = PINNED_BLOCK.toString();
-    const round = await rt.kit.read<readonly unknown[]>(ACTIONS.chainRead, { chain: "base", address: EXPECTED.eth_usd_feed.address, abi: FEED_ABI as never, function_name: "latestRoundData", block } satisfies ChainReadInput);
-    eq("kit latestRoundData.answer", round[1], EXPECTED.eth_usd_feed.answer);
-    eq("kit latestRoundData.updatedAt", round[3], EXPECTED.eth_usd_feed.updated_at);
-    const supply = await rt.kit.read(ACTIONS.chainRead, { chain: "base", address: EXPECTED.usdc.address, abi: ERC20_ABI as never, function_name: "totalSupply", block } satisfies ChainReadInput);
-    eq("kit USDC totalSupply", supply, EXPECTED.usdc.total_supply);
-    return "chain.read matches the pinned values";
+    // chain.read answers at the RPC's latest block; the fork sits at the pinned block (nothing is mined).
+    const round = await rt.kit.read<ChainReadOutput<readonly string[]>>(ACTIONS.chainRead, { kind: "contract_read", chain: "base", contract: EXPECTED.eth_usd_feed.address, abi: fragment(FEED_ABI, "latestRoundData") } satisfies ChainReadInput);
+    eq("kit block_number", round.block_number, PINNED_BLOCK);
+    eq("kit latestRoundData.answer", round.result[1], EXPECTED.eth_usd_feed.answer);
+    eq("kit latestRoundData.updatedAt", round.result[3], EXPECTED.eth_usd_feed.updated_at);
+    const supply = await rt.kit.read<ChainReadOutput<string>>(ACTIONS.chainRead, { kind: "contract_read", chain: "base", contract: EXPECTED.usdc.address, abi: fragment(ERC20_ABI, "totalSupply") } satisfies ChainReadInput);
+    eq("kit USDC totalSupply", supply.result, EXPECTED.usdc.total_supply);
+    rt.usd.eth_usd = Number(round.result[1]) / 1e8;
+    return `chain.read at block ${round.block_number} matches the pinned values`;
   });
 
   await step("kit.tx_simulate", async () => {
     if (!rt) throw new Error("no runtime");
     const data = encodeFunctionData({ abi: ERC20_ABI, functionName: "approve", args: [SPENDER, parseUnits("25", 6)] });
     const sim = await rt.kit.read<{ ok: boolean; error: string | null; method: string }>(ACTIONS.txSimulate, {
-      tx: { kind: "evm_tx", chain: "base", chain_id: 8453, from: rt.taker, to: TOKENS.base.USDC.address, data, value: "0" },
+      chain: "base", from: rt.taker, to: TOKENS.base.USDC.address, data, value: "0",
     });
     if (!sim.ok) throw new Error(`approve simulation failed: ${sim.error}`);
     return `unsigned USDC approve simulated ok via ${sim.method}`;
@@ -100,12 +102,12 @@ async function main() {
     if (!rt) throw new Error("no runtime");
     const input: SwapInput = {
       chain: "base",
-      token_in: TOKENS.base.USDC.address,
-      token_out: TOKENS.base.WETH.address,
-      amount_in_base_units: parseUnits(amount, 6).toString(),
+      sell_token: TOKENS.base.USDC.address,
+      buy_token: TOKENS.base.WETH.address,
+      sell_amount: parseUnits(amount, 6).toString(),
       slippage_bps: cfg.slippage_bps,
       venue: "sato",
-      taker: rt.taker!,
+      taker: rt.taker,
     };
     return rt.kit.prepare(ACTIONS.swapPrepare, input);
   };

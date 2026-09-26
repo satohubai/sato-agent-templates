@@ -10,8 +10,9 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseUnits } from "viem";
 import { parseArgs, parseConfig, UsageError, type AgentConfig } from "./config.js";
-import { writeRpcFixtures } from "./fixtures.js";
-import { ACTIONS, readQuotes, type SwapInput } from "./kit-io.js";
+import { writeHttpFixtures, writeRpcFixtures } from "./fixtures.js";
+import { ACTIONS, venueLabel, type SwapInput, type SwapQuoteOutput } from "./kit-io.js";
+import { usdValue } from "./pricing.js";
 import { readMarket } from "./market.js";
 import { MockModel, type Model, type TradeIdea } from "./model.js";
 import { loadPolicy } from "./policy.js";
@@ -26,12 +27,12 @@ function swapInput(rt: Runtime, cfg: AgentConfig, idea: TradeIdea): SwapInput {
   const tout = TOKENS[rt.chain][idea.token_out];
   return {
     chain: rt.chain,
-    token_in: tin.address,
-    token_out: tout.address,
-    amount_in_base_units: parseUnits(idea.amount, tin.decimals).toString(),
+    sell_token: tin.address,
+    buy_token: tout.address,
+    sell_amount: parseUnits(idea.amount, tin.decimals).toString(),
     slippage_bps: cfg.slippage_bps,
     venue: cfg.venue,
-    ...(rt.taker ? { taker: rt.taker } : {}),
+    taker: rt.taker,
   };
 }
 
@@ -54,7 +55,8 @@ async function main(): Promise<number> {
   line("venue", cfg.venue === "sato" ? "sato (Sato Swap, labelled default; a no-Sato-fee quote is shown alongside)" : "direct (no Sato call)");
 
   const rt = await buildRuntime({ mode: args.mode, policy, fixturesDir: FIXTURES_DIR, env: process.env, record: args.record });
-  line("signer", rt.signer ? `${rt.signer.kind} ${rt.taker}` : "none — fixture mode holds no key");
+  line("signer", rt.signer ? `${rt.signer.kind} ${await rt.signer.address(rt.chain)}` : "none — fixture mode holds no key");
+  line("intents built for", rt.taker);
   line("user-agent", USER_AGENT);
 
   const market = await readMarket(rt);
@@ -63,6 +65,8 @@ async function main(): Promise<number> {
   line("gas price", `${market.gas_price_gwei} gwei`);
   line("ETH/USD", market.eth_usd === null ? "unknown" : `${market.eth_usd.toFixed(2)} — ${market.eth_usd_feed}`);
   line("feed updated", market.eth_usd_updated_at ?? "unknown");
+  rt.usd.eth_usd = market.eth_usd;
+  line("USD for the caps", "USDC counted at 1.00 USD; WETH at the ETH/USD answer above; a venue's own USD value is used when it returns one");
 
   const ideas = model.decide(market, cfg);
   console.log(`\nModel ${model.name}: ${ideas.length} idea(s)`);
@@ -75,10 +79,11 @@ async function main(): Promise<number> {
     line("why", idea.reason);
     const input = swapInput(rt, cfg, idea);
 
-    const quote = await rt.kit.read(ACTIONS.swapQuote, input);
-    for (const q of readQuotes(quote)) {
-      line(`quote ${q.label ?? q.venue}`, `${q.amount_out_base_units} base units of ${idea.token_out}`);
-      if (q.fee_disclosure) console.log(`  Fee disclosure (${q.fee_disclosure.venue}), verbatim:\n    ${q.fee_disclosure.statement}`);
+    const quote = await rt.kit.read<SwapQuoteOutput>(ACTIONS.swapQuote, input);
+    console.log(`  ${quote.note}`);
+    for (const q of quote.quotes) {
+      line(`quote ${q.venue}`, `${venueLabel(q.venue)}: ${q.buy_amount ?? "no quote"} base units of ${idea.token_out}${q.route_via ? ` via ${q.route_via}` : ""}${q.error ? ` — ${q.error}` : ""}`);
+      console.log(`    fee, verbatim: ${q.fee_disclosure}`);
     }
 
     const prepared = await rt.kit.prepare(ACTIONS.swapPrepare, input);
@@ -90,6 +95,8 @@ async function main(): Promise<number> {
     if (args.execute && rt.mode === "testnet" && prepared.policy.ok && !idea.demo_refusal) {
       const receipt = await rt.kit.execute({ intent_id: prepared.intent_id });
       line("executed", `${receipt.status} ${receipt.tx_hash ?? ""}`);
+      const spent = usdValue(rt.chain, input.sell_token, input.sell_amount, rt.usd);
+      if (receipt.status === "executed" && spent !== null) rt.ledger.add(spent);
     }
   }
 
@@ -109,6 +116,8 @@ async function main(): Promise<number> {
   if (args.record && rt.recorded) {
     writeRpcFixtures(FIXTURES_DIR, rt.recorded, { recorded_from: "anvil fork of Base", note: "written by --mode fork --record" });
     console.log(`\nRecorded ${Object.keys(rt.recorded).length} RPC answer(s) into ${FIXTURES_DIR}/rpc.json`);
+    const names = writeHttpFixtures(FIXTURES_DIR, rt.recordedHttp ?? []);
+    console.log(`Recorded ${names.length} venue response(s) into ${FIXTURES_DIR}/http/: ${names.join(", ")}`);
   }
 
   console.log(`\nReport written to ${join(args.out, "report.json")}`);

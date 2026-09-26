@@ -3,7 +3,7 @@
 
 import { formatUnits } from "viem";
 import type { Runtime } from "./runtime.js";
-import { ACTIONS, type ChainReadInput } from "./kit-io.js";
+import { ACTIONS, fragment, type ChainReadInput, type ChainReadOutput } from "./kit-io.js";
 import { ETH_USD_FEED, FEED_ABI } from "./tokens.js";
 import type { MarketView } from "./model.js";
 
@@ -16,12 +16,12 @@ export type MarketSnapshot = MarketView & {
 export async function readMarket(rt: Runtime): Promise<MarketSnapshot> {
   const [block, gasPrice] = await Promise.all([rt.client.getBlockNumber(), rt.client.getGasPrice()]);
   const feed = ETH_USD_FEED[rt.chain];
-  const read = <O>(function_name: string) =>
-    rt.kit.read<O>(ACTIONS.chainRead, { chain: rt.chain, address: feed, abi: FEED_ABI as never, function_name } satisfies ChainReadInput);
+  const read = async <O>(name: string): Promise<O> =>
+    (await rt.kit.read<ChainReadOutput<O>>(ACTIONS.chainRead, { kind: "contract_read", chain: rt.chain, contract: feed, abi: fragment(FEED_ABI, name) } satisfies ChainReadInput)).result;
   const [decimals, description, round] = await Promise.all([
-    read<number | bigint | string>("decimals"),
+    read<number | string>("decimals"),
     read<string>("description"),
-    read<readonly [unknown, unknown, unknown, unknown, unknown]>("latestRoundData"),
+    read<readonly [string, string, string, string, string]>("latestRoundData"),
   ]);
   const dec = Number(decimals);
   const answer = BigInt(String(round[1]));

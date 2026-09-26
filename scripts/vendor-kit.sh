@@ -6,8 +6,9 @@
 #
 # <ref> is a branch, tag or commit sha. With no template dirs, every
 # templates/*/*/vendor directory that already holds a kit tarball is refreshed.
-# After it runs, re-lock each template (`npm install --package-lock-only`
-# inside it) so package-lock.json records the new tarball's integrity.
+# It also rewrites the kit's integrity in each template's package-lock.json
+# (npm keeps a stale integrity for an unchanged file: path). Run `npm ci`
+# inside the template afterwards to check the lock installs.
 set -euo pipefail
 
 REF="${1:?usage: scripts/vendor-kit.sh <ref> [template-dir ...]}"
@@ -47,5 +48,9 @@ Preview build of @satohub/kit, vendored until the package is published to npm; b
 
 Rebuild with \`scripts/vendor-kit.sh <ref>\` at the root of satohubai/sato-agent-templates.
 MD
+  if [ -f "$dir/package-lock.json" ]; then
+    INTEGRITY="sha512-$(openssl dgst -sha512 -binary "$dir/vendor/$NAME" | base64 | tr -d '\n')"
+    node -e 'const fs=require("fs");const [f,i]=process.argv.slice(1);const l=JSON.parse(fs.readFileSync(f,"utf8"));const p=l.packages&&l.packages["node_modules/@satohub/kit"];if(p){p.integrity=i;fs.writeFileSync(f,JSON.stringify(l,null,2)+"\n");}' "$dir/package-lock.json" "$INTEGRITY"
+  fi
   echo "vendored $NAME from $SHA into $dir/vendor"
 done
