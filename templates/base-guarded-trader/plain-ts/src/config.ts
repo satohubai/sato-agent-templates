@@ -41,7 +41,7 @@ export function parseArgs(argv: readonly string[]): Args {
     };
     if (a === "--mode") {
       const m = next();
-      if (m === "mainnet") throw new UsageError("mainnet is not offered by this template. Use fork (default) or testnet.");
+      if (m === "mainnet") throw new UsageError("mainnet is not offered by this template. Use fixture (the default), fork or testnet.");
       if (!(MODES as readonly string[]).includes(m)) throw new UsageError(`--mode must be one of ${MODES.join(", ")}`);
       args.mode = m as Mode;
     } else if (a === "--execute") args.execute = true;
