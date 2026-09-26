@@ -1,0 +1,6 @@
+{
+  "venue": "sato",
+  "amount_usdc": "10",
+  "over_cap_amount_usdc": "1000",
+  "slippage_bps": 50
+}

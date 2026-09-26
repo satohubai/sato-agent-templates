@@ -1,0 +1,95 @@
+name: nightly
+
+# Every template × framework on the pinned lane, every night, with no secrets.
+# The status job commits status.json and the badges to main daily; that commit
+# is by design — it also keeps this schedule alive past GitHub's 60-day idle
+# cutoff for scheduled workflows.
+
+on:
+  schedule:
+    - cron: "23 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nightly
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [base-guarded-trader]
+        framework: [plain-ts]
+        lane: [pinned]
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - id: verify
+        uses: ./.github/actions/verify-template
+        with:
+          template: ${{ matrix.template }}
+          framework: ${{ matrix.framework }}
+          lane: ${{ matrix.lane }}
+          result-file: ${{ runner.temp }}/result-${{ matrix.template }}-${{ matrix.framework }}-${{ matrix.lane }}.json
+
+      - id: upload
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: result-${{ matrix.template }}-${{ matrix.framework }}-${{ matrix.lane }}
+          path: ${{ runner.temp }}/result-${{ matrix.template }}-${{ matrix.framework }}-${{ matrix.lane }}.json
+          if-no-files-found: warn
+          retention-days: 30
+
+  status:
+    needs: verify
+    if: always() && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - id: setup_node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+
+      - id: download
+        # A night where every verify cell died before uploading must still be
+        # recorded: update-status.mjs writes a missing cell as error/no_result.
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: result-*
+          path: results
+          merge-multiple: true
+
+      - id: update
+        run: |
+          node scripts/update-status.mjs \
+            --results results --status status.json --badges badges \
+            --date "$(date -u +%F)" \
+            --expect "base-guarded-trader/plain-ts/pinned"
+
+      - id: commit
+        run: |
+          git add status.json badges
+          if git diff --cached --quiet; then
+            echo "status unchanged"
+            exit 0
+          fi
+          git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" \
+            commit -m "status: nightly $(date -u +%F)"
+          git push origin HEAD:main

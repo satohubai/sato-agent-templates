@@ -1,0 +1,136 @@
+name: "Verify one template cell"
+description: "Install, typecheck, fixture run, tests, anvil fork check and custody check for templates/<template>/<framework>, then write one result JSON. Uses no secrets."
+
+inputs:
+  template:
+    required: true
+  framework:
+    required: true
+  lane:
+    required: true
+  fork-block:
+    description: "The pinned Base block the fork check runs at."
+    required: false
+    default: "51800000"
+  result-file:
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - id: setup_node
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      with:
+        node-version: "22"
+
+    - id: foundry
+      uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1.9.1
+
+    - id: rpc_cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ~/.foundry/cache/rpc
+        key: foundry-rpc-base-${{ inputs.fork-block }}
+
+    - id: prepare
+      shell: bash
+      run: |
+        mkdir -p "$RUNNER_TEMP/logs"
+        echo "TEMPLATE_DIR=templates/${{ inputs.template }}/${{ inputs.framework }}" >> "$GITHUB_ENV"
+        echo "LOG_DIR=$RUNNER_TEMP/logs" >> "$GITHUB_ENV"
+
+    # The install is constrained to the npm registry: the lockfile is checked to
+    # resolve every package from registry.npmjs.org or the template's own
+    # vendor/ tarball, the registry is pinned on the command line, and
+    # --ignore-scripts stops any install-time script from running. This
+    # template needs none (tsx's esbuild binary arrives as an optional
+    # dependency, not through a postinstall).
+    - id: install
+      shell: bash
+      working-directory: ${{ env.TEMPLATE_DIR }}
+      run: |
+        set -o pipefail
+        { node "$GITHUB_WORKSPACE/scripts/check-lock-registry.mjs" package-lock.json && \
+          npm ci --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/ ; } 2>&1 | tee "$LOG_DIR/install.log"
+
+    - id: typecheck
+      shell: bash
+      working-directory: ${{ env.TEMPLATE_DIR }}
+      run: |
+        set -o pipefail
+        npm run typecheck 2>&1 | tee "$LOG_DIR/typecheck.log"
+
+    - id: fixture_run
+      shell: bash
+      working-directory: ${{ env.TEMPLATE_DIR }}
+      run: |
+        set -o pipefail
+        npm start -- --mode fixture 2>&1 | tee "$LOG_DIR/fixture_run.log"
+
+    - id: test
+      shell: bash
+      working-directory: ${{ env.TEMPLATE_DIR }}
+      run: |
+        set -o pipefail
+        npm test 2>&1 | tee "$LOG_DIR/test.log"
+
+    - id: anvil_start
+      shell: bash
+      run: |
+        set -o pipefail
+        start_anvil() {
+          # anvil's own output goes to a file, never to the tee pipe below: a
+          # background process holding the pipe open keeps this step running.
+          anvil --fork-url "$1" --fork-block-number "${{ inputs.fork-block }}" --port 8547 --silent \
+            < /dev/null >> "$LOG_DIR/anvil.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/anvil.pid"
+          for _ in $(seq 1 90); do
+            if curl -s -A "SatoHub-templates-ci/1.0" -H 'content-type: application/json' \
+                 --data '{"jsonrpc":"2.0","id":1,"method":"eth_chainId","params":[]}' \
+                 http://127.0.0.1:8547 | grep -q '"result"'; then
+              echo "anvil ready, forked from $1 at block ${{ inputs.fork-block }}"
+              return 0
+            fi
+            kill -0 "$(cat "$RUNNER_TEMP/anvil.pid")" 2>/dev/null || return 1
+            sleep 1
+          done
+          kill "$(cat "$RUNNER_TEMP/anvil.pid")" 2>/dev/null || true
+          return 1
+        }
+        { start_anvil https://mainnet.base.org || start_anvil https://base.drpc.org ; } 2>&1 | tee "$LOG_DIR/anvil_start.log"
+
+    - id: fork_check
+      shell: bash
+      working-directory: ${{ env.TEMPLATE_DIR }}
+      env:
+        ANVIL_RPC_URL: http://127.0.0.1:8547
+      run: |
+        set -o pipefail
+        npm run fork-check 2>&1 | tee "$LOG_DIR/fork_check.log"
+
+    - id: anvil_stop
+      if: always()
+      shell: bash
+      run: |
+        if [ -f "$RUNNER_TEMP/anvil.pid" ]; then kill "$(cat "$RUNNER_TEMP/anvil.pid")" 2>/dev/null || true; fi
+        pkill -x anvil 2>/dev/null || true
+
+    - id: custody
+      uses: satohubai/preflight-action@v1
+      with:
+        manifest: ${{ env.TEMPLATE_DIR }}/package.json
+        custody: "true"
+        fail_on: "no,key_egress_observed"
+        github-token: ""
+
+    - id: result
+      if: always()
+      shell: bash
+      env:
+        TEMPLATE: ${{ inputs.template }}
+        FRAMEWORK: ${{ inputs.framework }}
+        LANE: ${{ inputs.lane }}
+        STEPS_JSON: ${{ toJSON(steps) }}
+        STEP_ORDER: setup_node,foundry,rpc_cache,prepare,install,typecheck,fixture_run,test,anvil_start,fork_check,custody
+        OUT: ${{ inputs.result-file }}
+      run: node "$GITHUB_WORKSPACE/scripts/collect-result.mjs"

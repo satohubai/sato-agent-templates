@@ -2,7 +2,7 @@ node_modules/
 .env
 .env.*
 !.env.example
-dist/
-*.log
-out/
+.sato/intent.key
 .sato/
+out/
+*.log
