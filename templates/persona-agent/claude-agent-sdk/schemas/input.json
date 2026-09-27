@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "persona-agent inbound messages (fixtures/inbound/messages.json)",
+  "type": "object",
+  "required": ["messages"],
+  "properties": {
+    "messages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["connector", "chat_id", "user", "text"],
+        "properties": {
+          "connector": { "type": "string", "enum": ["telegram", "discord"] },
+          "chat_id": { "type": "string" },
+          "user": { "type": "string" },
+          "text": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "note": "Scripted inbound messages for fixture mode. They are replayed through fake connectors; nothing is sent to Telegram or Discord.",
+  "messages": [
+    { "connector": "telegram", "chat_id": "tg-fixture-chat", "user": "ada", "text": "gm Mira" },
+    { "connector": "discord", "chat_id": "dc-fixture-channel", "user": "lin", "text": "what do you remember about my agent?" },
+    { "connector": "telegram", "chat_id": "tg-fixture-chat", "user": "ada", "text": "quote 10 USDC to WETH please" },
+    { "connector": "discord", "chat_id": "dc-fixture-channel", "user": "lin", "text": "swap 1000 USDC to WETH right now" }
+  ]
+}

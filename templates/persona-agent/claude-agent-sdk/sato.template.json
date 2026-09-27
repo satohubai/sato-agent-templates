@@ -1,0 +1,70 @@
+{
+  "schema": "sato.template/v1",
+  "id": "persona-agent",
+  "version": "0.1.0",
+  "title": "Persona agent (Claude Agent SDK)",
+  "summary": "A character-driven agent on the Claude Agent SDK: a character file, a local JSONL memory with retrieval, optional Telegram and Discord connectors over their official Bot APIs, and a wallet through the Sato Kit that reads, quotes and prepares, with a policy pre-flight that names the rule, limit and observed value of every refusal. Fixture mode replays scripted messages with a scripted model: no network, no token, no key. Signing needs a person to approve it, on Base Sepolia only, and never on mainnet. No ElizaOS dependency.",
+  "runtime": { "kind": "node", "version": "22", "entrypoint": "src/agent.ts", "package_manager": "npm" },
+  "io_schemas": { "input": "schemas/input.json", "output": "schemas/output.json" },
+  "harness": {
+    "fixture_command": ["npm", "start", "--", "--mode", "fixture"],
+    "fixtures_dir": "fixtures",
+    "output_dir": "out",
+    "max_output_bytes": 262144
+  },
+  "model_policy": null,
+  "declared_secret_names": ["ANTHROPIC_API_KEY", "TELEGRAM_BOT_TOKEN", "DISCORD_BOT_TOKEN", "DISCORD_CHANNEL_IDS", "ANVIL_RPC_URL", "BASE_SEPOLIA_RPC_URL", "CDP_API_KEY_ID", "CDP_API_KEY_SECRET", "CDP_WALLET_SECRET"],
+  "capabilities": ["read:evm-contract", "quote:swap", "prepare:swap", "simulate:evm-tx"],
+  "requested_permissions": ["network:rpc-read", "network:venue-quote"],
+  "network": { "install": "registry-only", "test": "none" },
+  "tests": [
+    {
+      "id": "platform.fixtures",
+      "kind": "package",
+      "description": "The platform runs the fixture command over the shipped recordings and scripted messages (no network, no token, no key) and checks out/report.json against schemas/output.json: exit 0, a reply per message, and the over-cap wallet intent refused with its rule, limit and observed value."
+    },
+    {
+      "id": "package.own",
+      "kind": "package",
+      "advisory": true,
+      "command": ["npm", "test"],
+      "description": "The template's own tests. Recorded, never the verdict."
+    }
+  ],
+  "licenses": [
+    { "name": "persona-agent", "license": "MIT", "url": "https://github.com/satohubai/sato-agent-templates" },
+    { "name": "@satohub/kit", "license": "MIT", "url": "https://github.com/satohubai/sato-hub-integrations" },
+    { "name": "@anthropic-ai/claude-agent-sdk", "license": "SEE LICENSE IN README.md", "url": "https://github.com/anthropics/claude-agent-sdk-typescript" },
+    { "name": "viem", "license": "MIT", "url": "https://github.com/wevm/viem" },
+    { "name": "zod", "license": "MIT", "url": "https://github.com/colinhacks/zod" }
+  ],
+  "provenance": {
+    "authored_by": "sato-hub",
+    "first_party": true,
+    "notes": "Covers the character-and-connectors use case without ElizaOS. Deterministic over fixtures. Live modes are opt-in and never run in the platform's offline test phase."
+  },
+  "template": {
+    "framework": "claude-agent-sdk",
+    "intents": ["general", "payments"],
+    "chains": ["base", "base-sepolia"],
+    "networks": ["fork", "testnet"],
+    "default_network": "fork",
+    "slots_filled": {},
+    "swappable": [],
+    "policy_defaults": {
+      "network": "fork",
+      "allow_chains": ["base", "base-sepolia"],
+      "allow_tokens": [
+        "base:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "base:0x4200000000000000000000000000000000000006"
+      ],
+      "max_usd_per_trade": 25,
+      "max_usd_per_day": 100,
+      "max_slippage_bps": 100,
+      "unknown_verdict": "refuse",
+      "intent_ttl_s": 300,
+      "human_approval": true
+    },
+    "upstream": { "@satohub/kit": "0.1.0", "@anthropic-ai/claude-agent-sdk": "0.3.283", "viem": "2.56.9", "zod": "4.6.5", "tsx": "4.23.15", "typescript": "5.9.3" }
+  }
+}
