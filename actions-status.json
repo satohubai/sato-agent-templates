@@ -1,0 +1,997 @@
+{
+  "schema": "sato.action-status/v1",
+  "updated": "2026-09-27",
+  "actions": [
+    {
+      "id": "agentkit-provider:defillama.find_protocol",
+      "name": "DefiLlamaActionProvider_find_protocol",
+      "source": {
+        "kind": "agentkit-provider",
+        "package": "@coinbase/agentkit",
+        "version": "0.10.4",
+        "repo_url": "https://github.com/coinbase/agentkit"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "reads",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40coinbase%2Fagentkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:0416327663347b81a6af0d075868c885c06a9e6b291713d0407ce1a65865e6b5",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.10.4",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "agentkit-provider:defillama.get_token_prices",
+      "name": "DefiLlamaActionProvider_get_token_prices",
+      "source": {
+        "kind": "agentkit-provider",
+        "package": "@coinbase/agentkit",
+        "version": "0.10.4",
+        "repo_url": "https://github.com/coinbase/agentkit"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "reads",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40coinbase%2Fagentkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:f1a7a8f81e181b2c95971b264800a7cb491973bfa4c16040ba4af0da0a241780",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.10.4",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "agentkit-provider:erc20.get_allowance",
+      "name": "ERC20ActionProvider_get_allowance",
+      "source": {
+        "kind": "agentkit-provider",
+        "package": "@coinbase/agentkit",
+        "version": "0.10.4",
+        "repo_url": "https://github.com/coinbase/agentkit"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "reads",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40coinbase%2Fagentkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:b346ebedc4241f43dd0d6819b23e479ec4c36958cfe5c7a44059af2867226934",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.10.4",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "agentkit-provider:erc20.get_balance",
+      "name": "ERC20ActionProvider_get_balance",
+      "source": {
+        "kind": "agentkit-provider",
+        "package": "@coinbase/agentkit",
+        "version": "0.10.4",
+        "repo_url": "https://github.com/coinbase/agentkit"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "reads",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40coinbase%2Fagentkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:7fd96ba25646b518bc83b0c928d6428456096cd3e12eaa2b6fbbbc48c06d94e6",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.10.4",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "agentkit-provider:pyth.fetch_price",
+      "name": "PythActionProvider_fetch_price",
+      "source": {
+        "kind": "agentkit-provider",
+        "package": "@coinbase/agentkit",
+        "version": "0.10.4",
+        "repo_url": "https://github.com/coinbase/agentkit"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "reads",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40coinbase%2Fagentkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:cc33cc6dd4b88093cc16768f198834c9edcea73ec403df320d7ef0c67076b73c",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.10.4",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "agentkit-provider:pyth.fetch_price_feed",
+      "name": "PythActionProvider_fetch_price_feed",
+      "source": {
+        "kind": "agentkit-provider",
+        "package": "@coinbase/agentkit",
+        "version": "0.10.4",
+        "repo_url": "https://github.com/coinbase/agentkit"
+      },
+      "checks": {
+        "conformance": {
+          "result": "fail",
+          "step": "call",
+          "detail": "Cannot read properties of undefined (reading 'toLowerCase')"
+        },
+        "schema_lint": {
+          "result": "findings",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": [
+            {
+              "path": "description",
+              "rule": "description_price",
+              "message": "no prices or fees in a description — disclose them in the response"
+            }
+          ]
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "reads",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40coinbase%2Fagentkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:54613a3f93986246f77b5002ca07de107d9d6f61db23cdbdd2ced907c0442f31",
+          "previous_digest": null
+        }
+      },
+      "result": "red",
+      "failing_step": "call",
+      "upstream_version": "0.10.4",
+      "last_run": "2026-09-27",
+      "last_green": null,
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "red"
+        }
+      ]
+    },
+    {
+      "id": "protocol-mcp:dexpaprika-mcp.getNetworks",
+      "name": "getNetworks",
+      "source": {
+        "kind": "protocol-mcp",
+        "package": "dexpaprika-mcp",
+        "version": "2.5.1",
+        "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "none_found",
+            "key_leaves": "not_observed",
+            "moves_funds": "none_found"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3Adexpaprika-mcp"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:39c9b062095025c569bf5f33b076fbdd046a3a68f66176642c0a41e8da6bf4fc",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "2.5.1",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "protocol-mcp:dexpaprika-mcp.getTokenDetails",
+      "name": "getTokenDetails",
+      "source": {
+        "kind": "protocol-mcp",
+        "package": "dexpaprika-mcp",
+        "version": "2.5.1",
+        "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
+      },
+      "checks": {
+        "conformance": {
+          "result": "fail",
+          "step": "assert",
+          "detail": "the tool answered an error: MCP error -32602: Output validation error: Invalid structured content for tool getTokenDetails: Invalid input at total_supply"
+        },
+        "schema_lint": {
+          "result": "findings",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": [
+            {
+              "path": "input_schema.properties.token_address",
+              "rule": "address_not_patterned_string",
+              "message": "token_address must be a string with a pattern, e.g. \"^0x[0-9a-fA-F]{40}$\""
+            },
+            {
+              "path": "output_schema.properties.chain",
+              "rule": "chain_not_enum",
+              "message": "chain must be an enum of the chains the action supports"
+            },
+            {
+              "path": "output_schema.properties.total_supply.type",
+              "rule": "type_array",
+              "message": "one type per node — use a single type (make optional fields optional instead of nullable)"
+            }
+          ]
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "none_found",
+            "key_leaves": "not_observed",
+            "moves_funds": "none_found"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3Adexpaprika-mcp"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:c14c4383e14adf1482670af416ff20e194748412437ba545999709d19f11543b",
+          "previous_digest": null
+        }
+      },
+      "result": "red",
+      "failing_step": "assert",
+      "upstream_version": "2.5.1",
+      "last_run": "2026-09-27",
+      "last_green": null,
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "red"
+        }
+      ]
+    },
+    {
+      "id": "protocol-mcp:evm-mcp-server.get_block",
+      "name": "get_block",
+      "source": {
+        "kind": "protocol-mcp",
+        "package": "@mcpdotdirect/evm-mcp-server",
+        "version": "2.0.4",
+        "repo_url": "https://github.com/mcpdotdirect/evm-mcp-server"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "reads",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40mcpdotdirect%2Fevm-mcp-server"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:183621a41004bda0154b0f9125b8409500ba346ea60fd8b3c7d7b2c5587d3325",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "2.0.4",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "protocol-mcp:evm-mcp-server.get_chain_info",
+      "name": "get_chain_info",
+      "source": {
+        "kind": "protocol-mcp",
+        "package": "@mcpdotdirect/evm-mcp-server",
+        "version": "2.0.4",
+        "repo_url": "https://github.com/mcpdotdirect/evm-mcp-server"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "reads",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40mcpdotdirect%2Fevm-mcp-server"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:6193baf956d1f8aa2ac2f491ad7eeff064b3a80b72b658b1c4740cf6e9be823c",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "2.0.4",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "protocol-mcp:openzeppelin-contracts-mcp.solidity-erc20",
+      "name": "solidity-erc20",
+      "source": {
+        "kind": "protocol-mcp",
+        "package": "@openzeppelin/contracts-mcp",
+        "version": "0.7.1",
+        "repo_url": "https://github.com/OpenZeppelin/contracts-wizard"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "answered",
+          "answers": {
+            "takes_key": "none_found",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40openzeppelin%2Fcontracts-mcp"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:394b71cd7b87f46b3fae3b25a768b1d14b228386915a6be1b60074dece4ab57e",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.7.1",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "sato-kit:chain.read",
+      "name": "chain_read",
+      "source": {
+        "kind": "sato-kit",
+        "package": "@satohub/kit",
+        "version": "0.1.0",
+        "repo_url": "https://github.com/satohubai/sato-hub-integrations"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "unknown",
+          "answers": {
+            "takes_key": "unknown",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:045f6d405253ac08056823ff5afbe8eeb5355d119879632322eacef7db45410e",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.1.0",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "sato-kit:erc8004.lookup",
+      "name": "erc8004_lookup",
+      "source": {
+        "kind": "sato-kit",
+        "package": "@satohub/kit",
+        "version": "0.1.0",
+        "repo_url": "https://github.com/satohubai/sato-hub-integrations"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "unknown",
+          "answers": {
+            "takes_key": "unknown",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:5fb4501c1b311eaed30d6c2188897b41e8593505259ab493c795eb9845c8d3bc",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.1.0",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "sato-kit:swap.prepare",
+      "name": "swap_prepare",
+      "source": {
+        "kind": "sato-kit",
+        "package": "@satohub/kit",
+        "version": "0.1.0",
+        "repo_url": "https://github.com/satohubai/sato-hub-integrations"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "unknown",
+          "answers": {
+            "takes_key": "unknown",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:16f5a863a902d79e9912766ab37afaf5b16d94efc3b19a42836d1443095866c6",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.1.0",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "sato-kit:swap.quote",
+      "name": "swap_quote",
+      "source": {
+        "kind": "sato-kit",
+        "package": "@satohub/kit",
+        "version": "0.1.0",
+        "repo_url": "https://github.com/satohubai/sato-hub-integrations"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "unknown",
+          "answers": {
+            "takes_key": "unknown",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:b853a28d7d11260b5973ce5fc07dcdbf3950d3f678b3c8b0b815558ac0bed31f",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.1.0",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "sato-kit:x402.prepare",
+      "name": "x402_prepare",
+      "source": {
+        "kind": "sato-kit",
+        "package": "@satohub/kit",
+        "version": "0.1.0",
+        "repo_url": "https://github.com/satohubai/sato-hub-integrations"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "unknown",
+          "answers": {
+            "takes_key": "unknown",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:75822250773faba48890867d09637cef8a3dd8f7483cf8d20e9d4f3e7eb18458",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "0.1.0",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "skill:uniswap-ai.swap-integration",
+      "name": "swap-integration",
+      "source": {
+        "kind": "skill",
+        "package": "github:Uniswap/uniswap-ai",
+        "version": "bff480cf4617",
+        "repo_url": "https://github.com/Uniswap/uniswap-ai"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "unknown",
+          "answers": {
+            "takes_key": "unknown",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/skill/uniswap%2Funiswap-ai"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:b430ebe6938f5e3f46ada8ff5bac857f9bed9af76a06cfd18342453018ed4d2a",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "bff480cf4617",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "skill:uniswap-ai.swap-planner",
+      "name": "swap-planner",
+      "source": {
+        "kind": "skill",
+        "package": "github:Uniswap/uniswap-ai",
+        "version": "bff480cf4617",
+        "repo_url": "https://github.com/Uniswap/uniswap-ai"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "unknown",
+          "answers": {
+            "takes_key": "unknown",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/skill/uniswap%2Funiswap-ai"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:a9eb070a2e5afb0595eba6a6e13cbeb5caa9a126c6d4f050207247460f0a8ff8",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "bff480cf4617",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "id": "skill:uniswap-ai.viem-integration",
+      "name": "viem-integration",
+      "source": {
+        "kind": "skill",
+        "package": "github:Uniswap/uniswap-ai",
+        "version": "bff480cf4617",
+        "repo_url": "https://github.com/Uniswap/uniswap-ai"
+      },
+      "checks": {
+        "conformance": {
+          "result": "pass",
+          "step": null,
+          "detail": null
+        },
+        "schema_lint": {
+          "result": "pass",
+          "hosts": {
+            "openai": [],
+            "cursor": [],
+            "claude": []
+          },
+          "portable": []
+        },
+        "custody": {
+          "result": "unknown",
+          "answers": {
+            "takes_key": "unknown",
+            "key_leaves": "unknown",
+            "moves_funds": "unknown"
+          },
+          "check_url": "https://satohub.ai/check/skill/uniswap%2Funiswap-ai"
+        },
+        "description_drift": {
+          "result": "first_seen",
+          "digest": "sha256:8cf09130115ae572a313599e45c8806b04395b76eaac126e576870768daa6b18",
+          "previous_digest": null
+        }
+      },
+      "result": "green",
+      "failing_step": null,
+      "upstream_version": "bff480cf4617",
+      "last_run": "2026-09-27",
+      "last_green": "2026-09-27",
+      "history": [
+        {
+          "date": "2026-09-27",
+          "result": "green"
+        }
+      ]
+    }
+  ]
+}
