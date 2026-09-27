@@ -1,0 +1,156 @@
+{
+  "schema": "sato.template/v1",
+  "id": "base-guarded-trader",
+  "version": "0.1.0",
+  "title": "Base guarded trader (OpenAI Agents SDK)",
+  "summary": "Reads Base market data (block, gas, Chainlink ETH/USD) and hands the Sato Kit's tools to an OpenAI Agents SDK agent as function tools; the runner stops for a person's approval before any prepare that would sign and before execute. Every intent is quoted, prepared, simulated and checked by a policy pre-flight that names the rule, limit and observed value of every refusal. Fixture mode runs the SDK's runner with a scripted model: no model API, no key, no network. It signs only on a local fork with a throwaway key or on Base Sepolia with a managed wallet, and never on mainnet.",
+  "runtime": {
+    "kind": "node",
+    "version": "22",
+    "entrypoint": "src/agent.ts",
+    "package_manager": "npm"
+  },
+  "io_schemas": {
+    "input": "schemas/input.json",
+    "output": "schemas/output.json"
+  },
+  "harness": {
+    "fixture_command": [
+      "npm",
+      "start",
+      "--",
+      "--mode",
+      "fixture"
+    ],
+    "fixtures_dir": "fixtures",
+    "output_dir": "out",
+    "max_output_bytes": 262144
+  },
+  "model_policy": null,
+  "declared_secret_names": [
+    "OPENAI_API_KEY",
+    "ANVIL_RPC_URL",
+    "BASE_SEPOLIA_RPC_URL",
+    "CDP_API_KEY_ID",
+    "CDP_API_KEY_SECRET",
+    "CDP_WALLET_SECRET"
+  ],
+  "capabilities": [
+    "read:evm-contract",
+    "quote:swap",
+    "prepare:swap",
+    "simulate:evm-tx"
+  ],
+  "requested_permissions": [
+    "network:rpc-read",
+    "network:venue-quote",
+    "network:model-api"
+  ],
+  "network": {
+    "install": "registry-only",
+    "test": "none"
+  },
+  "tests": [
+    {
+      "id": "platform.fixtures",
+      "kind": "package",
+      "description": "The platform runs the fixture command over the shipped recordings (no network, no key, no model API) and checks out/report.json against schemas/output.json: exit 0, the over-cap intent refused with its rule, limit and observed value, and the execute call stopped at the runner's approval interruption."
+    },
+    {
+      "id": "package.own",
+      "kind": "package",
+      "advisory": true,
+      "command": [
+        "npm",
+        "test"
+      ],
+      "description": "The template's own tests. Recorded, never the verdict."
+    },
+    {
+      "id": "unit.fork-check",
+      "kind": "unit",
+      "description": "Nightly in satohubai/sato-agent-templates: an anvil fork of Base at block 51800000 with recorded quotes; exact reads, an approve simulation and pre-flight outcomes. Never broadcasts."
+    }
+  ],
+  "licenses": [
+    {
+      "name": "base-guarded-trader",
+      "license": "MIT",
+      "url": "https://github.com/satohubai/sato-agent-templates"
+    },
+    {
+      "name": "@satohub/kit",
+      "license": "MIT",
+      "url": "https://github.com/satohubai/sato-hub-integrations"
+    },
+    {
+      "name": "@openai/agents",
+      "license": "MIT",
+      "url": "https://github.com/openai/openai-agents-js"
+    },
+    {
+      "name": "zod",
+      "license": "MIT",
+      "url": "https://github.com/colinhacks/zod"
+    },
+    {
+      "name": "viem",
+      "license": "MIT",
+      "url": "https://github.com/wevm/viem"
+    }
+  ],
+  "provenance": {
+    "authored_by": "sato-hub",
+    "first_party": true,
+    "migrated_from": "https://github.com/satohubai/base-agent-starter",
+    "notes": "Same goal as base-guarded-trader/plain-ts, hosted by the OpenAI Agents SDK through @satohub/kit/openai-agents. Deterministic over fixtures with a scripted model inside the SDK's runner. Live model, fork and testnet modes are opt-in and never run in the platform's offline test phase."
+  },
+  "template": {
+    "framework": "openai-agents",
+    "intents": [
+      "trading",
+      "swap"
+    ],
+    "chains": [
+      "base",
+      "base-sepolia"
+    ],
+    "networks": [
+      "fork",
+      "testnet"
+    ],
+    "default_network": "fork",
+    "slots_filled": {
+      "wallet": "coinbase-agentic-wallets",
+      "data": "chainlink-for-agents"
+    },
+    "swappable": [
+      "wallet",
+      "data"
+    ],
+    "policy_defaults": {
+      "network": "fork",
+      "allow_chains": [
+        "base",
+        "base-sepolia"
+      ],
+      "allow_tokens": [
+        "base:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "base:0x4200000000000000000000000000000000000006"
+      ],
+      "max_usd_per_trade": 25,
+      "max_usd_per_day": 100,
+      "max_slippage_bps": 100,
+      "unknown_verdict": "refuse",
+      "intent_ttl_s": 300
+    },
+    "upstream": {
+      "@satohub/kit": "0.1.0",
+      "@openai/agents": "0.18.0",
+      "zod": "4.6.5",
+      "viem": "2.56.9",
+      "tsx": "4.23.15",
+      "typescript": "5.9.3"
+    }
+  }
+}
