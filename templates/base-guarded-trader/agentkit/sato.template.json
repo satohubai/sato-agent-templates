@@ -1,0 +1,148 @@
+{
+  "schema": "sato.template/v1",
+  "id": "base-guarded-trader",
+  "version": "0.1.0",
+  "title": "Base guarded trader (Coinbase AgentKit)",
+  "summary": "A Coinbase AgentKit agent on Base: the Sato Kit's tools reach AgentKit through one action provider. It reads Base market data (block, gas, Chainlink ETH/USD), a small Model names the AgentKit actions to call, and every intent goes through quote, prepare, simulate and a policy pre-flight that names the rule, limit and observed value of every refusal. Fixture mode needs no network and no key. It signs only on a local fork with a throwaway key or on Base Sepolia with a CDP smart wallet, never on mainnet, and execute needs a person's approval.",
+  "runtime": {
+    "kind": "node",
+    "version": "22",
+    "entrypoint": "src/agent.ts",
+    "package_manager": "npm"
+  },
+  "io_schemas": {
+    "input": "schemas/input.json",
+    "output": "schemas/output.json"
+  },
+  "harness": {
+    "fixture_command": [
+      "npm",
+      "start",
+      "--",
+      "--mode",
+      "fixture"
+    ],
+    "fixtures_dir": "fixtures",
+    "output_dir": "out",
+    "max_output_bytes": 262144
+  },
+  "model_policy": null,
+  "declared_secret_names": [
+    "ANVIL_RPC_URL",
+    "BASE_SEPOLIA_RPC_URL",
+    "CDP_API_KEY_ID",
+    "CDP_API_KEY_SECRET",
+    "CDP_WALLET_SECRET"
+  ],
+  "capabilities": [
+    "read:evm-contract",
+    "quote:swap",
+    "prepare:swap",
+    "simulate:evm-tx"
+  ],
+  "requested_permissions": [
+    "network:rpc-read",
+    "network:venue-quote"
+  ],
+  "network": {
+    "install": "registry-only",
+    "test": "none"
+  },
+  "tests": [
+    {
+      "id": "platform.fixtures",
+      "kind": "package",
+      "description": "The platform runs the fixture command over the shipped recordings (no network, no key) and checks out/report.json against schemas/output.json: exit 0, and the over-cap intent refused with its rule, limit and observed value."
+    },
+    {
+      "id": "package.own",
+      "kind": "package",
+      "advisory": true,
+      "command": [
+        "npm",
+        "test"
+      ],
+      "description": "The template's own tests. Recorded, never the verdict."
+    },
+    {
+      "id": "unit.fork-check",
+      "kind": "unit",
+      "description": "Nightly in satohubai/sato-agent-templates: an anvil fork of Base at block 51800000 with recorded quotes; exact reads, an approve simulation, pre-flight outcomes through the AgentKit actions, and execute refused without an approve callback. Never broadcasts."
+    }
+  ],
+  "licenses": [
+    {
+      "name": "base-guarded-trader",
+      "license": "MIT",
+      "url": "https://github.com/satohubai/sato-agent-templates"
+    },
+    {
+      "name": "@satohub/kit",
+      "license": "MIT",
+      "url": "https://github.com/satohubai/sato-hub-integrations"
+    },
+    {
+      "name": "@coinbase/agentkit",
+      "license": "Apache-2.0",
+      "url": "https://github.com/coinbase/agentkit"
+    },
+    {
+      "name": "viem",
+      "license": "MIT",
+      "url": "https://github.com/wevm/viem"
+    }
+  ],
+  "provenance": {
+    "authored_by": "sato-hub",
+    "first_party": true,
+    "migrated_from": "https://github.com/satohubai/base-agent-starter",
+    "notes": "Deterministic over fixtures. Same goal as base-guarded-trader/plain-ts, on Coinbase AgentKit through @satohub/kit/agentkit. AgentKit's built-in wallet-provider analytics call is turned off in src/agentkit.ts. Fork and testnet modes are opt-in and never run in the platform's offline test phase."
+  },
+  "template": {
+    "framework": "agentkit",
+    "intents": [
+      "trading",
+      "swap"
+    ],
+    "chains": [
+      "base",
+      "base-sepolia"
+    ],
+    "networks": [
+      "fork",
+      "testnet"
+    ],
+    "default_network": "fork",
+    "slots_filled": {
+      "wallet": "coinbase-agentic-wallets",
+      "data": "chainlink-for-agents"
+    },
+    "swappable": [
+      "wallet",
+      "data"
+    ],
+    "policy_defaults": {
+      "network": "fork",
+      "allow_chains": [
+        "base",
+        "base-sepolia"
+      ],
+      "allow_tokens": [
+        "base:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "base:0x4200000000000000000000000000000000000006"
+      ],
+      "max_usd_per_trade": 25,
+      "max_usd_per_day": 100,
+      "max_slippage_bps": 100,
+      "unknown_verdict": "refuse",
+      "intent_ttl_s": 300
+    },
+    "upstream": {
+      "@satohub/kit": "0.1.0",
+      "@coinbase/agentkit": "0.10.4",
+      "viem": "2.38.3",
+      "tsx": "4.23.15",
+      "typescript": "5.9.3"
+    }
+  }
+}
