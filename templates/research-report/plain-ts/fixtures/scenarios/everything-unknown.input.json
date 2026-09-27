@@ -1,0 +1,32 @@
+{
+  "_note": "A corpus that establishes nothing about the question. Unknowns are their own array; findings stays empty rather than being padded with hedged statements.",
+  "input": {
+    "now": "2026-09-20T00:00:00.000Z",
+    "question": "Who controls the treasury contract and what did it receive?",
+    "sources": [
+      {
+        "id": "s1",
+        "kind": "project-docs",
+        "url": "https://example.invalid/a",
+        "retrieved_at": "2026-09-19T10:00:00.000Z",
+        "content": "This page describes the project roadmap and names no contract."
+      }
+    ]
+  },
+  "fixture": {
+    "model_response": {
+      "findings": [],
+      "conflicts": [],
+      "unknowns": [
+        {
+          "question": "Who controls the treasury contract?",
+          "reason": "the supplied source names no contract or controller"
+        },
+        {
+          "question": "What did the contract receive?",
+          "reason": "no transfer data was supplied"
+        }
+      ]
+    }
+  }
+}

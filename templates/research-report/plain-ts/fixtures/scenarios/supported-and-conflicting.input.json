@@ -1,0 +1,66 @@
+{
+  "_note": "Supporting and conflicting evidence. Every finding cites a supplied source and every number appears in a cited source, so all survive; the multisig disagreement is a conflict, not a finding.",
+  "input": {
+    "now": "2026-09-20T00:00:00.000Z",
+    "question": "Who controls the treasury contract and what did it receive?",
+    "sources": [
+      {
+        "id": "s1",
+        "kind": "block-explorer",
+        "url": "https://example.invalid/tx/1",
+        "retrieved_at": "2026-09-19T10:00:00.000Z",
+        "content": "Contract 0x1111111111111111111111111111111111111111 received 4200 USDC on 2026-09-01 in a single transfer."
+      },
+      {
+        "id": "s2",
+        "kind": "project-docs",
+        "url": "https://example.invalid/docs",
+        "retrieved_at": "2026-09-19T10:05:00.000Z",
+        "content": "The treasury contract is upgradeable and controlled by a 3 of 5 multisig."
+      },
+      {
+        "id": "s3",
+        "kind": "forum-post",
+        "url": "https://example.invalid/forum/9",
+        "retrieved_at": "2026-09-19T10:10:00.000Z",
+        "content": "A community member states the multisig is 2 of 3, contradicting the documentation."
+      }
+    ]
+  },
+  "fixture": {
+    "model_response": {
+      "findings": [
+        {
+          "statement": "The contract received 4200 USDC in a single transfer.",
+          "source_ids": [
+            "s1"
+          ],
+          "confidence": "high"
+        },
+        {
+          "statement": "The treasury contract is upgradeable.",
+          "source_ids": [
+            "s2"
+          ],
+          "confidence": "high"
+        }
+      ],
+      "conflicts": [
+        {
+          "topic": "multisig threshold",
+          "source_ids": [
+            "s2",
+            "s3"
+          ],
+          "detail": "documentation says 3 of 5; a forum post says 2 of 3"
+        }
+      ],
+      "unknowns": [
+        {
+          "question": "Who holds the multisig keys?",
+          "reason": "no supplied source names a key holder"
+        }
+      ]
+    }
+  }
+}

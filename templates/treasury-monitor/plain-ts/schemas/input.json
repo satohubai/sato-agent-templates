@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/satohubai/sato-agent-templates/templates/treasury-monitor/plain-ts/schemas/input.json",
+  "title": "Treasury monitor input",
+  "description": "A PUBLIC address list, the assets to read at each, integer base-unit thresholds and optional USD prices you name a source for. No key, no secret and no signing material appears here or anywhere else in this template: it only reads.",
+  "type": "object",
+  "required": [
+    "assets",
+    "addresses"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "now": {
+      "type": "string",
+      "description": "Optional observation timestamp, so a run is reproducible. Defaults to the run's clock."
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "symbol",
+          "decimals"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "symbol": {
+            "type": "string",
+            "maxLength": 20
+          },
+          "decimals": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 36
+          },
+          "token": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ERC-20 address, or null for the chain's native asset."
+          }
+        }
+      }
+    },
+    "addresses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "label",
+          "address",
+          "chain",
+          "assets"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "address": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{40}$"
+          },
+          "chain": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            }
+          }
+        }
+      }
+    },
+    "thresholds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "chain",
+          "address",
+          "asset",
+          "direction",
+          "base_units"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "chain": {
+            "type": "integer"
+          },
+          "address": {
+            "type": "string",
+            "pattern": "^0x[0-9a-fA-F]{40}$"
+          },
+          "asset": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "direction": {
+            "enum": [
+              "below",
+              "above"
+            ]
+          },
+          "base_units": {
+            "type": "string",
+            "pattern": "^[0-9]+$"
+          }
+        }
+      }
+    },
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "firing": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200
+          }
+        }
+      }
+    },
+    "prices": {
+      "type": "array",
+      "description": "Unit prices you supply, each with the source you name. Without one, a holding is reported with value_usd null.",
+      "items": {
+        "type": "object",
+        "required": [
+          "asset",
+          "usd",
+          "source"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "asset": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "usd": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]{1,6})?$"
+          },
+          "source": {
+            "type": "string",
+            "maxLength": 120
+          }
+        }
+      }
+    }
+  }
+}

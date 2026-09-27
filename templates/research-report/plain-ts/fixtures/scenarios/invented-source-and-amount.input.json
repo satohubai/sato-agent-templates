@@ -1,0 +1,59 @@
+{
+  "_note": "The model fabricates: a citation to a source that was never supplied, and an amount that appears in no cited source. Both findings must be REJECTED with their reasons, and sources_used must not name the fabricated id.",
+  "input": {
+    "now": "2026-09-20T00:00:00.000Z",
+    "question": "Who controls the treasury contract and what did it receive?",
+    "sources": [
+      {
+        "id": "s1",
+        "kind": "block-explorer",
+        "url": "https://example.invalid/tx/1",
+        "retrieved_at": "2026-09-19T10:00:00.000Z",
+        "content": "Contract 0x1111111111111111111111111111111111111111 received 4200 USDC on 2026-09-01 in a single transfer."
+      },
+      {
+        "id": "s2",
+        "kind": "project-docs",
+        "url": "https://example.invalid/docs",
+        "retrieved_at": "2026-09-19T10:05:00.000Z",
+        "content": "The treasury contract is upgradeable and controlled by a 3 of 5 multisig."
+      },
+      {
+        "id": "s3",
+        "kind": "forum-post",
+        "url": "https://example.invalid/forum/9",
+        "retrieved_at": "2026-09-19T10:10:00.000Z",
+        "content": "A community member states the multisig is 2 of 3, contradicting the documentation."
+      }
+    ]
+  },
+  "fixture": {
+    "model_response": {
+      "findings": [
+        {
+          "statement": "An audit by a reputable firm found no issues.",
+          "source_ids": [
+            "s9"
+          ],
+          "confidence": "high"
+        },
+        {
+          "statement": "The contract received 9999 USDC in total.",
+          "source_ids": [
+            "s1"
+          ],
+          "confidence": "high"
+        },
+        {
+          "statement": "The treasury contract is upgradeable.",
+          "source_ids": [
+            "s2"
+          ],
+          "confidence": "medium"
+        }
+      ],
+      "conflicts": [],
+      "unknowns": []
+    }
+  }
+}

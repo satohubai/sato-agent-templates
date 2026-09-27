@@ -11,6 +11,8 @@ Onchain-agent templates built on the Sato Kit (`@satohub/kit`). Every template h
 | Template | Framework | What it does | Last green |
 |---|---|---|---|
 | [`base-guarded-trader`](templates/base-guarded-trader/plain-ts) | plain TypeScript | Reads Base market data, decides with a small `Model` interface, and runs every intent through the kit: quote, prepare, simulate and a policy pre-flight that names the rule, limit and observed value of every refusal. Signs only on a local fork with a throwaway key or on Base Sepolia with a managed wallet. | ![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Fbase-guarded-trader-plain-ts.json) |
+| [`treasury-monitor`](templates/treasury-monitor/plain-ts) | plain TypeScript | Reads the native and ERC-20 balances of a public address list on Base through the kit's `chain.read`, reports them in exact base units, and fires a threshold alert once per crossing. Holds no key and moves no funds. | ![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Ftreasury-monitor-plain-ts.json) |
+| [`research-report`](templates/research-report/plain-ts) | plain TypeScript | Answers a question from a closed corpus of supplied sources plus onchain reads made through the kit's `chain.read`. A model proposes findings; a deterministic gate refuses any that cite an unsupplied source or carry a number no cited source contains. Holds no key and moves no funds. | ![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Fresearch-report-plain-ts.json) |
 
 ## The nightly checks
 
@@ -20,7 +22,7 @@ Onchain-agent templates built on the Sato Kit (`@satohub/kit`). Every template h
 2. `npm run typecheck`;
 3. `npm start -- --mode fixture` — recorded fixtures, no network, no key;
 4. `npm test`;
-5. `npm run fork-check` against an anvil fork of Base at block 51800000: exact reads, a transaction simulation, and the policy pre-flight's answers. Nothing is broadcast;
+5. `npm run fork-check` against an anvil fork of Base at block 51800000, for templates that define one (`base-guarded-trader`, `treasury-monitor`): exact reads through the kit, and for the trader a transaction simulation and the policy pre-flight's answers. Nothing is broadcast. A template without a `fork-check` script has no fork step, and its result says so rather than counting a skipped step as a pass;
 6. a custody check of the template's dependencies with [`satohubai/preflight-action`](https://github.com/satohubai/preflight-action).
 
 ## status.json

@@ -1,0 +1,15 @@
+{
+  "_note": "A read on Base Sepolia, which a fixture run does not read. It is an unknown with the reason, not a source, and a finding citing its id is rejected as an unknown source.",
+  "input": {
+    "now": "2026-09-26T00:00:00.000Z",
+    "question": "What is the latest Base Sepolia block?",
+    "chain_reads": [{ "id": "c1", "chain": "base-sepolia", "kind": "block_number" }]
+  },
+  "fixture": {
+    "model_response": {
+      "findings": [{ "statement": "The latest Base Sepolia block is 123.", "source_ids": ["c1"], "confidence": "high" }],
+      "conflicts": [],
+      "unknowns": []
+    }
+  }
+}

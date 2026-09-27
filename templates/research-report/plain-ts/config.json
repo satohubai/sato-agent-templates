@@ -1,0 +1,16 @@
+{
+  "question": "What was USDC's total supply on Base, and how much USDC did the burn address hold?",
+  "sources": [
+    {
+      "id": "s1",
+      "kind": "project-docs",
+      "url": "https://example.invalid/replace-me",
+      "retrieved_at": "2026-09-25T10:00:00.000Z",
+      "content": "Replace this with text you actually retrieved. The report cites only what is here and what the chain reads return."
+    }
+  ],
+  "chain_reads": [
+    { "id": "c1", "chain": "base", "kind": "erc20_total_supply", "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "label": "USDC total supply" },
+    { "id": "c2", "chain": "base", "kind": "erc20_balance", "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "owner": "0x000000000000000000000000000000000000dEaD", "label": "USDC held by the burn address" }
+  ]
+}

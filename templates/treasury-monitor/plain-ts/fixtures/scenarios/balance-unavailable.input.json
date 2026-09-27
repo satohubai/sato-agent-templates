@@ -1,0 +1,33 @@
+{
+  "_note": "An address on Ethereum (chain 1), which this run has no RPC for. It must be reported as unknown, not as zero, and the threshold over it must go unevaluated rather than fire.",
+  "input": {
+    "now": "2026-09-26T00:00:00.000Z",
+    "assets": [
+      {
+        "id": "usdc",
+        "symbol": "USDC",
+        "decimals": 6,
+        "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      }
+    ],
+    "addresses": [
+      {
+        "label": "cold",
+        "address": "0x2222222222222222222222222222222222222222",
+        "chain": 1,
+        "assets": [
+          "usdc"
+        ]
+      }
+    ],
+    "thresholds": [
+      {
+        "chain": 1,
+        "address": "0x2222222222222222222222222222222222222222",
+        "asset": "usdc",
+        "direction": "below",
+        "base_units": "1"
+      }
+    ]
+  }
+}

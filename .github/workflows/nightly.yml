@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        template: [base-guarded-trader]
+        template: [base-guarded-trader, treasury-monitor, research-report]
         framework: [plain-ts]
         lane: [pinned]
     steps:
@@ -81,7 +81,7 @@ jobs:
           node scripts/update-status.mjs \
             --results results --status status.json --badges badges \
             --date "$(date -u +%F)" \
-            --expect "base-guarded-trader/plain-ts/pinned"
+            --expect "base-guarded-trader/plain-ts/pinned,treasury-monitor/plain-ts/pinned,research-report/plain-ts/pinned"
 
       - id: commit
         run: |
