@@ -93,3 +93,12 @@ test("the file carries no counts and never the word safe", () => {
   const text = JSON.stringify(s);
   assert.doesNotMatch(text, /\b(safe|secure|count|total)\b/i);
 });
+
+test("chain is carried per action (additive); a record without one keeps the previous chain", () => {
+  const s1 = applyActionResults(empty, [{ ...green, chain: "base" }], { date: "2026-09-26" });
+  assert.equal(s1.actions[0].chain, "base");
+  const s2 = applyActionResults(s1, [green], { date: "2026-09-27" });
+  assert.equal(s2.actions[0].chain, "base");
+  assert.equal(parseRecord({ ...green, chain: "Not A Chain!" }).chain, null);
+  assert.equal(applyActionResults(empty, [green], { date: "2026-09-26" }).actions[0].chain, null);
+});

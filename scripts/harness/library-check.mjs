@@ -4,15 +4,17 @@
 // only and kills it when its time box runs out.
 //
 //   node library-check.mjs '<json>'
-//     json = { source: "agentkit" | "sato-kit", dir, rpc: url|null,
-//              calls: [{ id, name, provider?, args, wallet_address? }] }
+//     json = { source: "agentkit" | "sato-kit", dir,
+//              rpcs: { <evm chain>: fork url }, chains: { <chain>: { kind, chain_id, network, public_rpc } },
+//              calls: [{ id, name, chain, provider?, args, wallet_address? }] }
 //
 // Prints one JSON line: { tools: { <name>: { description, inputSchema,
 // outputSchema } }, calls: { <id>: { ok, output } | { ok: false, step, error } } }.
 //
 // No key is created or loaded. AgentKit is given a READ-ONLY wallet provider
-// whose only capabilities are an address to read and a public client on the
-// fork; any attempt to send or sign throws.
+// for the call's chain whose only capabilities are an address to read and a
+// public client on that chain's fork (EVM) or a connection to Solana's public
+// RPC (SVM); any attempt to send or sign throws.
 
 import { createRequire } from "node:module";
 import { join } from "node:path";
@@ -33,20 +35,33 @@ globalThis.fetch = (u, init) => {
 };
 const req = createRequire(join(input.dir, "package.json"));
 const load = async (spec) => import(pathToFileURL(req.resolve(spec)).href);
+/** One call's time box inside the library child (the child as a whole has its own). */
+const CALL_MS = 60_000;
 const errMsg = (e) => String(e?.message ?? e).slice(0, 600);
 
-async function viemClient() {
+const rpcs = input.rpcs ?? {};
+const chains = input.chains ?? {};
+const clients = new Map();
+
+async function viemClient(chain = "base") {
+  if (!rpcs[chain]) return null;
+  if (clients.has(chain)) return clients.get(chain);
   const viem = await load("viem");
-  const { base } = await load("viem/chains");
-  return viem.createPublicClient({ chain: base, transport: viem.http(input.rpc ?? "http://127.0.0.1:8547", { timeout: 30_000, retryCount: 1 }) });
+  const all = await load("viem/chains");
+  const def = Object.values(all).find((c) => c && typeof c === "object" && c.id === chains[chain]?.chain_id) ?? all.base;
+  const client = viem.createPublicClient({ chain: def, transport: viem.http(rpcs[chain], { timeout: 30_000, retryCount: 1 }) });
+  clients.set(chain, client);
+  return client;
 }
 
-function readOnlyWallet(client, address) {
-  const refuse = () => { throw new Error("read-only wallet provider: signing and sending are not available in this check"); };
+const refuse = () => { throw new Error("read-only wallet provider: signing and sending are not available in this check"); };
+
+function readOnlyWallet(client, address, chain = "base") {
+  const c = chains[chain] ?? { network: "base-mainnet", chain_id: 8453 };
   return {
     getName: () => "sato_status_read_only",
     getAddress: () => address,
-    getNetwork: () => ({ protocolFamily: "evm", networkId: "base-mainnet", chainId: "8453" }),
+    getNetwork: () => ({ protocolFamily: "evm", networkId: c.network, chainId: String(c.chain_id) }),
     getPublicClient: () => client,
     readContract: (p) => client.readContract(p),
     getBalance: () => client.getBalance({ address }),
@@ -55,17 +70,38 @@ function readOnlyWallet(client, address) {
   };
 }
 
+/** Solana: a connection to the public mainnet RPC and an address to read. Nothing can sign. */
+async function readOnlySvmWallet(address, chain = "solana") {
+  const web3 = await load("@solana/web3.js");
+  const c = chains[chain];
+  const connection = new web3.Connection(c.public_rpc, { commitment: "confirmed", httpHeaders: { "user-agent": "SatoHub-templates-ci/1.0" } });
+  return {
+    getName: () => "sato_status_read_only",
+    getAddress: () => address,
+    getPublicKey: () => new web3.PublicKey(address),
+    getNetwork: () => ({ protocolFamily: "svm", networkId: c.network }),
+    getConnection: () => connection,
+    getBalance: async () => BigInt(await connection.getBalance(new web3.PublicKey(address))),
+    signTransaction: refuse, signMessage: refuse, sendTransaction: refuse, signAndSendTransaction: refuse, nativeTransfer: refuse,
+    waitForSignatureResult: refuse,
+  };
+}
+
+async function walletFor(c) {
+  if (chains[c.chain]?.kind === "svm") return readOnlySvmWallet(c.wallet_address, c.chain);
+  return readOnlyWallet(await viemClient(c.chain ?? "base"), c.wallet_address ?? "0x0000000000000000000000000000000000000001", c.chain ?? "base");
+}
+
 async function agentkit() {
   const ak = await load("@coinbase/agentkit");
   const { zodToJsonSchema } = await load("zod-to-json-schema");
-  const client = input.rpc ? await viemClient() : null;
   const tools = {};
   const calls = {};
   for (const c of input.calls) {
     try {
       const provider = ak[c.provider]?.();
       if (!provider) { calls[c.id] = { ok: false, step: "tool_missing", error: `${c.provider} is not exported` }; continue; }
-      const wallet = readOnlyWallet(client, c.wallet_address ?? "0x0000000000000000000000000000000000000001");
+      const wallet = await walletFor(c);
       for (const a of provider.getActions(wallet)) {
         if (!tools[a.name]) tools[a.name] = { description: a.description, inputSchema: stripDraft(zodToJsonSchema(a.schema)), outputSchema: null };
       }
@@ -73,10 +109,14 @@ async function agentkit() {
       if (!action) { calls[c.id] = { ok: false, step: "tool_missing", error: `${c.name} is not among the provider's actions` }; continue; }
       const parsed = action.schema.safeParse(c.args);
       if (!parsed.success) { calls[c.id] = { ok: false, step: "input_rejected", error: errMsg(parsed.error) }; continue; }
-      const output = await action.invoke(parsed.data);
+      let timer;
+      const output = await Promise.race([
+        action.invoke(parsed.data),
+        new Promise((_, rej) => { timer = setTimeout(() => rej(Object.assign(new Error(`timed out after ${CALL_MS / 1000}s`), { step: "timeout" })), CALL_MS); }),
+      ]).finally(() => clearTimeout(timer));
       calls[c.id] = { ok: true, output };
     } catch (e) {
-      calls[c.id] = { ok: false, step: "call", error: errMsg(e) };
+      calls[c.id] = { ok: false, step: e?.step === "timeout" ? "timeout" : "call", error: errMsg(e) };
     }
   }
   return { tools, calls };
@@ -89,7 +129,7 @@ function stripDraft(s) {
 
 async function satoKit() {
   const kit = await load("@satohub/kit");
-  const client = input.rpc ? await viemClient() : null;
+  const client = await viemClient("base");
   const actions = kit.coreActions();
   const tools = {};
   for (const a of actions) tools[a.descriptor.name] = { description: a.descriptor.description, inputSchema: a.descriptor.input_schema, outputSchema: a.descriptor.output_schema };
