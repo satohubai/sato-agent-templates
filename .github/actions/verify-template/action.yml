@@ -1,5 +1,5 @@
 name: "Verify one template cell"
-description: "Install, typecheck, fixture run, tests, anvil fork check and custody check for templates/<template>/<framework>, then write one result JSON. Uses no secrets."
+description: "Install, typecheck, fixture run, tests, anvil fork check (when the template has a fork-check script) and custody check for templates/<template>/<framework>, then write one result JSON. Uses no secrets."
 
 inputs:
   template:
@@ -23,10 +23,29 @@ runs:
       with:
         node-version: "22"
 
+    # A template has a fork check only when its package.json defines a
+    # `fork-check` script (one with an onchain read worth pinning). Without
+    # one, the foundry, anvil and fork steps are not part of the cell, and the
+    # step order the result is judged on says so; a skipped step never reads
+    # as a pass.
+    - id: detect
+      shell: bash
+      run: |
+        dir="templates/${{ inputs.template }}/${{ inputs.framework }}"
+        if node -e 'const p=require(process.argv[1]);process.exit(p.scripts&&p.scripts["fork-check"]?0:1)' "$GITHUB_WORKSPACE/$dir/package.json"; then
+          echo "fork=true" >> "$GITHUB_OUTPUT"
+          echo "step_order=setup_node,detect,foundry,rpc_cache,prepare,install,typecheck,fixture_run,test,anvil_start,fork_check,custody" >> "$GITHUB_OUTPUT"
+        else
+          echo "fork=false" >> "$GITHUB_OUTPUT"
+          echo "step_order=setup_node,detect,prepare,install,typecheck,fixture_run,test,custody" >> "$GITHUB_OUTPUT"
+        fi
+
     - id: foundry
+      if: steps.detect.outputs.fork == 'true'
       uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1.9.1
 
     - id: rpc_cache
+      if: steps.detect.outputs.fork == 'true'
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ~/.foundry/cache/rpc
@@ -75,6 +94,7 @@ runs:
         npm test 2>&1 | tee "$LOG_DIR/test.log"
 
     - id: anvil_start
+      if: steps.detect.outputs.fork == 'true'
       shell: bash
       run: |
         set -o pipefail
@@ -100,6 +120,7 @@ runs:
         { start_anvil https://mainnet.base.org || start_anvil https://base.drpc.org ; } 2>&1 | tee "$LOG_DIR/anvil_start.log"
 
     - id: fork_check
+      if: steps.detect.outputs.fork == 'true'
       shell: bash
       working-directory: ${{ env.TEMPLATE_DIR }}
       env:
@@ -131,6 +152,6 @@ runs:
         FRAMEWORK: ${{ inputs.framework }}
         LANE: ${{ inputs.lane }}
         STEPS_JSON: ${{ toJSON(steps) }}
-        STEP_ORDER: setup_node,foundry,rpc_cache,prepare,install,typecheck,fixture_run,test,anvil_start,fork_check,custody
+        STEP_ORDER: ${{ steps.detect.outputs.step_order || 'setup_node,detect,foundry,rpc_cache,prepare,install,typecheck,fixture_run,test,anvil_start,fork_check,custody' }}
         OUT: ${{ inputs.result-file }}
       run: node "$GITHUB_WORKSPACE/scripts/collect-result.mjs"

@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        template: [base-guarded-trader]
+        template: [base-guarded-trader, treasury-monitor, research-report]
         framework: [plain-ts]
         lane: [pinned]
     steps:

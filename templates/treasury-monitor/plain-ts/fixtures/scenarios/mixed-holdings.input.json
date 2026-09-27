@@ -1,0 +1,47 @@
+{
+  "_note": "Two holders on Base, one priced asset (USDC, at a price the config names) and one unpriced (ETH). The unpriced holding must NOT become a zero and total_usd must NOT be a partial sum.",
+  "input": {
+    "now": "2026-09-26T00:00:00.000Z",
+    "assets": [
+      {
+        "id": "eth",
+        "symbol": "ETH",
+        "decimals": 18,
+        "token": null
+      },
+      {
+        "id": "usdc",
+        "symbol": "USDC",
+        "decimals": 6,
+        "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+      }
+    ],
+    "addresses": [
+      {
+        "label": "weth-contract",
+        "address": "0x4200000000000000000000000000000000000006",
+        "chain": 8453,
+        "assets": [
+          "eth",
+          "usdc"
+        ]
+      },
+      {
+        "label": "burn",
+        "address": "0x000000000000000000000000000000000000dEaD",
+        "chain": 8453,
+        "assets": [
+          "usdc"
+        ]
+      }
+    ],
+    "thresholds": [],
+    "prices": [
+      {
+        "asset": "usdc",
+        "usd": "1.00",
+        "source": "config:usdc-counted-at-1.00-usd"
+      }
+    ]
+  }
+}

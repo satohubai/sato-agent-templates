@@ -1,0 +1,25 @@
+{
+  "name": "research-report",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A plain TypeScript agent that answers a question from a closed corpus of supplied sources plus onchain reads made through the Sato Kit chain.read. A model proposes findings; a deterministic gate refuses any that cite an unsupplied source or carry a number no cited source contains. It holds no key, signs nothing and moves no funds.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/agent.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@satohub/kit": "file:vendor/satohub-kit-0.1.0.tgz",
+    "viem": "2.56.9"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.4",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

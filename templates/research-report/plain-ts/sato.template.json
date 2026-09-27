@@ -1,0 +1,72 @@
+{
+  "schema": "sato.template/v1",
+  "id": "research-report",
+  "version": "0.1.0",
+  "title": "Onchain research report (plain TypeScript)",
+  "summary": "Answers a question from a CLOSED corpus: sources you supply plus onchain reads made through the Sato Kit's chain.read, each read becoming a source that carries the exact value and block. A model proposes findings; a deterministic gate refuses any that cite a source outside the corpus or contain a number no cited source contains, and keeps every refusal visible with its reason. Attributable, which is a narrower claim than true. Fixture mode uses a fake provider and recorded reads, with no network and no key. It holds no key, signs nothing and moves no funds.",
+  "runtime": { "kind": "node", "version": "22", "entrypoint": "src/agent.ts", "package_manager": "npm" },
+  "io_schemas": { "input": "schemas/input.json", "output": "schemas/output.json" },
+  "harness": {
+    "fixture_command": ["npm", "start", "--", "--mode", "fixture"],
+    "fixtures_dir": "fixtures",
+    "output_dir": "out",
+    "max_output_bytes": 262144
+  },
+  "model_policy": {
+    "recommended": "anthropic/claude-sonnet-5",
+    "candidates": ["anthropic/claude-sonnet-5", "anthropic/claude-haiku-4-5"],
+    "evaluated": []
+  },
+  "declared_secret_names": ["ANTHROPIC_API_KEY", "ANVIL_RPC_URL", "SATO_RPC_URL_BASE"],
+  "capabilities": ["read:evm-contract", "read:evm-balance", "read:erc20-balance", "reason:closed-corpus"],
+  "requested_permissions": ["network:rpc-read", "network:model-provider"],
+  "network": { "install": "registry-only", "test": "none" },
+  "tests": [
+    {
+      "id": "platform.fixtures",
+      "kind": "package",
+      "description": "The platform runs the fixture command over the shipped scenarios with the FAKE provider and recorded RPC answers (no network, no key) and checks out/report.json against schemas/output.json. Evidence is labelled provider='fake' and is never a model evaluation."
+    },
+    {
+      "id": "package.own",
+      "kind": "package",
+      "advisory": true,
+      "command": ["npm", "test"],
+      "description": "The template's own tests. Recorded, never the verdict."
+    }
+  ],
+  "licenses": [
+    { "name": "research-report", "license": "MIT", "url": "https://github.com/satohubai/sato-agent-templates" },
+    { "name": "@satohub/kit", "license": "MIT", "url": "https://github.com/satohubai/sato-hub-integrations" },
+    { "name": "viem", "license": "MIT", "url": "https://github.com/wevm/viem" }
+  ],
+  "provenance": {
+    "authored_by": "sato-hub",
+    "first_party": true,
+    "migrated_from": "https://satohub.ai (recipe onchain-research-report 1.0.0)",
+    "model_identifiers_verified_against": "https://platform.claude.com/docs/en/about-claude/models/overview",
+    "model_identifiers_verified_on": "2026-09-20",
+    "notes": "model_policy.evaluated is empty: the candidates are configured choices, not evidence of compatibility with this template. Deterministic over fixtures; fork and rpc modes and the real provider are opt-in and never run in the platform's offline test phase."
+  },
+  "template": {
+    "framework": "plain-ts",
+    "intents": ["data", "research"],
+    "chains": ["base", "base-sepolia"],
+    "networks": ["fork", "testnet"],
+    "default_network": "fork",
+    "slots_filled": {},
+    "swappable": [],
+    "policy_defaults": {
+      "network": "fork",
+      "allow_chains": ["base", "base-sepolia"],
+      "allow_tokens": ["base:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"],
+      "max_usd_per_trade": 1,
+      "max_usd_per_day": 1,
+      "max_slippage_bps": 0,
+      "unknown_verdict": "refuse",
+      "intent_ttl_s": 60,
+      "human_approval": true
+    },
+    "upstream": { "@satohub/kit": "0.1.0", "viem": "2.56.9", "tsx": "4.23.15", "typescript": "5.9.3" }
+  }
+}

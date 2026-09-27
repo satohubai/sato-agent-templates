@@ -1,0 +1,33 @@
+{
+  "_note": "Two onchain reads made through the kit's chain.read at the pinned Base block become sources c1 and c2. Findings citing them survive when every number appears in the read's sentence; a finding that rounds a read value is REJECTED as an unsupported number.",
+  "input": {
+    "now": "2026-09-26T00:00:00.000Z",
+    "question": "What was USDC's total supply on Base, and how much USDC did the burn address hold?",
+    "sources": [
+      {
+        "id": "s1",
+        "kind": "project-docs",
+        "url": "https://example.invalid/usdc",
+        "retrieved_at": "2026-09-25T10:00:00.000Z",
+        "content": "USDC on Base uses 6 decimals."
+      }
+    ],
+    "chain_reads": [
+      { "id": "c1", "chain": "base", "kind": "erc20_total_supply", "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "label": "USDC total supply" },
+      { "id": "c2", "chain": "base", "kind": "erc20_balance", "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "owner": "0x000000000000000000000000000000000000dEaD", "label": "USDC held by the burn address" }
+    ]
+  },
+  "fixture": {
+    "model_response": {
+      "findings": [
+        { "statement": "At block 51800000, USDC's totalSupply() on Base returned 4303897166696938 base units.", "source_ids": ["c1"], "confidence": "high" },
+        { "statement": "USDC on Base uses 6 decimals, and the burn address held 25896806146 base units at block 51800000.", "source_ids": ["c2", "s1"], "confidence": "high" },
+        { "statement": "The burn address held about 26000 USDC.", "source_ids": ["c2"], "confidence": "medium" }
+      ],
+      "conflicts": [],
+      "unknowns": [
+        { "question": "Who sent USDC to the burn address?", "reason": "a balance read names no sender" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "assets": [
+    { "id": "eth", "symbol": "ETH", "decimals": 18, "token": null },
+    { "id": "usdc", "symbol": "USDC", "decimals": 6, "token": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" }
+  ],
+  "addresses": [
+    { "label": "weth-contract", "address": "0x4200000000000000000000000000000000000006", "chain": 8453, "assets": ["eth", "usdc"] },
+    { "label": "burn", "address": "0x000000000000000000000000000000000000dEaD", "chain": 8453, "assets": ["eth", "usdc"] }
+  ],
+  "thresholds": [
+    { "chain": 8453, "address": "0x000000000000000000000000000000000000dEaD", "asset": "usdc", "direction": "below", "base_units": "100000000000" }
+  ],
+  "prices": [
+    { "asset": "usdc", "usd": "1.00", "source": "config:usdc-counted-at-1.00-usd (an assumption, not a price read)" }
+  ]
+}
