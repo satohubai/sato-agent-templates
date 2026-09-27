@@ -14,6 +14,10 @@ inputs:
     default: "51800000"
   result-file:
     required: true
+  inject-drift:
+    description: "Latest lane only, drift drill: force <pkg>@<version> instead of that package's latest."
+    required: false
+    default: ""
 
 runs:
   using: composite
@@ -30,14 +34,19 @@ runs:
     # as a pass.
     - id: detect
       shell: bash
+      env:
+        LANE: ${{ inputs.lane }}
       run: |
         dir="templates/${{ inputs.template }}/${{ inputs.framework }}"
+        # The latest lane adds one step before install: resolve_latest.
+        pre="prepare"
+        if [ "$LANE" = "latest" ]; then pre="prepare,resolve_latest"; fi
         if node -e 'const p=require(process.argv[1]);process.exit(p.scripts&&p.scripts["fork-check"]?0:1)' "$GITHUB_WORKSPACE/$dir/package.json"; then
           echo "fork=true" >> "$GITHUB_OUTPUT"
-          echo "step_order=setup_node,detect,foundry,rpc_cache,prepare,install,typecheck,fixture_run,test,anvil_start,fork_check,custody" >> "$GITHUB_OUTPUT"
+          echo "step_order=setup_node,detect,foundry,rpc_cache,$pre,install,typecheck,fixture_run,test,anvil_start,fork_check,custody" >> "$GITHUB_OUTPUT"
         else
           echo "fork=false" >> "$GITHUB_OUTPUT"
-          echo "step_order=setup_node,detect,prepare,install,typecheck,fixture_run,test,custody" >> "$GITHUB_OUTPUT"
+          echo "step_order=setup_node,detect,$pre,install,typecheck,fixture_run,test,custody" >> "$GITHUB_OUTPUT"
         fi
 
     - id: foundry
@@ -57,6 +66,19 @@ runs:
         mkdir -p "$RUNNER_TEMP/logs"
         echo "TEMPLATE_DIR=templates/${{ inputs.template }}/${{ inputs.framework }}" >> "$GITHUB_ENV"
         echo "LOG_DIR=$RUNNER_TEMP/logs" >> "$GITHUB_ENV"
+
+    # Latest lane: move every non-vendored dependency to its newest published
+    # version (registry.npmjs.org only, install scripts off) before the same
+    # checks. The result cell records the versions that were resolved.
+    - id: resolve_latest
+      if: inputs.lane == 'latest'
+      shell: bash
+      working-directory: ${{ env.TEMPLATE_DIR }}
+      env:
+        INJECT_DRIFT: ${{ inputs.inject-drift }}
+      run: |
+        set -o pipefail
+        node "$GITHUB_WORKSPACE/scripts/resolve-latest.mjs" 2>&1 | tee "$LOG_DIR/resolve_latest.log"
 
     # The install is constrained to the npm registry: the lockfile is checked to
     # resolve every package from registry.npmjs.org or the template's own
