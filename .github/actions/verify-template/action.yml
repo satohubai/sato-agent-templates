@@ -22,10 +22,18 @@ inputs:
 runs:
   using: composite
   steps:
+    # The Node the cell runs on is the one the template declares
+    # (sato.template.json runtime.version), never a hard-coded major.
+    - id: runtime
+      shell: bash
+      run: |
+        v=$(node "$GITHUB_WORKSPACE/scripts/template-guards.mjs" runtime-version "templates/${{ inputs.template }}/${{ inputs.framework }}/sato.template.json")
+        echo "node=$v" >> "$GITHUB_OUTPUT"
+
     - id: setup_node
       uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
-        node-version: "22"
+        node-version: ${{ steps.runtime.outputs.node }}
 
     # A template has a fork check only when its package.json defines a
     # `fork-check` script (one with an onchain read worth pinning). Without
@@ -43,10 +51,10 @@ runs:
         if [ "$LANE" = "latest" ]; then pre="prepare,resolve_latest"; fi
         if node -e 'const p=require(process.argv[1]);process.exit(p.scripts&&p.scripts["fork-check"]?0:1)' "$GITHUB_WORKSPACE/$dir/package.json"; then
           echo "fork=true" >> "$GITHUB_OUTPUT"
-          echo "step_order=setup_node,detect,foundry,rpc_cache,$pre,install,typecheck,fixture_run,test,anvil_start,fork_check,custody" >> "$GITHUB_OUTPUT"
+          echo "step_order=runtime,setup_node,detect,foundry,rpc_cache,$pre,install,typecheck,fixture_run,test,anvil_start,fork_check,custody" >> "$GITHUB_OUTPUT"
         else
           echo "fork=false" >> "$GITHUB_OUTPUT"
-          echo "step_order=setup_node,detect,$pre,install,typecheck,fixture_run,test,custody" >> "$GITHUB_OUTPUT"
+          echo "step_order=runtime,setup_node,detect,$pre,install,typecheck,fixture_run,test,custody" >> "$GITHUB_OUTPUT"
         fi
 
     - id: foundry
@@ -63,6 +71,7 @@ runs:
     - id: prepare
       shell: bash
       run: |
+        set -o pipefail
         mkdir -p "$RUNNER_TEMP/logs"
         echo "TEMPLATE_DIR=templates/${{ inputs.template }}/${{ inputs.framework }}" >> "$GITHUB_ENV"
         echo "LOG_DIR=$RUNNER_TEMP/logs" >> "$GITHUB_ENV"
@@ -70,6 +79,8 @@ runs:
         # apart: on latest, the pin-consistency tests skip, because the lane
         # moves versions on purpose.
         echo "SATO_LANE=${{ inputs.lane }}" >> "$GITHUB_ENV"
+        # Refuse a wrong Node major rather than verify on it.
+        node "$GITHUB_WORKSPACE/scripts/template-guards.mjs" check-node "templates/${{ inputs.template }}/${{ inputs.framework }}/sato.template.json" 2>&1 | tee "$RUNNER_TEMP/logs/prepare.log"
 
     # Latest lane: move every non-vendored dependency to its newest published
     # version (registry.npmjs.org only, install scripts off) before the same
@@ -118,6 +129,8 @@ runs:
       run: |
         set -o pipefail
         npm test 2>&1 | tee "$LOG_DIR/test.log"
+        # A run with zero tests is not a pass; the count goes in the result.
+        node "$GITHUB_WORKSPACE/scripts/template-guards.mjs" check-tests "$LOG_DIR/test.log" "$LOG_DIR/test_count.json" 2>&1 | tee -a "$LOG_DIR/test.log"
 
     - id: anvil_start
       if: steps.detect.outputs.fork == 'true'
@@ -196,6 +209,6 @@ runs:
         FRAMEWORK: ${{ inputs.framework }}
         LANE: ${{ inputs.lane }}
         STEPS_JSON: ${{ toJSON(steps) }}
-        STEP_ORDER: ${{ steps.detect.outputs.step_order || 'setup_node,detect,foundry,rpc_cache,prepare,install,typecheck,fixture_run,test,anvil_start,fork_check,custody' }}
+        STEP_ORDER: ${{ steps.detect.outputs.step_order || 'runtime,setup_node,detect,foundry,rpc_cache,prepare,install,typecheck,fixture_run,test,anvil_start,fork_check,custody' }}
         OUT: ${{ inputs.result-file }}
       run: node "$GITHUB_WORKSPACE/scripts/collect-result.mjs"

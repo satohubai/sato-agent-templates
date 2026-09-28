@@ -23,7 +23,7 @@ Onchain-agent templates built on the Sato Kit (`@satohub/kit`). Every template h
 `.github/workflows/nightly.yml` runs every night at 06:23 UTC. It finds every `templates/*/*/sato.template.json` on its own, so a new template needs no workflow change, and checks each template × framework on two lanes:
 
 - **pinned**: the exact versions in the template's lockfile. This lane must always be green; a red here is ours to fix.
-- **latest**: the same checks after moving every non-vendored dependency to its newest published version. When latest is green and pinned is behind, the workflow opens one pull request bumping the pins. When latest is red and pinned is green, it opens one issue named `upstream break: <package>@<version> breaks <template>/<framework>` and closes it when latest passes again. A drill forces a known-bad version to prove this path: `gh workflow run nightly.yml -f inject_drift=viem@1.0.0`.
+- **latest**: the same checks after moving every non-vendored dependency to its newest published version. Bump pull requests are not taken from that set: they carry only what [`upgrade-policy.json`](upgrade-policy.json) allows (no automatic majors, `0.x` minors count as majors, `@types/node` stays on the runtime major, runtime and tooling in separate PRs), and CI is dispatched on each bump commit ([docs/latest-lane.md](docs/latest-lane.md)). When latest is red and pinned is green, the workflow opens one issue named `upstream break: <package>@<version> breaks <template>/<framework>` and closes it when latest passes again. A drill forces a known-bad version to prove this path: `gh workflow run nightly.yml -f inject_drift=viem@1.0.0`.
 
 Each lane runs:
 
@@ -46,6 +46,7 @@ One entry per template × framework × lane (`pinned` or `latest`):
 | `failing_step` | the first check that failed, or `null` |
 | `log_excerpt` | the last 40 lines of that check's output |
 | `resolved` | the exact package versions the run installed |
+| `held` | latest cells only: `[{ pkg, pinned, latest, reason }]`, each version the latest lane tested that the update policy keeps out of bump PRs |
 | `history` | the last 30 runs as `{ date, result }` |
 
 `badges/<template>-<framework>.json` is the same date in shields.io endpoint format.

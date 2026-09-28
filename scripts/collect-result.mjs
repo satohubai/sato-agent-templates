@@ -41,6 +41,11 @@ if (env.LANE === "latest" && failing && existsSync(attrPath)) {
   try { attribution = JSON.parse(readFileSync(attrPath, "utf8")); } catch { attribution = null; }
 }
 
+// How many tests the template's own suite ran (null: not recorded).
+let test_count = null;
+const countPath = join(env.LOG_DIR || ".", "test_count.json");
+if (existsSync(countPath)) { try { test_count = JSON.parse(readFileSync(countPath, "utf8")); } catch { test_count = null; } }
+
 const result = failing ? "red" : anyMissing ? "error" : "green";
 const out = {
   template: env.TEMPLATE,
@@ -50,6 +55,7 @@ const out = {
   failing_step: failing ?? (anyMissing ? "incomplete" : null),
   log_excerpt,
   resolved,
+  test_count,
   attribution,
 };
 writeFileSync(env.OUT || "result.json", JSON.stringify(out, null, 2) + "\n");

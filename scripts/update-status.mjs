@@ -12,6 +12,7 @@
 import { mkdirSync, readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
+import { heldInLatest, loadPolicy, runtimeMajor } from "./lib/upgrade-policy.mjs";
 
 export const STATUS_SCHEMA = "sato.template-status/v1";
 export const HISTORY_MAX = 30;
@@ -36,6 +37,7 @@ export function parseResult(r) {
     failing_step: result === "green" ? null : typeof r.failing_step === "string" ? r.failing_step : "unknown",
     log_excerpt: result === "green" ? null : typeof r.log_excerpt === "string" ? r.log_excerpt.slice(-8000) : null,
     resolved: r.resolved && typeof r.resolved === "object" && !Array.isArray(r.resolved) ? r.resolved : {},
+    held: r.lane === "latest" && Array.isArray(r.held) ? r.held.filter((h) => h && typeof h.pkg === "string").map((h) => ({ pkg: h.pkg, pinned: String(h.pinned ?? ""), latest: String(h.latest ?? ""), reason: String(h.reason ?? "") })) : null,
     attribution: result !== "green" && r.attribution && typeof r.attribution === "object" && ["single", "combination", "inconclusive"].includes(r.attribution.kind) ? r.attribution : null,
   };
 }
@@ -65,6 +67,7 @@ export function applyResults(status, results, { date, expected = [] }) {
       log_excerpt: r.log_excerpt,
       resolved: Object.keys(r.resolved).length ? r.resolved : (prev?.resolved ?? {}),
       attribution: r.attribution,
+      ...(r.lane === "latest" ? { held: r.held ?? [] } : {}),
       history,
     });
   }
@@ -106,11 +109,22 @@ export function main(argv = process.argv.slice(2)) {
   const prev = existsSync(statusPath) ? JSON.parse(readFileSync(statusPath, "utf8")) : { schema: STATUS_SCHEMA, cells: [] };
   const files = existsSync(resultsDir) ? readdirSync(resultsDir, { recursive: true }).filter((f) => String(f).endsWith(".json")) : [];
   const results = files.map((f) => JSON.parse(readFileSync(join(resultsDir, String(f)), "utf8")));
+  const policyPath = arg(argv, "--policy", "upgrade-policy.json");
+  const policy = existsSync(policyPath) ? loadPolicy(policyPath) : null;
+  if (policy) for (const r of results) {
+    if (r?.lane !== "latest") continue;
+    try {
+      const dir = join(arg(argv, "--root", "."), "templates", r.template, r.framework);
+      const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
+      const manifest = JSON.parse(readFileSync(join(dir, "sato.template.json"), "utf8"));
+      r.held = heldInLatest({ pkg, resolved: r.resolved, policy, runtime: runtimeMajor(manifest) });
+    } catch { /* template removed since; no held list */ }
+  }
   const next = applyResults(prev, results, { date, expected });
   writeFileSync(statusPath, JSON.stringify(next, null, 2) + "\n");
   mkdirSync(badgesDir, { recursive: true });
   for (const [file, badge] of Object.entries(badgesFor(next))) writeFileSync(join(badgesDir, file), JSON.stringify(badge, null, 2) + "\n");
-  for (const c of next.cells) console.log(`${cellId(c)}: ${c.result}${c.failing_step ? ` (${c.failing_step})` : ""}, last green ${c.last_green ?? "never"}`);
+  for (const c of next.cells) console.log(`${cellId(c)}: ${c.result}${c.failing_step ? ` (${c.failing_step})` : ""}, last green ${c.last_green ?? "never"}${c.held?.length ? `, held by policy: ${c.held.map((h) => `${h.pkg}@${h.latest}`).join(", ")}` : ""}`);
   return next;
 }
 

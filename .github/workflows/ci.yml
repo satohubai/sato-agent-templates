@@ -2,9 +2,23 @@ name: ci
 
 # The same verification as the nightly, on every pull request. No secrets and
 # no status commit.
+#
+# Only the templates a change touches are verified; a change under .github/,
+# scripts/ or to upgrade-policy.json / the root package files verifies all.
+#
+# workflow_dispatch: the nightly status job runs this on every bump branch it
+# pushes (a push by GITHUB_TOKEN triggers no pull_request run), so the checks
+# attach to the bump commit and show on its PR. `ref` must name the branch the
+# run was dispatched on; anything else is refused rather than checking one
+# commit and reporting on another.
 
 on:
   pull_request:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "The branch this run is dispatched on (gh workflow run ci.yml --ref <branch> -f ref=<branch>)."
+        required: true
 
 permissions:
   contents: read
@@ -31,26 +45,47 @@ jobs:
     outputs:
       matrix: ${{ steps.list.outputs.matrix }}
       expect: ${{ steps.list.outputs.expect }}
+      count: ${{ steps.list.outputs.count }}
     steps:
+      - id: ref_guard
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          WANT: ${{ inputs.ref }}
+          GOT: ${{ github.ref_name }}
+        run: |
+          if [ "$WANT" != "$GOT" ]; then
+            echo "::error::dispatched on '$GOT' but ref input is '$WANT'; run with --ref '$WANT'"
+            exit 1
+          fi
       - id: checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
       - id: setup_node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: "22"
-      # Every templates/*/*/sato.template.json becomes a cell: a new template
-      # needs no workflow edit.
+      # Every templates/*/*/sato.template.json is a candidate cell (a new
+      # template needs no workflow edit); the change decides which ones run.
       - id: list
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
         run: |
-          echo "matrix=$(node scripts/discover-templates.mjs --lanes pinned)" >> "$GITHUB_OUTPUT"
-          echo "expect=$(node scripts/discover-templates.mjs --lanes pinned --expect)" >> "$GITHUB_OUTPUT"
+          base="$PR_BASE"
+          if [ -z "$base" ]; then base="$(git merge-base origin/main HEAD)"; fi
+          git diff --name-only "$base" HEAD > "$RUNNER_TEMP/changed.txt"
+          echo "changed files:"; cat "$RUNNER_TEMP/changed.txt"
+          m="$(node scripts/discover-templates.mjs --lanes pinned --changed "$RUNNER_TEMP/changed.txt")"
+          echo "matrix=$m" >> "$GITHUB_OUTPUT"
+          echo "expect=$(node scripts/discover-templates.mjs --lanes pinned --changed "$RUNNER_TEMP/changed.txt" --expect)" >> "$GITHUB_OUTPUT"
+          echo "count=$(node -e 'console.log(JSON.parse(process.argv[1]).include.length)' "$m")" >> "$GITHUB_OUTPUT"
 
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     needs: discover
+    if: needs.discover.outputs.count != '0'
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
@@ -76,3 +111,22 @@ jobs:
           path: ${{ runner.temp }}/result-${{ matrix.template }}-${{ matrix.framework }}-${{ matrix.lane }}.json
           if-no-files-found: warn
           retention-days: 7
+
+  # One stable check name to make required: fails when discover failed or any
+  # verify cell failed/was cancelled; passes when verify succeeded or was
+  # skipped because the change touched no template.
+  ci-result:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [discover, verify]
+    if: always()
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: result
+        env:
+          DISCOVER: ${{ needs.discover.result }}
+          VERIFY: ${{ needs.verify.result }}
+        run: node scripts/ci-result.mjs "$DISCOVER" "$VERIFY"
