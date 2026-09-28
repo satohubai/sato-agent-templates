@@ -3,10 +3,14 @@
 // writes one result file per action for update-actions-status.mjs to fold in.
 //
 //   node scripts/check-actions.mjs --out <dir> [--rpc http://127.0.0.1:8547]
-//     [--work <dir>] [--only <id,id>]
+//     [--rpc-ethereum http://127.0.0.1:8548] [--work <dir>] [--only <id,id>]
+//
+// --rpc is the Base fork (--rpc-base is the same flag); --rpc-<chain> gives the
+// fork for any other EVM chain in CHAINS. An action whose chain has no fork is
+// recorded as our error (no_fork); the other actions still run.
 //
 // Per action: (a) conformance — one read-only call (a fork read at the pinned
-// block, or a public read; never a write, never a key); (b) schema lint —
+// block of the action's chain, or a public read; never a write, never a key); (b) schema lint —
 // portable rules plus host facts; (c) custody — Sato Check's answers for the
 // source, as returned; (d) the sha256 of the tool description (the updater
 // compares it with last night's).
@@ -23,7 +27,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-import { ACTIONS, SOURCES } from "./actions-catalog.mjs";
+import { ACTIONS, CHAINS, SOURCES } from "./actions-catalog.mjs";
 import { fetchCustody } from "./lib/custody.mjs";
 import { lintSkill, lintTool, schemaLintCell } from "./lib/host-lint.mjs";
 import { parseFrontmatter, skillConformance } from "./lib/skill.mjs";
@@ -31,7 +35,7 @@ import { bareEnv, startServer } from "./lib/stdio-mcp.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const UA = "SatoHub-templates-ci/1.0";
-export const TIME = { install: 300_000, start: 60_000, call: 60_000, library: 240_000, fetch: 30_000 };
+export const TIME = { install: 300_000, start: 60_000, call: 60_000, library: 480_000, fetch: 30_000 };
 
 export function sha256(s) {
   return `sha256:${createHash("sha256").update(String(s)).digest("hex")}`;
@@ -101,11 +105,51 @@ async function ethCall(rpc, to, data, fetchImpl = fetch) {
 
 const pad = (a) => a.toLowerCase().replace(/^0x/, "").padStart(64, "0");
 
+async function rpcCall(rpc, method, params, fetchImpl) {
+  const res = await fetchImpl(rpc, {
+    method: "POST",
+    headers: { "content-type": "application/json", "user-agent": UA },
+    body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params }),
+    signal: AbortSignal.timeout(TIME.fetch),
+  });
+  const j = await res.json();
+  if (j.error) throw new Error(j.error.message ?? `${method} failed`);
+  return j.result;
+}
+
+/**
+ * The value a check compares against, read by us: from the action's fork for
+ * EVM kinds, from Solana mainnet (a public read) for spl_mint.
+ */
 export async function expectedValue(rpc, exp, fetchImpl = fetch) {
   if (!exp) return null;
-  if (exp.kind === "erc20_balance") return { ...exp, value: await ethCall(rpc, exp.token, `0x70a08231${pad(exp.owner)}`, fetchImpl) };
+  if (exp.kind === "erc20_balance" || exp.kind === "erc721_balance") return { ...exp, value: await ethCall(rpc, exp.token, `0x70a08231${pad(exp.owner)}`, fetchImpl) };
   if (exp.kind === "erc20_allowance") return { ...exp, value: await ethCall(rpc, exp.token, `0xdd62ed3e${pad(exp.owner)}${pad(exp.spender)}`, fetchImpl) };
+  if (exp.kind === "native_balance") return { ...exp, value: BigInt(await rpcCall(rpc, "eth_getBalance", [exp.owner, "latest"], fetchImpl)).toString() };
+  if (exp.kind === "spl_mint") {
+    const r = await rpcCall(rpc, "getAccountInfo", [exp.mint, { encoding: "jsonParsed" }], fetchImpl);
+    const decimals = r?.value?.data?.parsed?.info?.decimals;
+    if (typeof decimals !== "number") throw new Error(`the mint account ${exp.mint} did not parse`);
+    return { ...exp, value: String(decimals) };
+  }
   throw new Error(`unknown expectation ${exp.kind}`);
+}
+
+/** Where an action's expectation is read from: its chain's fork, or Solana's public RPC. */
+export function expectationRpc(action, rpcs) {
+  if (action.expected?.kind === "spl_mint") return CHAINS.solana.public_rpc;
+  return rpcs[action.chain] ?? null;
+}
+
+/** The fork RPC per EVM chain from the command line: --rpc / --rpc-base, --rpc-<chain>. */
+export function forkRpcs(argv) {
+  const out = {};
+  for (const [chain, c] of Object.entries(CHAINS)) {
+    if (c.kind !== "evm") continue;
+    const v = arg(argv, `--rpc-${chain}`, chain === "base" ? arg(argv, "--rpc", null) : null);
+    if (v) out[chain] = v;
+  }
+  return out;
 }
 
 // ── per-source runners → { tools, calls } ────────────────────────────────────
@@ -146,8 +190,9 @@ async function runMcp(src, dir, actions) {
   }
 }
 
-async function runLibrary(srcId, dir, actions, rpc) {
-  const payload = { source: srcId, dir, rpc, calls: actions.map((a) => ({ id: a.id, name: a.name, provider: a.provider, args: a.args, wallet_address: a.wallet_address })) };
+async function runLibrary(srcId, dir, actions, rpcs) {
+  const chains = Object.fromEntries(Object.entries(CHAINS).map(([k, c]) => [k, { kind: c.kind, chain_id: c.chain_id ?? null, network: c.agentkit_network, public_rpc: c.public_rpc ?? null }]));
+  const payload = { source: srcId, dir, rpcs, chains, calls: actions.map((a) => ({ id: a.id, name: a.name, chain: a.chain, provider: a.provider, args: a.args, wallet_address: a.wallet_address })) };
   const r = await run(process.execPath, [join(ROOT, "scripts", "harness", "library-check.mjs"), JSON.stringify(payload)], { cwd: dir, env: bareEnv(), timeoutMs: TIME.library });
   const line = r.out.trim().split("\n").filter(Boolean).pop();
   if (r.code !== 0 || !line) {
@@ -212,6 +257,7 @@ export function buildRecord(action, src, { version, call, tool, toolCount, expec
   return {
     id: action.id,
     name: action.name,
+    chain: action.chain ?? null,
     source: { kind: src.kind, package: src.package, version: version ?? null, repo_url: src.repo_url },
     upstream_version: version ?? null,
     checks: { conformance, schema_lint: schemaLintCell(lint), custody },
@@ -228,7 +274,7 @@ function arg(argv, name, fallback) {
 
 export async function main(argv = process.argv.slice(2)) {
   const out = resolve(arg(argv, "--out", "action-results"));
-  const rpc = arg(argv, "--rpc", null);
+  const rpcs = forkRpcs(argv);
   const work = resolve(arg(argv, "--work", mkdtempSync(join(tmpdir(), "sato-actions-"))));
   const only = arg(argv, "--only", "").split(",").map((s) => s.trim()).filter(Boolean);
   mkdirSync(out, { recursive: true });
@@ -251,6 +297,9 @@ export async function main(argv = process.argv.slice(2)) {
     let version = null;
     const expected = {};
     let blocked = null;
+    // Per action: a fork check whose chain has no fork is ours, not upstream's.
+    const noFork = new Set(actions.filter((a) => a.needs_fork && !rpcs[a.chain]).map((a) => a.id));
+    const runnable = actions.filter((a) => !noFork.has(a.id));
     if (src.runner === "skill") {
       const r = await runSkills(src, actions);
       result = r;
@@ -260,27 +309,31 @@ export async function main(argv = process.argv.slice(2)) {
       if (!inst.ok) blocked = { step: inst.step, error: inst.detail };
       else {
         version = inst.version;
-        const forkNeeded = actions.some((a) => a.needs_fork);
-        if (forkNeeded && !rpc) blocked = { step: "no_fork", error: "no --rpc given; the fork checks need an anvil fork of Base" };
-        for (const a of actions) {
-          if (blocked || !a.expected) continue;
-          try { expected[a.id] = await expectedValue(rpc, a.expected); } catch (e) { expected[a.id] = { error: e.message }; }
+        for (const a of runnable) {
+          if (!a.expected) continue;
+          try {
+            const at = expectationRpc(a, rpcs);
+            if (!at) throw new Error(`no RPC to read the expectation for ${a.chain}`);
+            expected[a.id] = await expectedValue(at, a.expected);
+          } catch (e) { expected[a.id] = { error: e.message }; }
         }
-        if (!blocked) {
-          result = src.runner === "mcp" ? await runMcp(src, inst.dir, actions) : await runLibrary(srcId, inst.dir, actions, rpc);
+        const toRun = runnable.filter((a) => !expected[a.id]?.error);
+        if (toRun.length) {
+          result = src.runner === "mcp" ? await runMcp(src, inst.dir, toRun) : await runLibrary(srcId, inst.dir, toRun, rpcs);
         }
       }
     }
     for (const a of actions) {
       let call = blocked ? { ok: false, step: blocked.step, error: blocked.error } : result.calls[a.id];
-      if (expected[a.id]?.error) call = { ok: false, step: "anvil_read", error: expected[a.id].error };
+      if (!blocked && noFork.has(a.id)) call = { ok: false, step: "no_fork", error: `no fork RPC for ${a.chain}; pass --rpc-${a.chain}` };
+      if (expected[a.id]?.error) call = { ok: false, step: a.expected.kind === "spl_mint" ? "rpc_read" : "anvil_read", error: expected[a.id].error };
       const rec = buildRecord(a, src, { version, call, tool: result.tools?.[a.name], toolCount: result.toolCount ?? null, expected: expected[a.id], custody });
-      if (blocked?.step === "no_fork" || call?.step === "anvil_read") rec.run_error = call.step; // ours, not upstream's
+      if (["no_fork", "anvil_read", "rpc_read"].includes(call?.step)) rec.run_error = call.step; // ours, not upstream's
       records.push(rec);
       const safe = a.id.replace(/[^A-Za-z0-9._-]/g, "_");
       writeFileSync(join(out, `${safe}.json`), JSON.stringify(rec, null, 2) + "\n");
       const c = rec.checks.conformance;
-      console.log(`  ${a.id}: ${c.result}${c.step ? ` (${c.step})` : ""} · lint ${rec.checks.schema_lint.result} · custody ${rec.checks.custody.result} · ${rec.upstream_version ?? "?"}`);
+      console.log(`  ${a.id} [${a.chain}]: ${c.result}${c.step ? ` (${c.step})` : ""} · lint ${rec.checks.schema_lint.result} · custody ${rec.checks.custody.result} · ${rec.upstream_version ?? "?"}`);
     }
   }
   return records;

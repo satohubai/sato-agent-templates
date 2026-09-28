@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { ACTIONS, BASE_BLOCK_HASH, FORK_BLOCK, PYTH_ETH_USD, SOURCES, formatUnits, thirdParty } from "./actions-catalog.mjs";
-import { buildRecord, expectedValue, sha256 } from "./check-actions.mjs";
+import { readFileSync } from "node:fs";
+import { ACTIONS, BASE_BLOCK_HASH, CHAINS, CHAIN_VALUES, DROPPED, ETH_FORK_BLOCK, FORK_BLOCK, PYTH_ETH_USD, SOURCES, formatUnits, thirdParty } from "./actions-catalog.mjs";
+import { buildRecord, expectationRpc, expectedValue, forkRpcs, sha256 } from "./check-actions.mjs";
 import { custodyCell, fetchCustody, checkUrlFor } from "./lib/custody.mjs";
 import { lintSkill, lintTool, schemaLintCell } from "./lib/host-lint.mjs";
 import { lintDescription, lintPortableSchema } from "./lib/oda-lint.mjs";
@@ -10,8 +11,8 @@ import { bareEnv } from "./lib/stdio-mcp.mjs";
 
 const byId = Object.fromEntries(ACTIONS.map((a) => [a.id, a]));
 
-test("catalog: at least ten third-party actions, unique ids, every source known", () => {
-  assert.ok(thirdParty().length >= 10);
+test("catalog: at least thirty third-party actions, unique ids, every source known", () => {
+  assert.ok(thirdParty().length >= 30, `${thirdParty().length} third-party actions`);
   assert.equal(new Set(ACTIONS.map((a) => a.id)).size, ACTIONS.length);
   for (const a of ACTIONS) {
     assert.ok(SOURCES[a.source], a.id);
@@ -142,4 +143,97 @@ test("vendored portable lint behaves as upstream", () => {
 
 test("third-party servers get PATH and HOME only", () => {
   assert.deepEqual(Object.keys(bareEnv({ PATH: "/bin", HOME: "/h", GITHUB_TOKEN: "t", ANY: "x" })).sort(), ["HOME", "PATH"]);
+});
+
+test("catalog: every action names its chain; Base, Ethereum and Solana each carry real reads", () => {
+  for (const a of ACTIONS) assert.ok(CHAIN_VALUES.includes(a.chain), `${a.id} chain ${a.chain}`);
+  const by = (c) => thirdParty().filter((a) => a.chain === c);
+  for (const c of ["base", "ethereum", "solana"]) {
+    assert.ok(by(c).length >= 5, `${c}: ${by(c).length}`);
+    // at least three per chain are not skills: they read the chain (fork or public RPC) or its data
+    assert.ok(by(c).filter((a) => SOURCES[a.source].kind !== "skill").length >= 3, c);
+  }
+  // a fork check only on a chain that has a fork
+  for (const a of ACTIONS.filter((x) => x.needs_fork)) assert.equal(CHAINS[a.chain]?.kind, "evm", a.id);
+});
+
+test("catalog: each EVM fork is pinned (block + hash) with two public archive RPCs, and the workflow forks the same blocks", () => {
+  const wf = readFileSync(new URL("../.github/workflows/actions-status.yml", import.meta.url), "utf8");
+  for (const [name, c] of Object.entries(CHAINS)) {
+    if (c.kind !== "evm") { assert.match(c.public_rpc, /^https:\/\//); continue; }
+    assert.ok(Number.isInteger(c.fork_block) && c.fork_block > 0, name);
+    assert.match(c.block_hash, /^0x[0-9a-f]{64}$/, name);
+    assert.ok(c.archive_rpcs.length >= 2, name);
+    for (const u of c.archive_rpcs) { assert.match(u, /^https:\/\//); assert.ok(wf.includes(u), `${u} not in the workflow`); }
+    assert.ok(wf.includes(`"${c.fork_block}"`), `${name} block ${c.fork_block} not in the workflow`);
+    assert.ok(wf.includes(String(c.port)), `${name} port ${c.port} not in the workflow`);
+  }
+  assert.equal(CHAINS.base.fork_block, FORK_BLOCK);
+  assert.equal(CHAINS.ethereum.fork_block, ETH_FORK_BLOCK);
+});
+
+test("catalog: what was left out is listed with a reason", () => {
+  assert.ok(DROPPED.length > 0);
+  for (const d of DROPPED) { assert.ok(d.name && d.package); assert.ok(d.reason.length > 20, d.name); }
+  const catalogued = new Set(Object.values(SOURCES).map((s) => s.package));
+  for (const d of DROPPED) if (d.package.startsWith("@alchemy") || d.package === "helius-mcp") assert.ok(!catalogued.has(d.package));
+});
+
+test("forkRpcs: --rpc is Base, --rpc-<chain> the others; expectations read from the right place", () => {
+  assert.deepEqual(forkRpcs(["--rpc", "http://b", "--rpc-ethereum", "http://e"]), { base: "http://b", ethereum: "http://e" });
+  assert.deepEqual(forkRpcs(["--rpc-base", "http://b2"]), { base: "http://b2" });
+  assert.deepEqual(forkRpcs([]), {});
+  const spl = ACTIONS.find((a) => a.expected?.kind === "spl_mint");
+  assert.equal(expectationRpc(spl, {}), CHAINS.solana.public_rpc);
+  const eth = ACTIONS.find((a) => a.id === "agentkit-provider:erc20.get_balance.ethereum");
+  assert.equal(expectationRpc(eth, { ethereum: "http://e" }), "http://e");
+  assert.equal(expectationRpc(eth, { base: "http://b" }), null);
+});
+
+test("expectedValue: native balance, ERC-721 balance and an SPL mint's decimals", async () => {
+  const calls = [];
+  const fake = async (_u, init) => {
+    const b = JSON.parse(init.body);
+    calls.push(b.method);
+    if (b.method === "getAccountInfo") return { json: async () => ({ result: { value: { data: { parsed: { info: { decimals: 6 } } } } } }) };
+    return { json: async () => ({ result: "0x0a" }) };
+  };
+  assert.equal((await expectedValue("x", { kind: "native_balance", owner: "0x1" }, fake)).value, "10");
+  assert.equal((await expectedValue("x", { kind: "erc721_balance", token: "0x1", owner: "0x2" }, fake)).value, "10");
+  assert.equal((await expectedValue("x", { kind: "spl_mint", mint: "M" }, fake)).value, "6");
+  assert.deepEqual(calls, ["eth_getBalance", "eth_call", "getAccountInfo"]);
+  await assert.rejects(expectedValue("x", { kind: "spl_mint", mint: "M" }, async () => ({ json: async () => ({ result: { value: null } }) })), /did not parse/);
+});
+
+test("new asserts: recorded outputs pass, wrong ones fail", () => {
+  const w = byId["agentkit-provider:wallet.get_wallet_details.ethereum"];
+  const out = "Wallet Details:\n- Network:\n  * Chain ID: 1\n- Native Balance: 63626699643288966 WEI\n";
+  assert.equal(w.assert(out, { value: "63626699643288966" }), null);
+  assert.ok(w.assert(out, { value: "1" }));
+  assert.ok(byId["agentkit-provider:wallet.get_wallet_details"].assert(out, { value: "63626699643288966" }), "chain id 1 is not Base");
+  const nft = byId["agentkit-provider:erc721.get_balance"];
+  assert.equal(nft.assert("Balance of NFTs for contract 0x03 at address 0xBB is 0", { value: "0" }), null);
+  assert.ok(nft.assert("Balance of NFTs for contract 0x03 at address 0xBB is 10", { value: "0" }));
+  const q = byId["agentkit-provider:sushi-router.quote.ethereum"];
+  assert.equal(q.assert("Found a quote for USDC (0xa0) -> WETH (0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2)  - AmountIn: 1 USDC  - AmountOut: 0.00037 WETH"), null);
+  assert.ok(q.assert("Unsupported chainId: 1"));
+  const spl = byId["agentkit-provider:spl.get_balance.solana"];
+  assert.equal(spl.assert("Balance for 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM is 1234.5 tokens"), null);
+  assert.ok(spl.assert("Error getting SPL token balance: boom"));
+  const dp = byId["protocol-mcp:dexpaprika-mcp.getTokenDetails.solana"];
+  const ok = { content: [{ type: "text", text: JSON.stringify({ symbol: "USDC", decimals: 6 }) }] };
+  assert.equal(dp.assert(ok, { value: "6" }), null);
+  assert.match(dp.assert(ok, { value: "9" }), /decimals/);
+  const dex = byId["protocol-mcp:dexpaprika-mcp.getNetworkDexes.solana"];
+  assert.equal(dex.assert({ content: [{ type: "text", text: JSON.stringify({ dexes: [{ chain: "solana", dex_id: "orca" }] }) }] }), null);
+  assert.ok(dex.assert({ content: [{ type: "text", text: JSON.stringify({ dexes: [] }) }] }));
+  const tm = byId["agentkit-provider:truemarkets.get_prediction_markets"];
+  assert.equal(tm.assert(JSON.stringify({ success: true, totalMarkets: 3, markets: [{ id: 1 }] })), null);
+  assert.ok(tm.assert(JSON.stringify({ success: false })));
+});
+
+test("buildRecord carries the chain", () => {
+  const a = byId["protocol-mcp:dexpaprika-mcp.getNetworkDexes.solana"];
+  const r = buildRecord(a, SOURCES[a.source], { version: "2.5.1", call: { ok: false, step: "call", error: "x" }, custody: { result: "not_run", answers: null, check_url: null } });
+  assert.equal(r.chain, "solana");
 });

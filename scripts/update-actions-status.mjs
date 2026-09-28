@@ -10,7 +10,9 @@
 // and the upstream version it ran against. An expected action that left no
 // result is "error" with failing_step "no_result"; a run that failed on our
 // side (no fork, fork read failed) is "error", never "red". last_green only
-// moves on a green run; history keeps the last 30 runs.
+// moves on a green run; history keeps the last 30 runs. Each action carries
+// the chain its check reads (`chain`, additive to v1; null when a record
+// predates it).
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -20,6 +22,7 @@ export const ACTION_STATUS_SCHEMA = "sato.action-status/v1";
 export const HISTORY_MAX = 30;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const ID_RE = /^[a-z0-9-]+:[A-Za-z0-9._-]+$/;
+const CHAIN_RE = /^[a-z0-9-]+$/;
 const KINDS = new Set(["agentkit-provider", "protocol-mcp", "skill", "base-mcp-plugin", "sato-kit"]);
 const EMPTY_LINT = { result: "not_run", hosts: { openai: [], cursor: [], claude: [] } };
 const EMPTY_CUSTODY = { result: "not_run", answers: null, check_url: null };
@@ -41,6 +44,7 @@ export function parseRecord(r) {
   return {
     id: r.id,
     name: r.name,
+    chain: typeof r.chain === "string" && CHAIN_RE.test(r.chain) ? r.chain : null,
     source: { kind: r.source.kind, package: String(r.source.package ?? ""), version: strOrNull(r.source.version), repo_url: strOrNull(r.source.repo_url) },
     conformance: { result: confResult, step: confResult === "pass" ? null : strOrNull(conf.step) ?? "unknown", detail: confResult === "pass" ? null : strOrNull(conf.detail)?.slice(0, 600) ?? null },
     schema_lint: { result: lint.result, hosts: { openai: lint.hosts?.openai ?? [], cursor: lint.hosts?.cursor ?? [], claude: lint.hosts?.claude ?? [] }, ...(Array.isArray(lint.portable) ? { portable: lint.portable } : {}) },
@@ -79,6 +83,7 @@ export function applyActionResults(status, records, { date, expected = [] }) {
     next.set(r.id, {
       id: r.id,
       name: r.name,
+      chain: r.chain ?? prev?.chain ?? null,
       source: r.source,
       checks: {
         conformance: r.conformance,
@@ -127,7 +132,7 @@ export async function main(argv = process.argv.slice(2)) {
   const records = files.map((f) => JSON.parse(readFileSync(join(resultsDir, String(f)), "utf8")));
   const next = applyActionResults(prev, records, { date, expected });
   writeFileSync(statusPath, JSON.stringify(next, null, 2) + "\n");
-  for (const a of next.actions) console.log(`${a.id}: ${a.result}${a.failing_step ? ` (${a.failing_step} @ ${a.upstream_version ?? "unknown version"})` : ""}, last green ${a.last_green ?? "never"}`);
+  for (const a of next.actions) console.log(`${a.id} [${a.chain ?? "?"}]: ${a.result}${a.failing_step ? ` (${a.failing_step} @ ${a.upstream_version ?? "unknown version"})` : ""}, last green ${a.last_green ?? "never"}`);
   return next;
 }
 

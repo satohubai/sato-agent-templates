@@ -2,10 +2,17 @@
 //
 // Chosen for demand (they are the actions onchain agents reach for: token
 // balances and allowances, price feeds, protocol and token data, block reads,
-// contract generation, swap skills) and for checkability WITHOUT secrets: every
-// check below is a read — against an anvil fork of Base at the pinned block,
-// or a public read — and none needs an API key, a wallet key or a signature.
-// Sources that need a key to answer at all are left out (see README).
+// swap quotes, contract generation, and the integration skills of LI.FI,
+// Uniswap, Jupiter, Helius and Polymarket) and for checkability WITHOUT
+// secrets: every check below is a read — against an anvil fork of Base or
+// Ethereum at a pinned block, or a public read (Solana mainnet RPC, a public
+// API, a repository file) — and none needs an API key, a wallet key or a
+// signature. Sources that need a key to answer at all are left out and listed
+// in DROPPED with the reason.
+//
+// Every action names the chain its check reads (`chain`): a key of CHAINS, or
+// "polygon" / "any" for a check that reads no chain of ours (a skill for a
+// Polygon protocol, a multi-chain skill, an oracle feed id).
 //
 // Each conformance `assert` is pure: (output, expected) → null when it passes,
 // or a sentence naming what differed.
@@ -14,12 +21,53 @@ export const FORK_BLOCK = 51800000;
 /** The hash of Base block 51800000. A block hash never changes. */
 export const BASE_BLOCK_HASH = "0xb4402c476ad106075a654226a59ed23003ffefbdc75ce4b0afeccab2b310493c";
 
+export const ETH_FORK_BLOCK = 23000000;
+/** The hash of Ethereum block 23000000. */
+export const ETH_BLOCK_HASH = "0xe368c631c74a82c3043e6d44c4bef6e6139a6501b39c7700c2552554d10e6c3b";
+
+/**
+ * The chains the checks read. EVM chains are forked with anvil at a pinned
+ * block from public archive RPCs (each verified to serve state at that block);
+ * Solana has no fork, so its checks are public mainnet reads.
+ *
+ * Arbitrum is not here: no public keyless RPC we tried serves historical state
+ * (arb1.arbitrum.io: "historical state … is not available"; arbitrum.drpc.org:
+ * "Unknown state"; publicnode: archive needs a token), so a pinned-block fork
+ * could not start without a key.
+ */
+export const CHAINS = {
+  base: {
+    kind: "evm", chain_id: 8453, fork_block: FORK_BLOCK, block_hash: BASE_BLOCK_HASH, port: 8547,
+    archive_rpcs: ["https://mainnet.base.org", "https://base.drpc.org"], agentkit_network: "base-mainnet",
+  },
+  ethereum: {
+    kind: "evm", chain_id: 1, fork_block: ETH_FORK_BLOCK, block_hash: ETH_BLOCK_HASH, port: 8548,
+    archive_rpcs: ["https://eth.drpc.org", "https://eth-mainnet.public.blastapi.io"], agentkit_network: "ethereum-mainnet",
+  },
+  solana: { kind: "svm", public_rpc: "https://api.mainnet-beta.solana.com", agentkit_network: "solana-mainnet" },
+};
+/** Every value an action's `chain` may take. */
+export const CHAIN_VALUES = [...Object.keys(CHAINS), "polygon", "any"];
+
 export const USDC_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 export const WETH_BASE = "0x4200000000000000000000000000000000000006";
 /** A contract that holds USDC on Base at the pinned block (Morpho Blue). Used only as an address to read. */
 export const HOLDER = "0xBBBBBbbBBb9cC5e90e3b3Af64bdAF62C37EEFFCb";
 export const PERMIT2 = "0x000000000022D473030F116dDEE9F6B43aC78BA3";
 export const PYTH_ETH_USD = "0xff61491a931112ddf1bd8147cd1b641375f79f5825126d665480874634fd0ace";
+/** The Basenames registrar (ERC-721) on Base. */
+export const BASENAMES_BASE = "0x03c4738Ee98aE44591e1A4A4F3CaB6641d95DD9a";
+
+export const USDC_ETH = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
+export const WETH_ETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
+/** An address that holds USDC and ETH on Ethereum at the pinned block. Used only as an address to read. */
+export const HOLDER_ETH = "0x37305B1cD40574E4C5Ce33f8e8306Be057fD7341";
+/** The ENS base registrar (ERC-721) on Ethereum. */
+export const ENS_REGISTRAR_ETH = "0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85";
+
+export const USDC_SOLANA = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
+/** A Solana address used only to read its USDC balance (the check reads the shape of the answer, not its value). */
+export const SOLANA_OWNER = "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM";
 
 const DEXPAPRIKA_RATIONALE = "Nightly Sato Status conformance check: one public read to confirm this tool answers.";
 
@@ -67,6 +115,38 @@ export const SOURCES = {
     github: { owner: "Uniswap", repo: "uniswap-ai", branch: "main" },
     custody: { kind: "skill", target: "Uniswap/uniswap-ai" },
   },
+  "lifi-agent-skills": {
+    kind: "skill",
+    package: "github:lifinance/lifi-agent-skills",
+    repo_url: "https://github.com/lifinance/lifi-agent-skills",
+    runner: "skill",
+    github: { owner: "lifinance", repo: "lifi-agent-skills", branch: "main" },
+    custody: { kind: "skill", target: "lifinance/lifi-agent-skills" },
+  },
+  "jupiter-agent-skills": {
+    kind: "skill",
+    package: "github:jup-ag/agent-skills",
+    repo_url: "https://github.com/jup-ag/agent-skills",
+    runner: "skill",
+    github: { owner: "jup-ag", repo: "agent-skills", branch: "main" },
+    custody: { kind: "skill", target: "jup-ag/agent-skills" },
+  },
+  "helius-core-ai": {
+    kind: "skill",
+    package: "github:helius-labs/core-ai",
+    repo_url: "https://github.com/helius-labs/core-ai",
+    runner: "skill",
+    github: { owner: "helius-labs", repo: "core-ai", branch: "main" },
+    custody: { kind: "skill", target: "helius-labs/core-ai" },
+  },
+  "polymarket-agent-skills": {
+    kind: "skill",
+    package: "github:Polymarket/agent-skills",
+    repo_url: "https://github.com/Polymarket/agent-skills",
+    runner: "skill",
+    github: { owner: "Polymarket", repo: "agent-skills", branch: "main" },
+    custody: { kind: "skill", target: "Polymarket/agent-skills" },
+  },
   "sato-kit": {
     kind: "sato-kit",
     package: "@satohub/kit",
@@ -78,6 +158,24 @@ export const SOURCES = {
     custody: { kind: "package", target: "@satohub/kit" },
   },
 };
+
+/**
+ * Asked for by demand, and left out because a check could not run without a
+ * secret (or at all). Listed so the omission is visible, never silent.
+ */
+export const DROPPED = [
+  { name: "Alchemy MCP server", package: "@alchemy/mcp-server", reason: "every tool calls Alchemy's API with ALCHEMY_API_KEY; there is no keyless read" },
+  { name: "Helius MCP server", package: "helius-mcp", reason: "the tools call Helius RPC/DAS with HELIUS_API_KEY; the Helius skills are checked instead" },
+  { name: "1inch MCP server", package: "1inch-mcp", reason: "the only npm package links no repository (publisher not verifiable), and the 1inch Developer Portal API it wraps needs an API key" },
+  { name: "Jupiter MCP server", package: "jupiter-mcp", reason: "it starts only with a Solana private key (it executes swaps); the Jupiter skills are checked instead" },
+  { name: "Solana Agent Kit MCP", package: "solana-mcp", reason: "it starts only with SOLANA_PRIVATE_KEY and an RPC URL" },
+  { name: "Base MCP", package: "base-mcp", reason: "deprecated upstream (its bin is deprecated.js) and needs CDP API keys and a seed phrase" },
+  { name: "LI.FI MCP servers", package: "(community)", reason: "no LI.FI-published MCP server package on npm (checked @lifi/mcp, @lifi/mcp-server, lifi-mcp); LI.FI's own agent skills are checked instead" },
+  { name: "CoinGecko MCP", package: "@coingecko/coingecko-mcp", reason: "a code-execution server (execute / search_docs) configured with COINGECKO_PRO_API_KEY or COINGECKO_DEMO_API_KEY" },
+  { name: "AgentKit zeroX / messari / zerion / vaultsfyi / alchemyTokenPrices", package: "@coinbase/agentkit", reason: "each provider refuses to construct without its API key" },
+  { name: "evm-mcp-server on Ethereum", package: "@mcpdotdirect/evm-mcp-server", reason: "its Ethereum reads go to a hard-coded eth.llamarpc.com that did not answer when catalogued, and a server gets no env to point it elsewhere; its Base reads stay" },
+  { name: "Arbitrum fork reads", package: "(chain)", reason: "no public keyless RPC serves Arbitrum historical state, so a pinned-block fork cannot start without a key; Solana is the third chain" },
+];
 
 // ── pure assertion helpers ───────────────────────────────────────────────────
 
@@ -107,6 +205,42 @@ function isMcpError(output) {
   return Boolean(output && output.isError);
 }
 
+function nativeBalanceAssert(chainId) {
+  return (output, exp) => {
+    const t = textOf(output);
+    if (!new RegExp(`Chain ID:\\s*${chainId}\\b`).test(t)) return `expected the wallet details for chain ${chainId}; got: ${t.slice(0, 200)}`;
+    return new RegExp(`(^|[^0-9])${exp.value} WEI`).test(t) ? null : `the fork holds ${exp.value} wei for the address; the action returned: ${t.slice(0, 200)}`;
+  };
+}
+
+function nftBalanceAssert(output, exp) {
+  const t = textOf(output);
+  return new RegExp(`is ${exp.value}$`).test(t.trim()) ? null : `the fork has an ERC-721 balance of ${exp.value}; the action returned: ${t.slice(0, 200)}`;
+}
+
+function tokenAddressAssert(address) {
+  return (output) => {
+    const t = textOf(output);
+    return t.toLowerCase().includes(address.toLowerCase()) ? null : `expected the USDC address ${address}; got: ${t.slice(0, 200)}`;
+  };
+}
+
+function foundTokenAssert(address) {
+  return (output) => {
+    const t = textOf(output);
+    return /^Found [0-9]+ tokens/.test(t.trim()) && t.toLowerCase().includes(address.toLowerCase()) ? null : `expected a token list that includes ${address}; got: ${t.slice(0, 200)}`;
+  };
+}
+
+function sushiQuoteAssert(buyToken) {
+  return (output) => {
+    const t = textOf(output);
+    if (!t.toLowerCase().includes(buyToken.toLowerCase())) return `expected a quote into ${buyToken}; got: ${t.slice(0, 200)}`;
+    const m = t.match(/AmountOut:\s*([0-9.]+)/);
+    return m && Number(m[1]) > 0 ? null : `expected a positive AmountOut; got: ${t.slice(0, 200)}`;
+  };
+}
+
 // ── the actions ──────────────────────────────────────────────────────────────
 
 export const ACTIONS = [
@@ -115,6 +249,7 @@ export const ACTIONS = [
     id: "agentkit-provider:erc20.get_balance",
     name: "ERC20ActionProvider_get_balance",
     source: "agentkit",
+    chain: "base",
     provider: "erc20ActionProvider",
     needs_fork: true,
     args: { tokenAddress: USDC_BASE, address: HOLDER },
@@ -129,6 +264,7 @@ export const ACTIONS = [
     id: "agentkit-provider:erc20.get_allowance",
     name: "ERC20ActionProvider_get_allowance",
     source: "agentkit",
+    chain: "base",
     provider: "erc20ActionProvider",
     needs_fork: true,
     wallet_address: HOLDER,
@@ -144,6 +280,7 @@ export const ACTIONS = [
     id: "agentkit-provider:pyth.fetch_price_feed",
     name: "PythActionProvider_fetch_price_feed",
     source: "agentkit",
+    chain: "any",
     provider: "pythActionProvider",
     args: { tokenSymbol: "ETH", quoteCurrency: "USD", assetType: "crypto" },
     assert(output) {
@@ -155,6 +292,7 @@ export const ACTIONS = [
     id: "agentkit-provider:pyth.fetch_price",
     name: "PythActionProvider_fetch_price",
     source: "agentkit",
+    chain: "any",
     provider: "pythActionProvider",
     args: { priceFeedID: PYTH_ETH_USD },
     assert(output) {
@@ -167,6 +305,7 @@ export const ACTIONS = [
     id: "agentkit-provider:defillama.find_protocol",
     name: "DefiLlamaActionProvider_find_protocol",
     source: "agentkit",
+    chain: "any",
     provider: "defillamaActionProvider",
     args: { query: "uniswap" },
     assert(output) {
@@ -178,6 +317,7 @@ export const ACTIONS = [
     id: "agentkit-provider:defillama.get_token_prices",
     name: "DefiLlamaActionProvider_get_token_prices",
     source: "agentkit",
+    chain: "base",
     provider: "defillamaActionProvider",
     args: { tokens: [`base:${USDC_BASE}`] },
     assert(output) {
@@ -191,6 +331,7 @@ export const ACTIONS = [
     id: "protocol-mcp:evm-mcp-server.get_block",
     name: "get_block",
     source: "evm-mcp-server",
+    chain: "base",
     args: { blockIdentifier: String(FORK_BLOCK), network: "base" },
     assert(output) {
       if (isMcpError(output)) return `the tool answered an error: ${textOf(output).slice(0, 200)}`;
@@ -204,6 +345,7 @@ export const ACTIONS = [
     id: "protocol-mcp:evm-mcp-server.get_chain_info",
     name: "get_chain_info",
     source: "evm-mcp-server",
+    chain: "base",
     args: { network: "base" },
     assert(output) {
       if (isMcpError(output)) return `the tool answered an error: ${textOf(output).slice(0, 200)}`;
@@ -215,6 +357,7 @@ export const ACTIONS = [
     id: "protocol-mcp:dexpaprika-mcp.getNetworks",
     name: "getNetworks",
     source: "dexpaprika-mcp",
+    chain: "any",
     args: { rationale: DEXPAPRIKA_RATIONALE },
     assert(output) {
       if (isMcpError(output)) return `the tool answered an error: ${textOf(output).slice(0, 200)}`;
@@ -225,6 +368,7 @@ export const ACTIONS = [
     id: "protocol-mcp:dexpaprika-mcp.getTokenDetails",
     name: "getTokenDetails",
     source: "dexpaprika-mcp",
+    chain: "base",
     args: { network: "base", token_address: USDC_BASE.toLowerCase(), rationale: DEXPAPRIKA_RATIONALE },
     assert(output) {
       if (isMcpError(output)) return `the tool answered an error: ${textOf(output).slice(0, 200)}`;
@@ -235,6 +379,7 @@ export const ACTIONS = [
     id: "protocol-mcp:openzeppelin-contracts-mcp.solidity-erc20",
     name: "solidity-erc20",
     source: "openzeppelin-contracts-mcp",
+    chain: "any",
     args: { name: "Example", symbol: "EX" },
     assert(output) {
       if (isMcpError(output)) return `the tool answered an error: ${textOf(output).slice(0, 200)}`;
@@ -244,15 +389,235 @@ export const ACTIONS = [
 
   // Skills: the SKILL.md at the repository's current commit must parse and
   // name itself as its directory does.
-  { id: "skill:uniswap-ai.swap-integration", name: "swap-integration", source: "uniswap-ai", path: "packages/plugins/uniswap-trading/skills/swap-integration/SKILL.md" },
-  { id: "skill:uniswap-ai.swap-planner", name: "swap-planner", source: "uniswap-ai", path: "packages/plugins/uniswap-driver/skills/swap-planner/SKILL.md" },
-  { id: "skill:uniswap-ai.viem-integration", name: "viem-integration", source: "uniswap-ai", path: "packages/plugins/uniswap-viem/skills/viem-integration/SKILL.md" },
+  { id: "skill:uniswap-ai.swap-integration", name: "swap-integration", source: "uniswap-ai", chain: "any", path: "packages/plugins/uniswap-trading/skills/swap-integration/SKILL.md" },
+  { id: "skill:uniswap-ai.swap-planner", name: "swap-planner", source: "uniswap-ai", chain: "any", path: "packages/plugins/uniswap-driver/skills/swap-planner/SKILL.md" },
+  { id: "skill:uniswap-ai.viem-integration", name: "viem-integration", source: "uniswap-ai", chain: "any", path: "packages/plugins/uniswap-viem/skills/viem-integration/SKILL.md" },
+
+  // ── AgentKit: more read-only providers, on Base and on Ethereum ─────────────
+  {
+    id: "agentkit-provider:wallet.get_wallet_details",
+    name: "WalletActionProvider_get_wallet_details",
+    source: "agentkit",
+    chain: "base",
+    provider: "walletActionProvider",
+    needs_fork: true,
+    wallet_address: WETH_BASE,
+    args: {},
+    expected: { kind: "native_balance", owner: WETH_BASE },
+    assert: nativeBalanceAssert(8453),
+  },
+  {
+    id: "agentkit-provider:erc721.get_balance",
+    name: "Erc721ActionProvider_get_balance",
+    source: "agentkit",
+    chain: "base",
+    provider: "erc721ActionProvider",
+    needs_fork: true,
+    args: { contractAddress: BASENAMES_BASE, address: HOLDER },
+    expected: { kind: "erc721_balance", token: BASENAMES_BASE, owner: HOLDER },
+    assert: nftBalanceAssert,
+  },
+  {
+    id: "agentkit-provider:erc20.get_erc20_token_address",
+    name: "ERC20ActionProvider_get_erc20_token_address",
+    source: "agentkit",
+    chain: "base",
+    provider: "erc20ActionProvider",
+    args: { symbol: "USDC" },
+    assert: tokenAddressAssert(USDC_BASE),
+  },
+  {
+    id: "agentkit-provider:sushi-data.find-token",
+    name: "SushiDataActionProvider_find-token",
+    source: "agentkit",
+    chain: "base",
+    provider: "sushiDataActionProvider",
+    args: { search: "USDC" },
+    assert: foundTokenAssert(USDC_BASE),
+  },
+  {
+    id: "agentkit-provider:sushi-router.quote",
+    name: "SushiRouterActionProvider_quote",
+    source: "agentkit",
+    chain: "base",
+    provider: "sushiRouterActionProvider",
+    needs_fork: true,
+    wallet_address: HOLDER,
+    args: { fromAssetAddress: USDC_BASE, toAssetAddress: WETH_BASE, amount: "1" },
+    assert: sushiQuoteAssert(WETH_BASE),
+  },
+  {
+    id: "agentkit-provider:truemarkets.get_prediction_markets",
+    name: "TrueMarketsActionProvider_get_prediction_markets",
+    source: "agentkit",
+    chain: "base",
+    provider: "truemarketsActionProvider",
+    needs_fork: true,
+    args: { limit: 2, offset: 0, sortOrder: "desc" },
+    assert(output) {
+      const j = jsonOf(output);
+      return j && j.success === true && Array.isArray(j.markets) && j.markets.length > 0 && Number(j.totalMarkets) > 0 ? null : `expected success with a non-empty market list read from the fork; got: ${textOf(output).slice(0, 200)}`;
+    },
+  },
+  {
+    id: "agentkit-provider:erc20.get_balance.ethereum",
+    name: "ERC20ActionProvider_get_balance",
+    source: "agentkit",
+    chain: "ethereum",
+    provider: "erc20ActionProvider",
+    needs_fork: true,
+    args: { tokenAddress: USDC_ETH, address: HOLDER_ETH },
+    expected: { kind: "erc20_balance", token: USDC_ETH, owner: HOLDER_ETH, decimals: 6 },
+    assert(output, exp) {
+      const t = textOf(output);
+      const want = formatUnits(exp.value, 6);
+      return t.includes(want) ? null : `the fork holds ${want} USDC for the holder; the action returned: ${t.slice(0, 200)}`;
+    },
+  },
+  {
+    id: "agentkit-provider:erc20.get_allowance.ethereum",
+    name: "ERC20ActionProvider_get_allowance",
+    source: "agentkit",
+    chain: "ethereum",
+    provider: "erc20ActionProvider",
+    needs_fork: true,
+    wallet_address: HOLDER_ETH,
+    args: { tokenAddress: USDC_ETH, spenderAddress: PERMIT2 },
+    expected: { kind: "erc20_allowance", token: USDC_ETH, owner: HOLDER_ETH, spender: PERMIT2, decimals: 6 },
+    assert(output, exp) {
+      const t = textOf(output);
+      const want = formatUnits(exp.value, 6);
+      return new RegExp(`(^|[^0-9.])${want.replace(".", "\\.")}([^0-9]|$)`).test(t) ? null : `the fork has an allowance of ${want}; the action returned: ${t.slice(0, 200)}`;
+    },
+  },
+  {
+    id: "agentkit-provider:wallet.get_wallet_details.ethereum",
+    name: "WalletActionProvider_get_wallet_details",
+    source: "agentkit",
+    chain: "ethereum",
+    provider: "walletActionProvider",
+    needs_fork: true,
+    wallet_address: HOLDER_ETH,
+    args: {},
+    expected: { kind: "native_balance", owner: HOLDER_ETH },
+    assert: nativeBalanceAssert(1),
+  },
+  {
+    id: "agentkit-provider:erc721.get_balance.ethereum",
+    name: "Erc721ActionProvider_get_balance",
+    source: "agentkit",
+    chain: "ethereum",
+    provider: "erc721ActionProvider",
+    needs_fork: true,
+    args: { contractAddress: ENS_REGISTRAR_ETH, address: HOLDER_ETH },
+    expected: { kind: "erc721_balance", token: ENS_REGISTRAR_ETH, owner: HOLDER_ETH },
+    assert: nftBalanceAssert,
+  },
+  {
+    id: "agentkit-provider:erc20.get_erc20_token_address.ethereum",
+    name: "ERC20ActionProvider_get_erc20_token_address",
+    source: "agentkit",
+    chain: "ethereum",
+    provider: "erc20ActionProvider",
+    args: { symbol: "USDC" },
+    assert: tokenAddressAssert(USDC_ETH),
+  },
+  {
+    id: "agentkit-provider:sushi-data.find-token.ethereum",
+    name: "SushiDataActionProvider_find-token",
+    source: "agentkit",
+    chain: "ethereum",
+    provider: "sushiDataActionProvider",
+    args: { search: "USDC" },
+    assert: foundTokenAssert(USDC_ETH),
+  },
+  {
+    id: "agentkit-provider:sushi-router.quote.ethereum",
+    name: "SushiRouterActionProvider_quote",
+    source: "agentkit",
+    chain: "ethereum",
+    provider: "sushiRouterActionProvider",
+    needs_fork: true,
+    wallet_address: HOLDER_ETH,
+    args: { fromAssetAddress: USDC_ETH, toAssetAddress: WETH_ETH, amount: "1" },
+    assert: sushiQuoteAssert(WETH_ETH),
+  },
+  // AgentKit on Solana: the SPL provider reads through a read-only Solana
+  // wallet provider whose connection is the public mainnet RPC.
+  {
+    id: "agentkit-provider:spl.get_balance.solana",
+    name: "SplActionProvider_get_balance",
+    source: "agentkit",
+    chain: "solana",
+    provider: "splActionProvider",
+    wallet_address: SOLANA_OWNER,
+    args: { mintAddress: USDC_SOLANA, address: SOLANA_OWNER },
+    assert(output) {
+      const t = textOf(output);
+      return new RegExp(`^Balance for ${SOLANA_OWNER} is [0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)? tokens$`).test(t.trim()) ? null : `expected "Balance for ${SOLANA_OWNER} is <n> tokens"; got: ${t.slice(0, 200)}`;
+    },
+  },
+
+  // ── DexPaprika on Ethereum and Solana ───────────────────────────────────────
+  {
+    id: "protocol-mcp:dexpaprika-mcp.getTokenDetails.ethereum",
+    name: "getTokenDetails",
+    source: "dexpaprika-mcp",
+    chain: "ethereum",
+    args: { network: "ethereum", token_address: USDC_ETH.toLowerCase(), rationale: DEXPAPRIKA_RATIONALE },
+    assert(output) {
+      if (isMcpError(output)) return `the tool answered an error: ${textOf(output).slice(0, 200)}`;
+      const j = jsonOf(output);
+      return j && j.symbol === "USDC" && Number(j.decimals) === 6 ? null : "expected symbol USDC with 6 decimals for Ethereum USDC";
+    },
+  },
+  {
+    id: "protocol-mcp:dexpaprika-mcp.getTokenDetails.solana",
+    name: "getTokenDetails",
+    source: "dexpaprika-mcp",
+    chain: "solana",
+    args: { network: "solana", token_address: USDC_SOLANA, rationale: DEXPAPRIKA_RATIONALE },
+    // decimals compared with the mint account read from Solana mainnet.
+    expected: { kind: "spl_mint", mint: USDC_SOLANA },
+    assert(output, exp) {
+      if (isMcpError(output)) return `the tool answered an error: ${textOf(output).slice(0, 200)}`;
+      const j = jsonOf(output);
+      if (!j || j.symbol !== "USDC") return "expected symbol USDC for Solana USDC";
+      return Number(j.decimals) === Number(exp.value) ? null : `the mint account on Solana has ${exp.value} decimals; the tool answered ${j.decimals}`;
+    },
+  },
+  {
+    id: "protocol-mcp:dexpaprika-mcp.getNetworkDexes.solana",
+    name: "getNetworkDexes",
+    source: "dexpaprika-mcp",
+    chain: "solana",
+    args: { network: "solana", rationale: DEXPAPRIKA_RATIONALE },
+    assert(output) {
+      if (isMcpError(output)) return `the tool answered an error: ${textOf(output).slice(0, 200)}`;
+      const j = jsonOf(output);
+      const dexes = Array.isArray(j?.dexes) ? j.dexes : [];
+      return dexes.length > 0 && dexes.every((d) => d.chain === "solana") ? null : "expected a non-empty list of Solana DEXes";
+    },
+  },
+
+  // ── Integration skills: SKILL.md at the repository's current commit ─────────
+  { id: "skill:uniswap-ai.lp-integration", name: "lp-integration", source: "uniswap-ai", chain: "any", path: "packages/plugins/uniswap-trading/skills/lp-integration/SKILL.md" },
+  { id: "skill:uniswap-ai.v4-sdk-integration", name: "v4-sdk-integration", source: "uniswap-ai", chain: "any", path: "packages/plugins/uniswap-trading/skills/v4-sdk-integration/SKILL.md" },
+  { id: "skill:lifi-agent-skills.lifi", name: "lifi", source: "lifi-agent-skills", chain: "any", path: "skills/lifi/SKILL.md" },
+  { id: "skill:lifi-agent-skills.lifi-stablecoin-swap", name: "lifi-stablecoin-swap", source: "lifi-agent-skills", chain: "any", path: "skills/lifi-stablecoin-swap/SKILL.md" },
+  { id: "skill:jupiter-agent-skills.integrating-jupiter", name: "integrating-jupiter", source: "jupiter-agent-skills", chain: "solana", path: "skills/integrating-jupiter/SKILL.md" },
+  { id: "skill:jupiter-agent-skills.jupiter-lend", name: "jupiter-lend", source: "jupiter-agent-skills", chain: "solana", path: "skills/jupiter-lend/SKILL.md" },
+  { id: "skill:jupiter-agent-skills.jupiter-swap-migration", name: "jupiter-swap-migration", source: "jupiter-agent-skills", chain: "solana", path: "skills/jupiter-swap-migration/SKILL.md" },
+  { id: "skill:helius-core-ai.helius", name: "helius", source: "helius-core-ai", chain: "solana", path: "helius-skills/helius/SKILL.md" },
+  { id: "skill:helius-core-ai.svm", name: "svm", source: "helius-core-ai", chain: "solana", path: "helius-skills/svm/SKILL.md" },
+  { id: "skill:polymarket-agent-skills.web3-polymarket", name: "web3-polymarket", source: "polymarket-agent-skills", chain: "polygon", path: "SKILL.md" },
 
   // Our own core five — the reference consumer, checked the same way.
   {
     id: "sato-kit:chain.read",
     name: "chain_read",
     source: "sato-kit",
+    chain: "base",
     needs_fork: true,
     args: { kind: "erc20_balance", chain: "base", token: USDC_BASE, owner: HOLDER },
     expected: { kind: "erc20_balance", token: USDC_BASE, owner: HOLDER, decimals: 6 },
@@ -264,6 +629,7 @@ export const ACTIONS = [
     id: "sato-kit:erc8004.lookup",
     name: "erc8004_lookup",
     source: "sato-kit",
+    chain: "base",
     needs_fork: true,
     args: { chain: "base", agent_id: "1" },
     assert(output) {
@@ -274,6 +640,7 @@ export const ACTIONS = [
     id: "sato-kit:swap.quote",
     name: "swap_quote",
     source: "sato-kit",
+    chain: "base",
     needs_fork: true,
     args: { chain: "base", sell_token: USDC_BASE, buy_token: WETH_BASE, sell_amount: "1000000", venue: "lifi" },
     assert(output) {
@@ -285,6 +652,7 @@ export const ACTIONS = [
     id: "sato-kit:swap.prepare",
     name: "swap_prepare",
     source: "sato-kit",
+    chain: "base",
     needs_fork: true,
     args: { chain: "base", sell_token: USDC_BASE, buy_token: WETH_BASE, sell_amount: "1000000", taker: HOLDER, venue: "lifi" },
     assert(output) {
@@ -295,6 +663,7 @@ export const ACTIONS = [
     id: "sato-kit:x402.prepare",
     name: "x402_prepare",
     source: "sato-kit",
+    chain: "base",
     args: { url: "https://satohub.ai/api/x402/history/coinbase-agentkit", max_amount_base_units: "1000000" },
     assert(output) {
       return output?.unsigned?.kind === "x402_payment" ? null : `expected an unsigned x402_payment; got ${JSON.stringify(output?.unsigned ?? null).slice(0, 200)}`;
