@@ -127,7 +127,7 @@ test("workflows: ci.yml is dispatchable with a ref input and the status job may 
   const nightly = readFileSync(new URL("../.github/workflows/nightly.yml", import.meta.url), "utf8");
   assert.match(nightly, /actions: write/);
   const lane = readFileSync(new URL("./latest-lane.mjs", import.meta.url), "utf8");
-  assert.match(lane, /"workflow", "run", "ci\.yml", "--ref", a\.branch/);
+  assert.match(lane, /"workflow", "run", "ci\.yml", "--ref", branch/);
 });
 
 test("framework rule caps a bump: a direct dependency's exact range holds viem, with the reason", () => {

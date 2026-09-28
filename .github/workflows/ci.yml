@@ -111,3 +111,22 @@ jobs:
           path: ${{ runner.temp }}/result-${{ matrix.template }}-${{ matrix.framework }}-${{ matrix.lane }}.json
           if-no-files-found: warn
           retention-days: 7
+
+  # One stable check name to make required: fails when discover failed or any
+  # verify cell failed/was cancelled; passes when verify succeeded or was
+  # skipped because the change touched no template.
+  ci-result:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [discover, verify]
+    if: always()
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: result
+        env:
+          DISCOVER: ${{ needs.discover.result }}
+          VERIFY: ${{ needs.verify.result }}
+        run: node scripts/ci-result.mjs "$DISCOVER" "$VERIFY"

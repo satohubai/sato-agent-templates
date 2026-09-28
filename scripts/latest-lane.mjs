@@ -117,7 +117,8 @@ export function bumpBody(a) {
   const heldText = held
     ? `Held by the update policy (not in this PR):\n\n| package | class | pinned | newest published | reason |\n|---|---|---|---|---|\n${held}\n`
     : "Held by the update policy: nothing.\n";
-  return `Update-policy bump for \`${a.template}/${a.framework}\`, class \`${a.class}\` (${a.class === "devDependencies" ? "tooling" : "runtime code"}).\n\nEach version is the highest published on registry.npmjs.org that \`upgrade-policy.json\` allows. It is not the latest lane's set: the latest lane tests newest-of-everything as an early warning, and this PR carries only what the policy permits.\n\n| package | class | pinned | bump to |\n|---|---|---|---|\n${rows}\n\n${heldText}\nThe status job dispatches \`ci.yml\` on this branch after every push, so the checks shown here ran on exactly this commit. Merge only when they are green.\n\nOpened by the nightly status job (scripts/latest-lane.mjs).\n`;
+  const lock = lockfileText(a.lockChanges);
+  return `Update-policy bump for \`${a.template}/${a.framework}\`, class \`${a.class}\` (${a.class === "devDependencies" ? "tooling" : "runtime code"}).\n\nEach version is the highest published on registry.npmjs.org that \`upgrade-policy.json\` allows. It is not the latest lane's set: the latest lane tests newest-of-everything as an early warning, and this PR carries only what the policy permits.\n\n| package | class | pinned | bump to |\n|---|---|---|---|\n${rows}\n\n${heldText}\n${lock}\nThe status job dispatches \`ci.yml\` on this branch after every push, so the checks shown here ran on exactly this commit. Merge only when they are green.\n\nOpened by the nightly status job (scripts/latest-lane.mjs).\n`;
 }
 
 /** Pure: one paragraph on how (or whether) the cause was established. */
@@ -135,6 +136,58 @@ export function issueBody(a) {
   const rows = a.versions.map((v) => `| \`${v.name}\` | ${v.from ?? "(new)"} | ${v.to} |`).join("\n") || "| (no version change recorded) | | |";
   const log = (a.log_excerpt ?? "(no log captured)").slice(-6000).replace(/```/g, "'''");
   return `The latest lane for \`${a.template}/${a.framework}\` failed tonight while the pinned lane passed.\n\nFailing step: \`${a.failing_step ?? "unknown"}\`\n\n${attributionText(a)}\n\nEvery version that changed:\n\n| package | pinned | latest |\n|---|---|---|\n${rows}\n\n<details><summary>Log excerpt</summary>\n\n\`\`\`\n${log}\n\`\`\`\n</details>\n\nThe pinned versions are unaffected. This issue closes itself on the first night the latest lane passes again.\n\nOpened by the nightly status job (scripts/latest-lane.mjs).\n`;
+}
+
+/**
+ * Pure: every package whose resolved version differs between two
+ * package-lock.json objects (lockfileVersion 2/3 `packages` map), direct and
+ * transitive, keyed by install path so nested copies are listed separately.
+ * from/to null = added/removed. Sorted by path.
+ */
+export function lockfileChanges(oldLock = {}, newLock = {}) {
+  const a = oldLock?.packages ?? {}, b = newLock?.packages ?? {};
+  const name = (path) => { const i = path.lastIndexOf("node_modules/"); return i < 0 ? path : path.slice(i + "node_modules/".length); };
+  const out = [];
+  for (const path of [...new Set([...Object.keys(a), ...Object.keys(b)])].sort()) {
+    if (path === "") continue;
+    const from = a[path]?.version ?? null, to = b[path]?.version ?? null;
+    if (from !== to) out.push({ name: name(path), path, from, to });
+  }
+  return out;
+}
+
+/** Pure: the "Lockfile changes" section of a bump PR body. */
+export function lockfileText(changes) {
+  if (!changes) return "Lockfile changes: not computed.\n";
+  if (!changes.length) return "Lockfile changes: none.\n";
+  const rows = changes.map((c) => `| \`${c.name}\` | \`${c.path}\` | ${c.from ?? "(added)"} | ${c.to ?? "(removed)"} |`).join("\n");
+  return `Lockfile changes (every package whose resolved version moved in package-lock.json, direct and transitive):\n\n| package | install path | from | to |\n|---|---|---|---|\n${rows}\n`;
+}
+
+/**
+ * Pure: does this head commit need ci.yml dispatched again? runs is
+ * `gh run list --workflow ci.yml --branch <b> --json headSha,status,conclusion`.
+ * A successful or still-running run on the head SHA means no.
+ */
+export function needsCiDispatch(runs, headSha) {
+  return !(runs ?? []).some((r) => r.headSha === headSha && (r.conclusion === "success" || (r.status && r.status !== "completed")));
+}
+
+/**
+ * Dispatch ci.yml on a bump branch. If the dispatch fails the PR would sit
+ * with no checks, so it is closed with a comment and its branch deleted
+ * (the next night rebuilds it). sh is injected. Returns "dispatched" | "closed".
+ */
+export function dispatchCi(branch, sh) {
+  try {
+    sh("gh", ["workflow", "run", "ci.yml", "--ref", branch, "-f", `ref=${branch}`]);
+    return "dispatched";
+  } catch (e) {
+    const why = String(e?.message ?? e).split("\n")[0];
+    try { sh("gh", ["pr", "close", branch, "--delete-branch", "--comment", `Closing: ci.yml could not be dispatched on this branch (${why}), so no checks ran on this commit. The nightly status job rebuilds it next run.`]); }
+    catch { try { sh("git", ["push", "origin", "--delete", branch]); } catch { /* already gone */ } }
+    throw new Error(`ci.yml not dispatched on ${branch} (${why}); PR closed and branch deleted`);
+  }
 }
 
 function sh(cmd, args, opts = {}) {
@@ -177,19 +230,25 @@ export function bumpUpstreamText(text, versions) {
 export const PR_PERMISSION_HINT =
   "Settings → Actions → General → Workflow permissions → \"Allow GitHub Actions to create and approve pull requests\"";
 
-function applyBump(a) {
+export function applyBump(a, { sh: run = sh, readFile = (f) => readFileSync(f, "utf8"), writeFile = writeFileSync } = {}) {
+  const sh = run;
   const dir = join("templates", a.template, a.framework);
   sh("git", ["fetch", "--quiet", "origin", "main"]);
   sh("git", ["checkout", "-B", a.branch, "origin/main"]);
+  const lockPath = join(dir, "package-lock.json");
+  let oldLock = null;
+  try { oldLock = JSON.parse(readFile(lockPath)); } catch { /* no lockfile on main */ }
   const specs = a.versions.map((v) => `${v.name}@${v.to}`);
   sh("npm", ["install", ...specs, a.class === "devDependencies" ? "--save-dev" : "--save-prod", "--save-exact", "--package-lock-only", "--ignore-scripts", "--no-audit", "--no-fund", "--registry=https://registry.npmjs.org/"], { cwd: dir });
   sh("node", ["scripts/check-lock-registry.mjs", join(dir, "package-lock.json")]);
   const manifestPath = join(dir, "sato.template.json");
-  writeFileSync(manifestPath, bumpUpstreamText(readFileSync(manifestPath, "utf8"), a.versions));
+  writeFile(manifestPath, bumpUpstreamText(readFile(manifestPath), a.versions));
+  let lockChanges = null;
+  try { lockChanges = lockfileChanges(oldLock ?? {}, JSON.parse(readFile(lockPath))); } catch { /* not computed */ }
   sh("git", ["add", join(dir, "package.json"), join(dir, "package-lock.json"), manifestPath]);
   sh("git", ["-c", "user.name=Sato Hub", "-c", "user.email=satohub88@gmail.com", "commit", "-m", `deps(${a.template}/${a.framework}): ${a.class} per the update policy`]);
   const bodyFile = join(process.env.RUNNER_TEMP || ".", `bump-${a.template}-${a.framework}-${a.class}.md`);
-  writeFileSync(bodyFile, bumpBody(a));
+  writeFile(bodyFile, bumpBody({ ...a, lockChanges }));
   if (a.mode === "update") {
     // Same contents already on the open PR: nothing to push, nothing to re-run.
     let same = false;
@@ -197,7 +256,19 @@ function applyBump(a) {
       sh("git", ["fetch", "--quiet", "origin", `+refs/heads/${a.branch}:refs/remotes/origin/${a.branch}`]);
       same = sh("git", ["rev-parse", "HEAD^{tree}"]).trim() === sh("git", ["rev-parse", `origin/${a.branch}^{tree}`]).trim();
     } catch { same = false; }
-    if (same) { console.log(`bump ${a.branch}: open PR #${a.number} already carries these versions`); sh("git", ["checkout", "--detach", "origin/main"]); return; }
+    if (same) {
+      // Same contents, but a PR must never sit without checks: if its head
+      // has no successful (or running) ci.yml run, dispatch again.
+      let runs = [];
+      const head = sh("git", ["rev-parse", `origin/${a.branch}`]).trim();
+      try { runs = JSON.parse(sh("gh", ["run", "list", "--workflow", "ci.yml", "--branch", a.branch, "--limit", "50", "--json", "headSha,status,conclusion"])); } catch { runs = []; }
+      if (needsCiDispatch(runs, head)) {
+        console.log(`bump ${a.branch}: open PR #${a.number} unchanged but ${head.slice(0, 7)} has no successful ci.yml run; dispatching`);
+        try { dispatchCi(a.branch, sh); } finally { sh("git", ["checkout", "--detach", "origin/main"]); }
+        return;
+      }
+      console.log(`bump ${a.branch}: open PR #${a.number} already carries these versions`); sh("git", ["checkout", "--detach", "origin/main"]); return;
+    }
     // bump/ branches are ours and rebuilt from origin/main every run.
     sh("git", ["push", "--force", "origin", `HEAD:refs/heads/${a.branch}`]);
     sh("gh", ["pr", "edit", String(a.number), "--body-file", bodyFile]);
@@ -214,8 +285,7 @@ function applyBump(a) {
   }
   // A push by GITHUB_TOKEN triggers no pull_request workflow; a
   // workflow_dispatch does, and its checks attach to the bump commit.
-  sh("gh", ["workflow", "run", "ci.yml", "--ref", a.branch, "-f", `ref=${a.branch}`]);
-  sh("git", ["checkout", "--detach", "origin/main"]);
+  try { dispatchCi(a.branch, sh); } finally { sh("git", ["checkout", "--detach", "origin/main"]); }
 }
 
 function npmVersions(spec, field = "versions") {
