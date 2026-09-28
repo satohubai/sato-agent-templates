@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "persona-agent out/report.json",
+  "type": "object",
+  "required": ["schema", "mode", "user_agent", "character", "model", "exchanges", "refused_intents", "executed"],
+  "properties": {
+    "schema": { "const": "persona-agent.report/v1" },
+    "mode": { "type": "string", "enum": ["fixture", "fork", "testnet"] },
+    "user_agent": { "type": "string" },
+    "character": { "type": "string" },
+    "model": { "type": "string" },
+    "refused_intents": { "type": "integer", "minimum": 0 },
+    "executed": { "type": "boolean" },
+    "exchanges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["connector", "chat_id", "user", "message", "reply", "memories_used", "wallet"],
+        "properties": {
+          "reply": { "type": "string" },
+          "wallet": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["request"],
+              "properties": {
+                "intent_id": { "type": "string", "pattern": "^si_[A-Za-z0-9_-]{43}$" },
+                "policy_ok": { "type": "boolean" },
+                "refusals": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["rule", "limit", "observed", "message"],
+                    "properties": { "rule": { "type": "string" }, "limit": { "type": "string" }, "observed": { "type": "string" }, "message": { "type": "string" } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,2 @@
+{"at":"2026-09-20T10:00:00.000Z","connector":"discord","chat_id":"dc-fixture-channel","user":"lin","role":"user","text":"my agent watches treasury balances on Base and posts alerts"}
+{"at":"2026-09-21T09:30:00.000Z","connector":"telegram","chat_id":"tg-fixture-chat","user":"ada","role":"user","text":"I prefer short answers"}
