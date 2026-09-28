@@ -12,7 +12,11 @@ test("package.json pins exact versions only", () => {
   }
 });
 
-test("sato.template.json upstream pins match the lockfile", () => {
+// The latest lane (SATO_LANE=latest) moves versions on purpose, so pin
+// consistency is only meaningful on the pinned lane.
+const PIN_CHECK_SKIP = process.env.SATO_LANE === "latest" ? "SATO_LANE=latest: the latest lane changes versions on purpose; pin consistency is checked on the pinned lane" : false;
+
+test("sato.template.json upstream pins match the lockfile", { skip: PIN_CHECK_SKIP }, () => {
   for (const [name, v] of Object.entries(tpl.template.upstream as Record<string, string>)) assert.equal(lock.packages[`node_modules/${name}`]?.version, v, name);
 });
 

@@ -6,9 +6,18 @@
 //   latest green, pinned green,
 //     pinned behind            → ONE bump PR (branch bump/<t>-<f>-<date>),
 //                                never a second open one for the same pair
-//   latest red, pinned green   → ONE issue "upstream break: <pkg>@<v> breaks <t>/<f>",
-//                                deduped by title
-//   latest green               → closes any open "upstream break: … breaks <t>/<f>" issue
+//   latest red, pinned green   → ONE issue, deduped by title. The package is
+//                                named only when it is established: the
+//                                one-package bisect (scripts/bisect-latest.mjs)
+//                                reproduced the failure with that upgrade alone,
+//                                or it is the only package that changed, or the
+//                                drift drill injected it:
+//                                  "upstream break: <pkg>@<v> breaks <t>/<f>"
+//                                every single upgrade passed alone:
+//                                  "upstream drift in <t>/<f>: a combination of newer versions fails <step>"
+//                                bisect did not finish (time box, no bisect):
+//                                  "upstream drift in <t>/<f>: newer versions fail <step> (not attributed)"
+//   latest green               → closes any open break or drift issue for <t>/<f>
 //
 // decide() is pure over the cells and the open PR / issue lists; main() only
 // reads them with gh and carries the actions out.
@@ -22,11 +31,30 @@ import { pathToFileURL } from "node:url";
 
 export const BUMP_PREFIX = "bump/";
 export const ISSUE_PREFIX = "upstream break: ";
+export const DRIFT_PREFIX = "upstream drift in ";
 
 export const pairId = (c) => `${c.template}/${c.framework}`;
 export const bumpBranchPrefix = (c) => `${BUMP_PREFIX}${c.template}-${c.framework}-`;
 export const issueSuffix = (c) => ` breaks ${pairId(c)}`;
 export const issueTitle = (pkg, version, c) => `${ISSUE_PREFIX}${pkg}@${version}${issueSuffix(c)}`;
+export const driftPrefix = (c) => `${DRIFT_PREFIX}${pairId(c)}: `;
+export const isIssueFor = (title, c) => (title.startsWith(ISSUE_PREFIX) && title.endsWith(issueSuffix(c))) || title.startsWith(driftPrefix(c));
+
+/**
+ * Pure: the title for a red latest cell. Names a package only when that
+ * package is established as the cause; never the alphabetically-first change.
+ */
+export function breakTitle({ pair, diff, attribution, inject, failingStep }) {
+  const step = failingStep ?? "a check";
+  if (inject) {
+    const hit = diff.find((d) => d.name === inject.name);
+    return issueTitle(inject.name, hit ? hit.to : inject.version, pair);
+  }
+  if (attribution?.kind === "single") return issueTitle(attribution.name, attribution.to, pair);
+  if (attribution?.kind === "combination") return `${driftPrefix(pair)}a combination of newer versions fails ${step}`;
+  if (!attribution && diff.length === 1) return issueTitle(diff[0].name, diff[0].to, pair);
+  return `${driftPrefix(pair)}newer versions fail ${step} (not attributed)`;
+}
 
 /** Packages whose latest-lane version differs from the pinned one, sorted by name. */
 export function versionDiff(pinned = {}, latest = {}, vendored = []) {
@@ -63,17 +91,17 @@ export function decide({ cells, openPrs = [], openIssues = [], date, vendored = 
     const diff = versionDiff(pinned?.resolved, latest.resolved, vendored[id] ?? []);
     if (latest.result === "green") {
       for (const i of openIssues) {
-        if (i.title.startsWith(ISSUE_PREFIX) && i.title.endsWith(issueSuffix(p))) actions.push({ type: "close_issue", ...base, number: i.number, title: i.title });
+        if (isIssueFor(i.title, p)) actions.push({ type: "close_issue", ...base, number: i.number, title: i.title });
       }
       if (pinned?.result === "green" && diff.length) {
         const dup = openPrs.find((pr) => pr.headRefName.startsWith(bumpBranchPrefix(p)));
         if (!dup) actions.push({ type: "bump", ...base, branch: `${bumpBranchPrefix(p)}${date}`, versions: diff });
       }
     } else if (latest.result === "red" && pinned?.result === "green") {
-      const culprit = (inject && diff.find((d) => d.name === inject.name)) || diff[0] || (inject ? { name: inject.name, to: inject.version } : null);
-      const title = culprit ? issueTitle(culprit.name, culprit.to, p) : `${ISSUE_PREFIX}unknown package${issueSuffix(p)}`;
+      const attribution = latest.attribution ?? null;
+      const title = breakTitle({ pair: p, diff, attribution, inject, failingStep: latest.failing_step });
       if (!openIssues.some((i) => i.title === title)) {
-        actions.push({ type: "issue", ...base, title, failing_step: latest.failing_step, log_excerpt: latest.log_excerpt, versions: diff });
+        actions.push({ type: "issue", ...base, title, failing_step: latest.failing_step, log_excerpt: latest.log_excerpt, versions: diff, attribution });
       }
     }
   }
@@ -85,10 +113,21 @@ export function bumpBody(a) {
   return `The latest lane for \`${a.template}/${a.framework}\` passed tonight's checks with newer upstream versions than the pinned lane.\n\n| package | pinned | latest (passed tonight's checks) |\n|---|---|---|\n${rows}\n\nThis PR moves the exact pins and the lockfile to those versions. The pinned lane re-verifies them on this PR.\n\nOpened by the nightly status job (scripts/latest-lane.mjs).\n`;
 }
 
+/** Pure: one paragraph on how (or whether) the cause was established. */
+export function attributionText(a) {
+  const at = a.attribution;
+  const tried = (at?.trials ?? []).map((t) => `- \`${t.name}\` ${t.from ?? "(new)"} → ${t.to} alone: ${t.reproduced ? `fails \`${t.step}\`` : "passes"}`).join("\n");
+  if (at?.kind === "single") return `Attribution: one-package bisect. With every other package at its pinned version, upgrading \`${at.name}\` from ${at.from ?? "(new)"} to ${at.to} alone fails \`${at.step}\`.\n\n${tried}`;
+  if (at?.kind === "combination") return `Attribution: no single upgrade reproduces the failure. Each changed package was upgraded alone with every other package pinned, and each run passed, so the failure needs a combination of the newer versions.\n\n${tried}`;
+  if (at?.kind === "inconclusive") return `Attribution: not established (${at.reason}).${tried ? `\n\n${tried}` : ""}`;
+  if ((a.versions ?? []).length === 1) return `Attribution: only one package changed.`;
+  return `Attribution: not established; no bisect result was recorded for this cell.`;
+}
+
 export function issueBody(a) {
   const rows = a.versions.map((v) => `| \`${v.name}\` | ${v.from ?? "(new)"} | ${v.to} |`).join("\n") || "| (no version change recorded) | | |";
   const log = (a.log_excerpt ?? "(no log captured)").slice(-6000).replace(/```/g, "'''");
-  return `The latest lane for \`${a.template}/${a.framework}\` failed tonight while the pinned lane passed.\n\nFailing step: \`${a.failing_step ?? "unknown"}\`\n\n| package | pinned | latest |\n|---|---|---|\n${rows}\n\n<details><summary>Log excerpt</summary>\n\n\`\`\`\n${log}\n\`\`\`\n</details>\n\nThe pinned versions are unaffected. This issue closes itself on the first night the latest lane passes again.\n\nOpened by the nightly status job (scripts/latest-lane.mjs).\n`;
+  return `The latest lane for \`${a.template}/${a.framework}\` failed tonight while the pinned lane passed.\n\nFailing step: \`${a.failing_step ?? "unknown"}\`\n\n${attributionText(a)}\n\nEvery version that changed:\n\n| package | pinned | latest |\n|---|---|---|\n${rows}\n\n<details><summary>Log excerpt</summary>\n\n\`\`\`\n${log}\n\`\`\`\n</details>\n\nThe pinned versions are unaffected. This issue closes itself on the first night the latest lane passes again.\n\nOpened by the nightly status job (scripts/latest-lane.mjs).\n`;
 }
 
 function sh(cmd, args, opts = {}) {
@@ -139,7 +178,7 @@ export function main(argv = process.argv.slice(2)) {
   const at = injectRaw.lastIndexOf("@");
   const inject = injectRaw && at > 0 ? { name: injectRaw.slice(0, at), version: injectRaw.slice(at + 1) } : null;
   const openPrs = dry ? [] : JSON.parse(sh("gh", ["pr", "list", "--state", "open", "--limit", "200", "--json", "number,headRefName"]));
-  const openIssues = dry ? [] : JSON.parse(sh("gh", ["issue", "list", "--state", "open", "--limit", "200", "--search", `"${ISSUE_PREFIX.trim()}" in:title`, "--json", "number,title"]));
+  const openIssues = dry ? [] : JSON.parse(sh("gh", ["issue", "list", "--state", "open", "--limit", "200", "--search", `upstream in:title`, "--json", "number,title"]));
   const actions = decide({ cells: status.cells, openPrs, openIssues, date, vendored: vendoredMap(status.cells), inject });
   let page = false;
   for (const a of actions) {
