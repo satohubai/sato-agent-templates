@@ -9,6 +9,11 @@ on:
   schedule:
     - cron: "23 6 * * *"
   workflow_dispatch:
+    inputs:
+      inject_drift:
+        description: "Drift drill: force <pkg>@<version> in the latest lane (e.g. viem@1.0.0). Empty on a normal run."
+        required: false
+        default: ""
 
 permissions:
   contents: read
@@ -18,15 +23,38 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.list.outputs.matrix }}
+      expect: ${{ steps.list.outputs.expect }}
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: setup_node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+      # Every templates/*/*/sato.template.json becomes a cell: a new template
+      # needs no workflow edit.
+      - id: list
+        run: |
+          echo "matrix=$(node scripts/discover-templates.mjs --lanes pinned,latest)" >> "$GITHUB_OUTPUT"
+          echo "expect=$(node scripts/discover-templates.mjs --lanes pinned,latest --expect)" >> "$GITHUB_OUTPUT"
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    needs: discover
+    # A latest-lane failure is recorded and filed as an issue by the status
+    # job; only a pinned failure fails the night.
+    continue-on-error: ${{ matrix.lane == 'latest' }}
     strategy:
       fail-fast: false
-      matrix:
-        template: [base-guarded-trader, treasury-monitor, research-report]
-        framework: [plain-ts]
-        lane: [pinned]
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
     steps:
       - id: checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -39,6 +67,7 @@ jobs:
           template: ${{ matrix.template }}
           framework: ${{ matrix.framework }}
           lane: ${{ matrix.lane }}
+          inject-drift: ${{ matrix.lane == 'latest' && inputs.inject_drift || '' }}
           result-file: ${{ runner.temp }}/result-${{ matrix.template }}-${{ matrix.framework }}-${{ matrix.lane }}.json
 
       - id: upload
@@ -51,12 +80,15 @@ jobs:
           retention-days: 30
 
   status:
-    needs: verify
+    needs: [discover, verify]
     if: always() && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # The only job that writes: status commit, bump PRs, break issues.
     permissions:
       contents: write
+      pull-requests: write
+      issues: write
     steps:
       - id: checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -77,11 +109,13 @@ jobs:
           merge-multiple: true
 
       - id: update
+        env:
+          EXPECT: ${{ needs.discover.outputs.expect }}
         run: |
           node scripts/update-status.mjs \
             --results results --status status.json --badges badges \
             --date "$(date -u +%F)" \
-            --expect "base-guarded-trader/plain-ts/pinned,treasury-monitor/plain-ts/pinned,research-report/plain-ts/pinned"
+            --expect "$EXPECT"
 
       - id: commit
         run: |
@@ -93,3 +127,13 @@ jobs:
           git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" \
             commit -m "status: nightly $(date -u +%F)"
           git push origin HEAD:main
+
+      # Pinned red pages (this step fails, after the status is recorded);
+      # latest green + pinned behind opens one bump PR per template/framework;
+      # latest red + pinned green opens one "upstream break" issue, closed
+      # automatically when the latest lane passes again.
+      - id: latest_lane
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INJECT_DRIFT: ${{ inputs.inject_drift }}
+        run: node scripts/latest-lane.mjs --status status.json --date "$(date -u +%F)"
