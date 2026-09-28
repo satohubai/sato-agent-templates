@@ -44,3 +44,43 @@ for (const c of cells) {
     }
   });
 }
+
+// One @satohub/kit build across every template, and each lockfile's record of
+// it regenerated from the tarball (a stale lock entry once made the update
+// policy compute a wrong MCP SDK bump).
+import { readdirSync, existsSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
+
+const kitCells = cells
+  .map((c) => ({ c, dir: join(ROOT, "templates", c.template, c.framework) }))
+  .filter(({ dir }) => existsSync(join(dir, "vendor")) && readdirSync(join(dir, "vendor")).some((f) => /^satohub-kit-.*\.tgz$/.test(f)));
+const kitTgz = (dir) => join(dir, "vendor", readdirSync(join(dir, "vendor")).find((f) => /^satohub-kit-.*\.tgz$/.test(f)));
+
+test("every template vendors the same @satohub/kit tarball bytes", () => {
+  const shas = new Set(kitCells.map(({ dir }) => createHash("sha256").update(readFileSync(kitTgz(dir))).digest("hex")));
+  assert.equal(shas.size, 1, `distinct kit tarballs: ${[...shas].join(", ")}`);
+});
+
+test("every vendor/README.md names the same sato-hub-integrations sha", () => {
+  const shas = new Set(kitCells.map(({ dir }) => {
+    const m = readFileSync(join(dir, "vendor", "README.md"), "utf8").match(/sato-hub-integrations@([0-9a-f]{40})/);
+    assert.ok(m, `${dir}/vendor/README.md names a full integrations sha`);
+    return m[1];
+  }));
+  assert.equal(shas.size, 1, `distinct integrations shas: ${[...shas].join(", ")}`);
+});
+
+for (const { c, dir } of kitCells) {
+  test(`${c.template}/${c.framework}: lockfile @satohub/kit entry matches the vendored tarball`, () => {
+    const tgz = kitTgz(dir);
+    const kit = JSON.parse(execFileSync("tar", ["-xzOf", tgz, "package/package.json"], { encoding: "utf8" }));
+    const lock = JSON.parse(readFileSync(join(dir, "package-lock.json"), "utf8"));
+    const e = lock.packages?.["node_modules/@satohub/kit"];
+    assert.ok(e, "lock has node_modules/@satohub/kit");
+    assert.equal(e.version, kit.version, "version");
+    assert.equal(e.integrity, "sha512-" + createHash("sha512").update(readFileSync(tgz)).digest("base64"), "integrity");
+    assert.deepEqual(e.dependencies ?? {}, kit.dependencies ?? {}, "dependencies");
+    assert.deepEqual(e.peerDependencies ?? {}, kit.peerDependencies ?? {}, "peerDependencies");
+  });
+}
