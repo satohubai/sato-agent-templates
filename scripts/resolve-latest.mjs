@@ -26,7 +26,7 @@
 // whose Client types do not match (typecheck failed).
 
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 
 const REGISTRY = "https://registry.npmjs.org/";
@@ -132,12 +132,21 @@ function respectPeers(pkg, inject) {
       }
     }
     if (!fixes.dependencies.length && !fixes.devDependencies.length) break;
-    for (const [group, dev] of [["dependencies", false], ["devDependencies", true]]) {
-      if (!fixes[group].length) continue;
-      const args = npmArgs(fixes[group], dev);
-      console.log(`npm ${args.join(" ")}`);
-      execFileSync("npm", args, { stdio: "inherit" });
+    // Write every held version into package.json first and re-resolve once:
+    // installing them one group at a time can hit the very conflict the other
+    // group's hold removes (viem@2.38.3 alone still ERESOLVEs against typescript@7).
+    const cur = JSON.parse(readFileSync("package.json", "utf8"));
+    for (const group of ["dependencies", "devDependencies"]) {
+      for (const spec of fixes[group]) {
+        const at = spec.lastIndexOf("@");
+        cur[group][spec.slice(0, at)] = spec.slice(at + 1);
+      }
     }
+    writeFileSync("package.json", JSON.stringify(cur, null, 2) + "\n");
+    const args = ["install", "--ignore-scripts", "--no-audit", "--no-fund", `--registry=${REGISTRY}`];
+    console.log(`npm ${args.join(" ")}  (after holding ${[...fixes.dependencies, ...fixes.devDependencies].join(", ")})`);
+    execFileSync("npm", args, { stdio: "inherit" });
+    pkg = cur;
   }
   return held;
 }
