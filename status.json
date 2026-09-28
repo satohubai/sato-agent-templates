@@ -7,18 +7,30 @@
       "lane": "latest",
       "last_run": "2026-09-28",
       "last_green": "2026-09-28",
-      "result": "green",
-      "failing_step": null,
-      "log_excerpt": null,
+      "result": "red",
+      "failing_step": "resolve_latest",
+      "log_excerpt": "npm error   @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Conflicting peer dependency: viem@2.56.9\nnpm error node_modules/viem\nnpm error   peer viem@\"^2\" from @satohub/kit@0.1.0\nnpm error   node_modules/@satohub/kit\nnpm error     @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Fix the upstream dependency conflict, or retry\nnpm error this command with --force or --legacy-peer-deps\nnpm error to accept an incorrect (and potentially broken) dependency resolution.\nnpm error\nnpm error\nnpm error For a full report see:\nnpm error /home/runner/.npm/_logs/2026-09-28T00_51_42_449Z-eresolve-report.txt\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-09-28T00_51_42_449Z-debug-0.log\nnode:internal/errors:983\n  const err = new Error(message);\n              ^\n\nError: Command failed: npm install @types/node@latest tsx@latest typescript@latest --save-dev --save-exact --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/\n    at genericNodeError (node:internal/errors:983:15)\n    at wrappedFn (node:internal/errors:537:14)\n    at checkExecSyncError (node:child_process:916:11)\n    at execFileSync (node:child_process:952:15)\n    at main (file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:164:5)\n    at file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:171:68\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  status: 1,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 2318,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v22.23.2\n",
       "resolved": {
         "@coinbase/agentkit": "0.10.4",
         "@satohub/kit": "0.1.0",
-        "@types/node": "26.6.3",
+        "@types/node": "22.20.4",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
-        "viem": "2.38.3"
+        "viem": "1.0.0"
       },
-      "attribution": null,
+      "attribution": {
+        "kind": "inconclusive",
+        "reason": "the failing step (resolve_latest) cannot be re-run on its own",
+        "failing_step": "resolve_latest",
+        "changes": [
+          {
+            "name": "viem",
+            "from": "2.38.3",
+            "to": "1.0.0"
+          }
+        ],
+        "trials": []
+      },
       "history": [
         {
           "date": "2026-09-28",
@@ -27,6 +39,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "red"
         }
       ]
     },
@@ -56,6 +72,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -65,21 +85,33 @@
       "lane": "latest",
       "last_run": "2026-09-28",
       "last_green": "2026-09-28",
-      "result": "green",
-      "failing_step": null,
-      "log_excerpt": null,
+      "result": "red",
+      "failing_step": "resolve_latest",
+      "log_excerpt": "npm error   @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Conflicting peer dependency: viem@2.56.9\nnpm error node_modules/viem\nnpm error   peer viem@\"^2\" from @satohub/kit@0.1.0\nnpm error   node_modules/@satohub/kit\nnpm error     @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Fix the upstream dependency conflict, or retry\nnpm error this command with --force or --legacy-peer-deps\nnpm error to accept an incorrect (and potentially broken) dependency resolution.\nnpm error\nnpm error\nnpm error For a full report see:\nnpm error /home/runner/.npm/_logs/2026-09-28T00_50_28_796Z-eresolve-report.txt\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-09-28T00_50_28_796Z-debug-0.log\nnode:internal/errors:983\n  const err = new Error(message);\n              ^\n\nError: Command failed: npm install @types/node@latest tsx@latest typescript@latest --save-dev --save-exact --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/\n    at genericNodeError (node:internal/errors:983:15)\n    at wrappedFn (node:internal/errors:537:14)\n    at checkExecSyncError (node:child_process:916:11)\n    at execFileSync (node:child_process:952:15)\n    at main (file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:164:5)\n    at file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:171:68\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  status: 1,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 2515,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v22.23.2\n",
       "resolved": {
         "@anthropic-ai/claude-agent-sdk": "0.3.283",
         "@anthropic-ai/sdk": "0.128.0",
         "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.0",
-        "@types/node": "26.6.3",
+        "@types/node": "22.20.4",
         "tsx": "4.23.15",
-        "typescript": "7.0.2",
-        "viem": "2.56.9",
+        "typescript": "5.9.3",
+        "viem": "1.0.0",
         "zod": "4.6.5"
       },
-      "attribution": null,
+      "attribution": {
+        "kind": "inconclusive",
+        "reason": "the failing step (resolve_latest) cannot be re-run on its own",
+        "failing_step": "resolve_latest",
+        "changes": [
+          {
+            "name": "viem",
+            "from": "2.56.9",
+            "to": "1.0.0"
+          }
+        ],
+        "trials": []
+      },
       "history": [
         {
           "date": "2026-09-28",
@@ -88,6 +120,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "red"
         }
       ]
     },
@@ -120,6 +156,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -129,19 +169,31 @@
       "lane": "latest",
       "last_run": "2026-09-28",
       "last_green": "2026-09-28",
-      "result": "green",
-      "failing_step": null,
-      "log_excerpt": null,
+      "result": "red",
+      "failing_step": "resolve_latest",
+      "log_excerpt": "npm error   @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Conflicting peer dependency: viem@2.56.9\nnpm error node_modules/viem\nnpm error   peer viem@\"^2\" from @satohub/kit@0.1.0\nnpm error   node_modules/@satohub/kit\nnpm error     @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Fix the upstream dependency conflict, or retry\nnpm error this command with --force or --legacy-peer-deps\nnpm error to accept an incorrect (and potentially broken) dependency resolution.\nnpm error\nnpm error\nnpm error For a full report see:\nnpm error /home/runner/.npm/_logs/2026-09-28T00_50_26_806Z-eresolve-report.txt\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-09-28T00_50_26_806Z-debug-0.log\nnode:internal/errors:983\n  const err = new Error(message);\n              ^\n\nError: Command failed: npm install @types/node@latest tsx@latest typescript@latest --save-dev --save-exact --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/\n    at genericNodeError (node:internal/errors:983:15)\n    at wrappedFn (node:internal/errors:537:14)\n    at checkExecSyncError (node:child_process:916:11)\n    at execFileSync (node:child_process:952:15)\n    at main (file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:164:5)\n    at file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:171:68\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  status: 1,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 2535,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v22.23.2\n",
       "resolved": {
         "@openai/agents": "0.18.0",
         "@satohub/kit": "0.1.0",
-        "@types/node": "26.6.3",
+        "@types/node": "22.20.4",
         "tsx": "4.23.15",
-        "typescript": "7.0.2",
-        "viem": "2.56.9",
+        "typescript": "5.9.3",
+        "viem": "1.0.0",
         "zod": "4.6.5"
       },
-      "attribution": null,
+      "attribution": {
+        "kind": "inconclusive",
+        "reason": "the failing step (resolve_latest) cannot be re-run on its own",
+        "failing_step": "resolve_latest",
+        "changes": [
+          {
+            "name": "viem",
+            "from": "2.56.9",
+            "to": "1.0.0"
+          }
+        ],
+        "trials": []
+      },
       "history": [
         {
           "date": "2026-09-28",
@@ -150,6 +202,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "red"
         }
       ]
     },
@@ -173,6 +229,10 @@
       },
       "attribution": null,
       "history": [
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        },
         {
           "date": "2026-09-28",
           "result": "green"
@@ -189,17 +249,29 @@
       "lane": "latest",
       "last_run": "2026-09-28",
       "last_green": "2026-09-28",
-      "result": "green",
-      "failing_step": null,
-      "log_excerpt": null,
+      "result": "red",
+      "failing_step": "resolve_latest",
+      "log_excerpt": "npm error   @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Conflicting peer dependency: viem@2.56.9\nnpm error node_modules/viem\nnpm error   peer viem@\"^2\" from @satohub/kit@0.1.0\nnpm error   node_modules/@satohub/kit\nnpm error     @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Fix the upstream dependency conflict, or retry\nnpm error this command with --force or --legacy-peer-deps\nnpm error to accept an incorrect (and potentially broken) dependency resolution.\nnpm error\nnpm error\nnpm error For a full report see:\nnpm error /home/runner/.npm/_logs/2026-09-28T00_50_28_653Z-eresolve-report.txt\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-09-28T00_50_28_653Z-debug-0.log\nnode:internal/errors:983\n  const err = new Error(message);\n              ^\n\nError: Command failed: npm install @types/node@latest tsx@latest typescript@latest --save-dev --save-exact --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/\n    at genericNodeError (node:internal/errors:983:15)\n    at wrappedFn (node:internal/errors:537:14)\n    at checkExecSyncError (node:child_process:916:11)\n    at execFileSync (node:child_process:952:15)\n    at main (file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:164:5)\n    at file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:171:68\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  status: 1,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 2520,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v22.23.2\n",
       "resolved": {
         "@satohub/kit": "0.1.0",
-        "@types/node": "26.6.3",
+        "@types/node": "22.20.4",
         "tsx": "4.23.15",
-        "typescript": "7.0.2",
-        "viem": "2.56.9"
+        "typescript": "5.9.3",
+        "viem": "1.0.0"
       },
-      "attribution": null,
+      "attribution": {
+        "kind": "inconclusive",
+        "reason": "the failing step (resolve_latest) cannot be re-run on its own",
+        "failing_step": "resolve_latest",
+        "changes": [
+          {
+            "name": "viem",
+            "from": "2.56.9",
+            "to": "1.0.0"
+          }
+        ],
+        "trials": []
+      },
       "history": [
         {
           "date": "2026-09-28",
@@ -208,6 +280,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "red"
         }
       ]
     },
@@ -248,6 +324,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -257,21 +337,33 @@
       "lane": "latest",
       "last_run": "2026-09-28",
       "last_green": "2026-09-28",
-      "result": "green",
-      "failing_step": null,
-      "log_excerpt": null,
+      "result": "red",
+      "failing_step": "resolve_latest",
+      "log_excerpt": "npm error   @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Conflicting peer dependency: viem@2.56.9\nnpm error node_modules/viem\nnpm error   peer viem@\"^2\" from @satohub/kit@0.1.0\nnpm error   node_modules/@satohub/kit\nnpm error     @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Fix the upstream dependency conflict, or retry\nnpm error this command with --force or --legacy-peer-deps\nnpm error to accept an incorrect (and potentially broken) dependency resolution.\nnpm error\nnpm error\nnpm error For a full report see:\nnpm error /home/runner/.npm/_logs/2026-09-28T00_50_22_475Z-eresolve-report.txt\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-09-28T00_50_22_475Z-debug-0.log\nnode:internal/errors:983\n  const err = new Error(message);\n              ^\n\nError: Command failed: npm install @types/node@latest tsx@latest typescript@latest --save-dev --save-exact --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/\n    at genericNodeError (node:internal/errors:983:15)\n    at wrappedFn (node:internal/errors:537:14)\n    at checkExecSyncError (node:child_process:916:11)\n    at execFileSync (node:child_process:952:15)\n    at main (file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:164:5)\n    at file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:171:68\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  status: 1,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 2183,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v22.23.2\n",
       "resolved": {
         "@anthropic-ai/claude-agent-sdk": "0.3.283",
         "@anthropic-ai/sdk": "0.128.0",
         "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.0",
-        "@types/node": "26.6.3",
+        "@types/node": "22.20.4",
         "tsx": "4.23.15",
-        "typescript": "7.0.2",
-        "viem": "2.56.9",
+        "typescript": "5.9.3",
+        "viem": "1.0.0",
         "zod": "4.6.5"
       },
-      "attribution": null,
+      "attribution": {
+        "kind": "inconclusive",
+        "reason": "the failing step (resolve_latest) cannot be re-run on its own",
+        "failing_step": "resolve_latest",
+        "changes": [
+          {
+            "name": "viem",
+            "from": "2.56.9",
+            "to": "1.0.0"
+          }
+        ],
+        "trials": []
+      },
       "history": [
         {
           "date": "2026-09-28",
@@ -280,6 +372,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "red"
         }
       ]
     },
@@ -312,6 +408,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -321,17 +421,29 @@
       "lane": "latest",
       "last_run": "2026-09-28",
       "last_green": "2026-09-28",
-      "result": "green",
-      "failing_step": null,
-      "log_excerpt": null,
+      "result": "red",
+      "failing_step": "resolve_latest",
+      "log_excerpt": "npm error   @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Conflicting peer dependency: viem@2.56.9\nnpm error node_modules/viem\nnpm error   peer viem@\"^2\" from @satohub/kit@0.1.0\nnpm error   node_modules/@satohub/kit\nnpm error     @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Fix the upstream dependency conflict, or retry\nnpm error this command with --force or --legacy-peer-deps\nnpm error to accept an incorrect (and potentially broken) dependency resolution.\nnpm error\nnpm error\nnpm error For a full report see:\nnpm error /home/runner/.npm/_logs/2026-09-28T00_50_20_503Z-eresolve-report.txt\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-09-28T00_50_20_503Z-debug-0.log\nnode:internal/errors:983\n  const err = new Error(message);\n              ^\n\nError: Command failed: npm install @types/node@latest tsx@latest typescript@latest --save-dev --save-exact --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/\n    at genericNodeError (node:internal/errors:983:15)\n    at wrappedFn (node:internal/errors:537:14)\n    at checkExecSyncError (node:child_process:916:11)\n    at execFileSync (node:child_process:952:15)\n    at main (file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:164:5)\n    at file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:171:68\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  status: 1,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 2360,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v22.23.2\n",
       "resolved": {
         "@satohub/kit": "0.1.0",
-        "@types/node": "26.6.3",
+        "@types/node": "22.20.4",
         "tsx": "4.23.15",
-        "typescript": "7.0.2",
-        "viem": "2.56.9"
+        "typescript": "5.9.3",
+        "viem": "1.0.0"
       },
-      "attribution": null,
+      "attribution": {
+        "kind": "inconclusive",
+        "reason": "the failing step (resolve_latest) cannot be re-run on its own",
+        "failing_step": "resolve_latest",
+        "changes": [
+          {
+            "name": "viem",
+            "from": "2.56.9",
+            "to": "1.0.0"
+          }
+        ],
+        "trials": []
+      },
       "history": [
         {
           "date": "2026-09-28",
@@ -340,6 +452,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "red"
         }
       ]
     },
@@ -367,6 +483,10 @@
         },
         {
           "date": "2026-09-27",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-28",
           "result": "green"
         },
         {
@@ -385,17 +505,29 @@
       "lane": "latest",
       "last_run": "2026-09-28",
       "last_green": "2026-09-28",
-      "result": "green",
-      "failing_step": null,
-      "log_excerpt": null,
+      "result": "red",
+      "failing_step": "resolve_latest",
+      "log_excerpt": "npm error   @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Conflicting peer dependency: viem@2.56.9\nnpm error node_modules/viem\nnpm error   peer viem@\"^2\" from @satohub/kit@0.1.0\nnpm error   node_modules/@satohub/kit\nnpm error     @satohub/kit@\"file:vendor/satohub-kit-0.1.0.tgz\" from the root project\nnpm error\nnpm error Fix the upstream dependency conflict, or retry\nnpm error this command with --force or --legacy-peer-deps\nnpm error to accept an incorrect (and potentially broken) dependency resolution.\nnpm error\nnpm error\nnpm error For a full report see:\nnpm error /home/runner/.npm/_logs/2026-09-28T00_50_24_183Z-eresolve-report.txt\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-09-28T00_50_24_183Z-debug-0.log\nnode:internal/errors:983\n  const err = new Error(message);\n              ^\n\nError: Command failed: npm install @types/node@latest tsx@latest typescript@latest --save-dev --save-exact --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/\n    at genericNodeError (node:internal/errors:983:15)\n    at wrappedFn (node:internal/errors:537:14)\n    at checkExecSyncError (node:child_process:916:11)\n    at execFileSync (node:child_process:952:15)\n    at main (file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:164:5)\n    at file:///home/runner/work/sato-agent-templates/sato-agent-templates/scripts/resolve-latest.mjs:171:68\n    at ModuleJob.run (node:internal/modules/esm/module_job:343:25)\n    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:681:26)\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {\n  status: 1,\n  signal: null,\n  output: [ null, null, null ],\n  pid: 2518,\n  stdout: null,\n  stderr: null\n}\n\nNode.js v22.23.2\n",
       "resolved": {
         "@satohub/kit": "0.1.0",
-        "@types/node": "26.6.3",
+        "@types/node": "22.20.4",
         "tsx": "4.23.15",
-        "typescript": "7.0.2",
-        "viem": "2.56.9"
+        "typescript": "5.9.3",
+        "viem": "1.0.0"
       },
-      "attribution": null,
+      "attribution": {
+        "kind": "inconclusive",
+        "reason": "the failing step (resolve_latest) cannot be re-run on its own",
+        "failing_step": "resolve_latest",
+        "changes": [
+          {
+            "name": "viem",
+            "from": "2.56.9",
+            "to": "1.0.0"
+          }
+        ],
+        "trials": []
+      },
       "history": [
         {
           "date": "2026-09-28",
@@ -404,6 +536,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "red"
         }
       ]
     },
@@ -431,6 +567,10 @@
         },
         {
           "date": "2026-09-27",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-28",
           "result": "green"
         },
         {
