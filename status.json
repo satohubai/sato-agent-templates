@@ -7,9 +7,9 @@
       "lane": "latest",
       "last_run": "2026-09-28",
       "last_green": "2026-09-28",
-      "result": "green",
-      "failing_step": null,
-      "log_excerpt": null,
+      "result": "red",
+      "failing_step": "foundry",
+      "log_excerpt": "(no log captured for this step)",
       "resolved": {
         "@coinbase/agentkit": "0.10.4",
         "@satohub/kit": "0.1.0",
@@ -19,6 +19,7 @@
         "viem": "2.38.3"
       },
       "attribution": null,
+      "held": [],
       "history": [
         {
           "date": "2026-09-28",
@@ -43,6 +44,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "red"
         }
       ]
     },
@@ -65,6 +70,10 @@
       },
       "attribution": null,
       "history": [
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        },
         {
           "date": "2026-09-28",
           "result": "green"
@@ -112,6 +121,26 @@
         "zod": "4.6.5"
       },
       "attribution": null,
+      "held": [
+        {
+          "pkg": "@anthropic-ai/sdk",
+          "pinned": "0.128.0",
+          "latest": "0.129.0",
+          "reason": "0.x change 0.128 → 0.129 counts as a major; @anthropic-ai/sdk is not in allow_major"
+        },
+        {
+          "pkg": "@types/node",
+          "pinned": "22.20.4",
+          "latest": "26.6.3",
+          "reason": "@types/node follows the template's runtime major (Node 22); 26.6.3 is for Node 26"
+        },
+        {
+          "pkg": "typescript",
+          "pinned": "5.9.3",
+          "latest": "7.0.2",
+          "reason": "major upgrade 5 → 7; typescript is not in allow_major"
+        }
+      ],
       "history": [
         {
           "date": "2026-09-28",
@@ -124,6 +153,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -184,6 +217,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -206,6 +243,20 @@
         "zod": "4.6.5"
       },
       "attribution": null,
+      "held": [
+        {
+          "pkg": "@types/node",
+          "pinned": "22.20.4",
+          "latest": "26.6.3",
+          "reason": "@types/node follows the template's runtime major (Node 22); 26.6.3 is for Node 26"
+        },
+        {
+          "pkg": "typescript",
+          "pinned": "5.9.3",
+          "latest": "7.0.2",
+          "reason": "major upgrade 5 → 7; typescript is not in allow_major"
+        }
+      ],
       "history": [
         {
           "date": "2026-09-28",
@@ -218,6 +269,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -276,6 +331,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -296,6 +355,20 @@
         "viem": "2.56.9"
       },
       "attribution": null,
+      "held": [
+        {
+          "pkg": "@types/node",
+          "pinned": "22.20.4",
+          "latest": "26.6.3",
+          "reason": "@types/node follows the template's runtime major (Node 22); 26.6.3 is for Node 26"
+        },
+        {
+          "pkg": "typescript",
+          "pinned": "5.9.3",
+          "latest": "7.0.2",
+          "reason": "major upgrade 5 → 7; typescript is not in allow_major"
+        }
+      ],
       "history": [
         {
           "date": "2026-09-28",
@@ -308,6 +381,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -376,6 +453,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -400,6 +481,26 @@
         "zod": "4.6.5"
       },
       "attribution": null,
+      "held": [
+        {
+          "pkg": "@anthropic-ai/sdk",
+          "pinned": "0.128.0",
+          "latest": "0.129.0",
+          "reason": "0.x change 0.128 → 0.129 counts as a major; @anthropic-ai/sdk is not in allow_major"
+        },
+        {
+          "pkg": "@types/node",
+          "pinned": "22.20.4",
+          "latest": "26.6.3",
+          "reason": "@types/node follows the template's runtime major (Node 22); 26.6.3 is for Node 26"
+        },
+        {
+          "pkg": "typescript",
+          "pinned": "5.9.3",
+          "latest": "7.0.2",
+          "reason": "major upgrade 5 → 7; typescript is not in allow_major"
+        }
+      ],
       "history": [
         {
           "date": "2026-09-28",
@@ -412,6 +513,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -472,6 +577,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -492,6 +601,20 @@
         "viem": "2.56.9"
       },
       "attribution": null,
+      "held": [
+        {
+          "pkg": "@types/node",
+          "pinned": "22.20.4",
+          "latest": "26.6.3",
+          "reason": "@types/node follows the template's runtime major (Node 22); 26.6.3 is for Node 26"
+        },
+        {
+          "pkg": "typescript",
+          "pinned": "5.9.3",
+          "latest": "7.0.2",
+          "reason": "major upgrade 5 → 7; typescript is not in allow_major"
+        }
+      ],
       "history": [
         {
           "date": "2026-09-28",
@@ -504,6 +627,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -568,6 +695,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -588,6 +719,20 @@
         "viem": "2.56.9"
       },
       "attribution": null,
+      "held": [
+        {
+          "pkg": "@types/node",
+          "pinned": "22.20.4",
+          "latest": "26.6.3",
+          "reason": "@types/node follows the template's runtime major (Node 22); 26.6.3 is for Node 26"
+        },
+        {
+          "pkg": "typescript",
+          "pinned": "5.9.3",
+          "latest": "7.0.2",
+          "reason": "major upgrade 5 → 7; typescript is not in allow_major"
+        }
+      ],
       "history": [
         {
           "date": "2026-09-28",
@@ -600,6 +745,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -639,6 +788,10 @@
         },
         {
           "date": "2026-09-27",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-28",
           "result": "green"
         },
         {
