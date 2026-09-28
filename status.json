@@ -7,9 +7,9 @@
       "lane": "latest",
       "last_run": "2026-09-28",
       "last_green": "2026-09-28",
-      "result": "red",
-      "failing_step": "foundry",
-      "log_excerpt": "(no log captured for this step)",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
       "resolved": {
         "@coinbase/agentkit": "0.10.4",
         "@satohub/kit": "0.1.0",
@@ -19,7 +19,14 @@
         "viem": "2.38.3"
       },
       "attribution": null,
-      "held": [],
+      "held": [
+        {
+          "pkg": "@types/node",
+          "pinned": "22.20.4",
+          "latest": "26.6.3",
+          "reason": "@types/node follows the template's runtime major (Node 22); 26.6.3 is for Node 26"
+        }
+      ],
       "history": [
         {
           "date": "2026-09-28",
@@ -48,6 +55,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -97,6 +108,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -112,7 +127,7 @@
       "resolved": {
         "@anthropic-ai/claude-agent-sdk": "0.3.284",
         "@anthropic-ai/sdk": "0.129.0",
-        "@modelcontextprotocol/sdk": "1.31.0",
+        "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.0",
         "@types/node": "26.6.3",
         "tsx": "4.23.15",
@@ -153,6 +168,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -221,6 +240,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -285,6 +308,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -308,6 +335,10 @@
       },
       "attribution": null,
       "history": [
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        },
         {
           "date": "2026-09-28",
           "result": "green"
@@ -381,6 +412,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -457,6 +492,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -529,6 +568,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -542,7 +585,7 @@
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
-        "@anthropic-ai/claude-agent-sdk": "0.3.283",
+        "@anthropic-ai/claude-agent-sdk": "0.3.284",
         "@anthropic-ai/sdk": "0.128.0",
         "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.0",
@@ -581,6 +624,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -643,6 +690,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -670,6 +721,10 @@
         },
         {
           "date": "2026-09-27",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-28",
           "result": "green"
         },
         {
@@ -761,6 +816,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -788,6 +847,10 @@
         },
         {
           "date": "2026-09-27",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-28",
           "result": "green"
         },
         {
