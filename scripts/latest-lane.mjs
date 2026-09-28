@@ -145,6 +145,31 @@ function vendoredMap(cells) {
   return out;
 }
 
+/**
+ * Rewrite the exact pins in sato.template.json's `template.upstream` block for
+ * the bumped packages, leaving every other byte as it was. A bump that moved
+ * package.json but not these pins would fail the template's own pinned-lane
+ * test ("upstream pins match the lockfile") on its own PR.
+ */
+export function bumpUpstreamText(text, versions) {
+  const start = text.indexOf('"upstream"');
+  if (start < 0) return text;
+  const open = text.indexOf("{", start);
+  const close = text.indexOf("}", open);
+  if (open < 0 || close < 0) return text;
+  let block = text.slice(open, close + 1);
+  for (const v of versions) {
+    const key = JSON.stringify(v.name);
+    const re = new RegExp(`(${key.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&")}\\s*:\\s*)"[^"]*"`);
+    block = block.replace(re, `$1${JSON.stringify(v.to)}`);
+  }
+  return text.slice(0, open) + block + text.slice(close + 1);
+}
+
+/** The repo setting that lets GITHUB_TOKEN open pull requests. */
+export const PR_PERMISSION_HINT =
+  "Settings → Actions → General → Workflow permissions → \"Allow GitHub Actions to create and approve pull requests\"";
+
 function applyBump(a) {
   const dir = join("templates", a.template, a.framework);
   const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
@@ -156,12 +181,23 @@ function applyBump(a) {
     sh("npm", ["install", ...specs, flag, "--save-exact", "--package-lock-only", "--ignore-scripts", "--no-audit", "--no-fund", "--registry=https://registry.npmjs.org/"], { cwd: dir });
   }
   sh("node", ["scripts/check-lock-registry.mjs", join(dir, "package-lock.json")]);
-  sh("git", ["add", join(dir, "package.json"), join(dir, "package-lock.json")]);
+  const manifestPath = join(dir, "sato.template.json");
+  writeFileSync(manifestPath, bumpUpstreamText(readFileSync(manifestPath, "utf8"), a.versions));
+  sh("git", ["add", join(dir, "package.json"), join(dir, "package-lock.json"), manifestPath]);
   sh("git", ["-c", "user.name=Sato Hub", "-c", "user.email=satohub88@gmail.com", "commit", "-m", `deps(${a.template}/${a.framework}): bump to versions that passed the latest lane`]);
-  sh("git", ["push", "origin", `HEAD:refs/heads/${a.branch}`]);
+  // bump/ branches are ours and rebuilt from origin/main every run, so a force
+  // push is safe and lets a later night reuse a branch an earlier one left.
+  sh("git", ["push", "--force", "origin", `HEAD:refs/heads/${a.branch}`]);
   const bodyFile = join(process.env.RUNNER_TEMP || ".", `bump-${a.template}-${a.framework}.md`);
   writeFileSync(bodyFile, bumpBody(a));
-  sh("gh", ["pr", "create", "--base", "main", "--head", a.branch, "--title", `deps(${a.template}/${a.framework}): bump pins to the latest green versions`, "--body-file", bodyFile]);
+  try {
+    sh("gh", ["pr", "create", "--base", "main", "--head", a.branch, "--title", `deps(${a.template}/${a.framework}): bump pins to the latest green versions`, "--body-file", bodyFile]);
+  } catch (e) {
+    // Leave nothing behind: a branch with no pull request is noise, and the
+    // next green night rebuilds it. The usual cause is the repo setting.
+    try { sh("git", ["push", "origin", "--delete", a.branch]); } catch { /* already gone */ }
+    throw new Error(`pull request not opened (${String(e.message).split("\n")[0]}); branch removed. If Actions may not open PRs here, enable: ${PR_PERMISSION_HINT}`);
+  }
   sh("git", ["checkout", "--detach", "origin/main"]);
 }
 
