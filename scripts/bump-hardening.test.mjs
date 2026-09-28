@@ -106,3 +106,15 @@ test("create path: dispatch failure after push closes the PR", () => {
   assert.ok(calls.some((c) => c.startsWith("gh pr close bump/t-f-deps --delete-branch")));
   assert.equal(calls.at(-1), "git checkout --detach origin/main");
 });
+
+test("update path, changed contents: a failed body edit still dispatches CI", () => {
+  const { calls, sh } = recorder((c, a) => c === "gh" && a[0] === "pr" && a[1] === "edit", (c, a) => {
+    if (a[0] === "rev-parse") return a[1] === "HEAD^{tree}" ? "NEWTREE\n" : "OLDTREE\n";
+    return "";
+  });
+  applyBump(upd, { sh, ...io });
+  assert.ok(calls.some((c) => c.startsWith("git push --force origin HEAD:refs/heads/bump/t-f-deps")));
+  assert.ok(calls.some((c) => c.startsWith("gh pr edit 7")));
+  assert.ok(calls.includes("gh workflow run ci.yml --ref bump/t-f-deps -f ref=bump/t-f-deps"));
+  assert.equal(calls.at(-1), "git checkout --detach origin/main");
+});

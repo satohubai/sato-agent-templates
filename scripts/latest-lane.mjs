@@ -271,7 +271,10 @@ export function applyBump(a, { sh: run = sh, readFile = (f) => readFileSync(f, "
     }
     // bump/ branches are ours and rebuilt from origin/main every run.
     sh("git", ["push", "--force", "origin", `HEAD:refs/heads/${a.branch}`]);
-    sh("gh", ["pr", "edit", String(a.number), "--body-file", bodyFile]);
+    // The push already moved the head: a failed body edit must not skip the
+    // CI dispatch below, or the new commit would sit with no checks.
+    try { sh("gh", ["pr", "edit", String(a.number), "--body-file", bodyFile]); }
+    catch (e) { console.warn(`bump ${a.branch}: PR #${a.number} body not updated (${String(e.message).split("\n")[0]}); dispatching CI anyway`); }
   } else {
     sh("git", ["push", "--force", "origin", `HEAD:refs/heads/${a.branch}`]);
     try {
