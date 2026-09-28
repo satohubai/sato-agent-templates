@@ -3,10 +3,185 @@
   "cells": [
     {
       "template": "base-guarded-trader",
+      "framework": "agentkit",
+      "lane": "latest",
+      "last_run": "2026-09-28",
+      "last_green": null,
+      "result": "red",
+      "failing_step": "install",
+      "log_excerpt": "npm error       node_modules/@coinbase/agentkit\nnpm error     4 more (@coinbase/agentkit, @coinbase/x402, @satohub/kit, @base-org/account)\nnpm error   peer @solana/kit@\"^5.0\" from @solana-program/system@0.10.0\nnpm error   node_modules/@coinbase/cdp-sdk/node_modules/@solana-program/system\nnpm error     @solana-program/system@\"^0.10.0\" from @coinbase/cdp-sdk@1.57.0\nnpm error     node_modules/@coinbase/cdp-sdk\nnpm error       @coinbase/cdp-sdk@\"^1.56.0\" from @base-org/account@2.5.13\nnpm error       node_modules/@base-org/account\nnpm error       4 more (@coinbase/agentkit, @coinbase/x402, @satohub/kit, @base-org/account)\nnpm error   6 more (@solana-program/compute-budget, ...)\nnpm error\nnpm error Conflicting peer dependency: typescript@5.9.3\nnpm error node_modules/typescript\nnpm error   peerOptional typescript@\"^5.0.0\" from @solana/kit@5.5.1\nnpm error   node_modules/@solana/kit\nnpm error     @solana/kit@\"^5.5.1\" from @coinbase/cdp-sdk@1.57.0\nnpm error     node_modules/@coinbase/cdp-sdk\nnpm error       @coinbase/cdp-sdk@\"^1.56.0\" from @base-org/account@2.5.13\nnpm error       node_modules/@base-org/account\nnpm error         @base-org/account@\"^2.2.0\" from @coinbase/agentkit@0.10.4\nnpm error         node_modules/@coinbase/agentkit\nnpm error       4 more (@coinbase/agentkit, @coinbase/x402, @satohub/kit, @base-org/account)\nnpm error     peer @solana/kit@\"^5.0\" from @solana-program/system@0.10.0\nnpm error     node_modules/@coinbase/cdp-sdk/node_modules/@solana-program/system\nnpm error       @solana-program/system@\"^0.10.0\" from @coinbase/cdp-sdk@1.57.0\nnpm error       node_modules/@coinbase/cdp-sdk\nnpm error         @coinbase/cdp-sdk@\"^1.56.0\" from @base-org/account@2.5.13\nnpm error         node_modules/@base-org/account\nnpm error         4 more (@coinbase/agentkit, @coinbase/x402, @satohub/kit, @base-org/account)\nnpm error     6 more (@solana-program/compute-budget, ...)\nnpm error\nnpm error Fix the upstream dependency conflict, or retry\nnpm error this command with --force or --legacy-peer-deps\nnpm error to accept an incorrect (and potentially broken) dependency resolution.\nnpm error\nnpm error\nnpm error For a full report see:\nnpm error /home/runner/.npm/_logs/2026-09-28T00_24_19_602Z-eresolve-report.txt\nnpm error A complete log of this run can be found in: /home/runner/.npm/_logs/2026-09-28T00_24_19_602Z-debug-0.log\n",
+      "resolved": {
+        "@coinbase/agentkit": "0.10.4",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "26.6.3",
+        "tsx": "4.23.15",
+        "typescript": "7.0.2",
+        "viem": "2.56.9"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "red"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
+      "framework": "agentkit",
+      "lane": "pinned",
+      "last_run": "2026-09-28",
+      "last_green": "2026-09-28",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@coinbase/agentkit": "0.10.4",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.38.3"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
+      "framework": "claude-agent-sdk",
+      "lane": "latest",
+      "last_run": "2026-09-28",
+      "last_green": null,
+      "result": "red",
+      "failing_step": "test",
+      "log_excerpt": "  expected: '5.9.3'\n  actual: '7.0.2'\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (/home/runner/work/sato-agent-templates/sato-agent-templates/templates/base-guarded-trader/claude-agent-sdk/test/template.test.ts:19:12)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)\n  ...\n# Subtest: sato.template.json policy_defaults match policy.json\nok 36 - sato.template.json policy_defaults match policy.json\n  ---\n  duration_ms: 1.040787\n  type: 'test'\n  ...\n# Subtest: the fixture command in the template is the one CI runs\nok 37 - the fixture command in the template is the one CI runs\n  ---\n  duration_ms: 0.295545\n  type: 'test'\n  ...\n# Subtest: this is the Claude Agent SDK build of base-guarded-trader\nok 38 - this is the Claude Agent SDK build of base-guarded-trader\n  ---\n  duration_ms: 0.30829\n  type: 'test'\n  ...\n1..38\n# tests 38\n# suites 0\n# pass 37\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 3879.677654\n",
+      "resolved": {
+        "@anthropic-ai/claude-agent-sdk": "0.3.283",
+        "@anthropic-ai/sdk": "0.128.0",
+        "@modelcontextprotocol/sdk": "1.30.1",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "26.6.3",
+        "tsx": "4.23.15",
+        "typescript": "7.0.2",
+        "viem": "2.56.9",
+        "zod": "4.6.5"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "red"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
+      "framework": "claude-agent-sdk",
+      "lane": "pinned",
+      "last_run": "2026-09-28",
+      "last_green": "2026-09-28",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@anthropic-ai/claude-agent-sdk": "0.3.283",
+        "@anthropic-ai/sdk": "0.128.0",
+        "@modelcontextprotocol/sdk": "1.30.1",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.56.9",
+        "zod": "4.6.5"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
+      "framework": "openai-agents",
+      "lane": "latest",
+      "last_run": "2026-09-28",
+      "last_green": null,
+      "result": "red",
+      "failing_step": "test",
+      "log_excerpt": "  expected: '5.9.3'\n  actual: '7.0.2'\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (/home/runner/work/sato-agent-templates/sato-agent-templates/templates/base-guarded-trader/openai-agents/test/template.test.ts:19:12)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)\n  ...\n# Subtest: sato.template.json policy_defaults match policy.json\nok 37 - sato.template.json policy_defaults match policy.json\n  ---\n  duration_ms: 1.106194\n  type: 'test'\n  ...\n# Subtest: the fixture command in the template is the one CI runs\nok 38 - the fixture command in the template is the one CI runs\n  ---\n  duration_ms: 0.323878\n  type: 'test'\n  ...\n# Subtest: this is the OpenAI Agents SDK build of base-guarded-trader\nok 39 - this is the OpenAI Agents SDK build of base-guarded-trader\n  ---\n  duration_ms: 0.287619\n  type: 'test'\n  ...\n1..39\n# tests 39\n# suites 0\n# pass 38\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 4136.569701\n",
+      "resolved": {
+        "@openai/agents": "0.18.0",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "26.6.3",
+        "tsx": "4.23.15",
+        "typescript": "7.0.2",
+        "viem": "2.56.9",
+        "zod": "4.6.5"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "red"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
+      "framework": "openai-agents",
+      "lane": "pinned",
+      "last_run": "2026-09-28",
+      "last_green": "2026-09-28",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@openai/agents": "0.18.0",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.56.9",
+        "zod": "4.6.5"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
+      "framework": "plain-ts",
+      "lane": "latest",
+      "last_run": "2026-09-28",
+      "last_green": null,
+      "result": "red",
+      "failing_step": "test",
+      "log_excerpt": "    typescript\n    \n    '7.0.2' !== '5.9.3'\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: '5.9.3'\n  actual: '7.0.2'\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (/home/runner/work/sato-agent-templates/sato-agent-templates/templates/base-guarded-trader/plain-ts/test/template.test.ts:19:12)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)\n  ...\n# Subtest: sato.template.json policy_defaults match policy.json\nok 29 - sato.template.json policy_defaults match policy.json\n  ---\n  duration_ms: 1.156208\n  type: 'test'\n  ...\n# Subtest: the fixture command in the template is the one CI runs\nok 30 - the fixture command in the template is the one CI runs\n  ---\n  duration_ms: 0.205425\n  type: 'test'\n  ...\n1..30\n# tests 30\n# suites 0\n# pass 29\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 2794.171989\n",
+      "resolved": {
+        "@satohub/kit": "0.1.0",
+        "@types/node": "26.6.3",
+        "tsx": "4.23.15",
+        "typescript": "7.0.2",
+        "viem": "2.56.9"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "red"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-09-27",
-      "last_green": "2026-09-27",
+      "last_run": "2026-09-28",
+      "last_green": "2026-09-28",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -29,6 +204,87 @@
         {
           "date": "2026-09-27",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "template": "persona-agent",
+      "framework": "claude-agent-sdk",
+      "lane": "latest",
+      "last_run": "2026-09-28",
+      "last_green": null,
+      "result": "red",
+      "failing_step": "test",
+      "log_excerpt": "    typescript\n    \n    '7.0.2' !== '5.9.3'\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: '5.9.3'\n  actual: '7.0.2'\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (/home/runner/work/sato-agent-templates/sato-agent-templates/templates/persona-agent/claude-agent-sdk/test/template.test.ts:19:12)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)\n  ...\n# Subtest: sato.template.json policy_defaults match policy.json\nok 17 - sato.template.json policy_defaults match policy.json\n  ---\n  duration_ms: 1.030138\n  type: 'test'\n  ...\n# Subtest: the fixture command in the template is the one CI runs\nok 18 - the fixture command in the template is the one CI runs\n  ---\n  duration_ms: 0.593671\n  type: 'test'\n  ...\n1..18\n# tests 18\n# suites 0\n# pass 17\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 3978.04152\n",
+      "resolved": {
+        "@anthropic-ai/claude-agent-sdk": "0.3.283",
+        "@anthropic-ai/sdk": "0.128.0",
+        "@modelcontextprotocol/sdk": "1.30.1",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "26.6.3",
+        "tsx": "4.23.15",
+        "typescript": "7.0.2",
+        "viem": "2.56.9",
+        "zod": "4.6.5"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "red"
+        }
+      ]
+    },
+    {
+      "template": "persona-agent",
+      "framework": "claude-agent-sdk",
+      "lane": "pinned",
+      "last_run": "2026-09-28",
+      "last_green": "2026-09-28",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@anthropic-ai/claude-agent-sdk": "0.3.283",
+        "@anthropic-ai/sdk": "0.128.0",
+        "@modelcontextprotocol/sdk": "1.30.1",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.56.9",
+        "zod": "4.6.5"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "template": "research-report",
+      "framework": "plain-ts",
+      "lane": "latest",
+      "last_run": "2026-09-28",
+      "last_green": null,
+      "result": "red",
+      "failing_step": "test",
+      "log_excerpt": "# Subtest: a comma is formatting, not part of the number\nok 23 - a comma is formatting, not part of the number\n  ---\n  duration_ms: 0.219531\n  type: 'test'\n  ...\n# Subtest: a number that appears in no cited source is unsupported\nok 24 - a number that appears in no cited source is unsupported\n  ---\n  duration_ms: 0.137186\n  type: 'test'\n  ...\n# Subtest: a finding citing a source outside the corpus is rejected, not downgraded\nok 25 - a finding citing a source outside the corpus is rejected, not downgraded\n  ---\n  duration_ms: 0.386232\n  type: 'test'\n  ...\n# Subtest: a conflict needs at least two sources we actually hold\nok 26 - a conflict needs at least two sources we actually hold\n  ---\n  duration_ms: 0.280063\n  type: 'test'\n  ...\n# Subtest: uncited and empty findings are rejected with their reasons\nok 27 - uncited and empty findings are rejected with their reasons\n  ---\n  duration_ms: 0.167222\n  type: 'test'\n  ...\n1..27\n# tests 27\n# suites 0\n# pass 26\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 2014.297768\n",
+      "resolved": {
+        "@satohub/kit": "0.1.0",
+        "@types/node": "26.6.3",
+        "tsx": "4.23.15",
+        "typescript": "7.0.2",
+        "viem": "2.56.9"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "red"
         }
       ]
     },
@@ -36,8 +292,8 @@
       "template": "research-report",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-09-27",
-      "last_green": "2026-09-27",
+      "last_run": "2026-09-28",
+      "last_green": "2026-09-28",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -55,6 +311,10 @@
         },
         {
           "date": "2026-09-27",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-28",
           "result": "green"
         }
       ]
@@ -62,9 +322,32 @@
     {
       "template": "treasury-monitor",
       "framework": "plain-ts",
+      "lane": "latest",
+      "last_run": "2026-09-28",
+      "last_green": null,
+      "result": "red",
+      "failing_step": "test",
+      "log_excerpt": "# Subtest: the fixture command in the template is the one CI runs\nok 20 - the fixture command in the template is the one CI runs\n  ---\n  duration_ms: 0.142487\n  type: 'test'\n  ...\n# Subtest: read-only: capabilities are reads and the source never prepares, executes or signs\nok 21 - read-only: capabilities are reads and the source never prepares, executes or signs\n  ---\n  duration_ms: 0.633867\n  type: 'test'\n  ...\n# Subtest: base units render exactly at 18 decimals\nok 22 - base units render exactly at 18 decimals\n  ---\n  duration_ms: 1.547069\n  type: 'test'\n  ...\n# Subtest: comparison does not go through a float\nok 23 - comparison does not go through a float\n  ---\n  duration_ms: 0.237956\n  type: 'test'\n  ...\n# Subtest: USD arithmetic is exact and truncates\nok 24 - USD arithmetic is exact and truncates\n  ---\n  duration_ms: 0.991618\n  type: 'test'\n  ...\n1..24\n# tests 24\n# suites 0\n# pass 23\n# fail 1\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 1973.223529\n",
+      "resolved": {
+        "@satohub/kit": "0.1.0",
+        "@types/node": "26.6.3",
+        "tsx": "4.23.15",
+        "typescript": "7.0.2",
+        "viem": "2.56.9"
+      },
+      "history": [
+        {
+          "date": "2026-09-28",
+          "result": "red"
+        }
+      ]
+    },
+    {
+      "template": "treasury-monitor",
+      "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-09-27",
-      "last_green": "2026-09-27",
+      "last_run": "2026-09-28",
+      "last_green": "2026-09-28",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -82,6 +365,10 @@
         },
         {
           "date": "2026-09-27",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-28",
           "result": "green"
         }
       ]
