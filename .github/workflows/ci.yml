@@ -25,15 +25,35 @@ jobs:
       - id: test
         run: npm test
 
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.list.outputs.matrix }}
+      expect: ${{ steps.list.outputs.expect }}
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: setup_node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+      # Every templates/*/*/sato.template.json becomes a cell: a new template
+      # needs no workflow edit.
+      - id: list
+        run: |
+          echo "matrix=$(node scripts/discover-templates.mjs --lanes pinned)" >> "$GITHUB_OUTPUT"
+          echo "expect=$(node scripts/discover-templates.mjs --lanes pinned --expect)" >> "$GITHUB_OUTPUT"
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    needs: discover
     strategy:
       fail-fast: false
-      matrix:
-        template: [base-guarded-trader, treasury-monitor, research-report]
-        framework: [plain-ts]
-        lane: [pinned]
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
     steps:
       - id: checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
