@@ -85,10 +85,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     # The only job that writes: status commit, bump PRs, break issues.
+    # actions: write lets it dispatch ci.yml on each bump branch it pushes.
     permissions:
       contents: write
       pull-requests: write
       issues: write
+      actions: write
     steps:
       - id: checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -129,7 +131,8 @@ jobs:
           git push origin HEAD:main
 
       # Pinned red pages (this step fails, after the status is recorded);
-      # latest green + pinned behind opens one bump PR per template/framework;
+      # bump PRs come from upgrade-policy.json (one per template/framework
+      # and class, updated in place) and get ci.yml dispatched on them;
       # latest red + pinned green opens one "upstream break" issue, closed
       # automatically when the latest lane passes again.
       - id: latest_lane

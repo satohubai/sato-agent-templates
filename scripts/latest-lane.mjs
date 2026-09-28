@@ -3,9 +3,14 @@
 // cells, decide what each template × framework needs and do it.
 //
 //   pinned red/error           → page: the job fails (after status is recorded)
-//   latest green, pinned green,
-//     pinned behind            → ONE bump PR (branch bump/<t>-<f>-<date>),
-//                                never a second open one for the same pair
+//   any allowed upgrade        → bump PRs computed from upgrade-policy.json
+//                                (scripts/lib/upgrade-policy.mjs), NOT from the
+//                                latest lane's set: per template × framework ×
+//                                class (dependencies | devDependencies), one
+//                                PR on bump/<t>-<f>-deps|dev; an open one is
+//                                updated in place, never duplicated. After a
+//                                push, ci.yml is dispatched on the bump branch
+//                                so the checks run on exactly what merges.
 //   latest red, pinned green   → ONE issue, deduped by title. The package is
 //                                named only when it is established: the
 //                                one-package bisect (scripts/bisect-latest.mjs)
@@ -28,13 +33,14 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
+import { peerRanges } from "./resolve-latest.mjs";
+import { CLASSES, bumpActions, loadPolicy, planBumps, runtimeMajor } from "./lib/upgrade-policy.mjs";
 
 export const BUMP_PREFIX = "bump/";
 export const ISSUE_PREFIX = "upstream break: ";
 export const DRIFT_PREFIX = "upstream drift in ";
 
 export const pairId = (c) => `${c.template}/${c.framework}`;
-export const bumpBranchPrefix = (c) => `${BUMP_PREFIX}${c.template}-${c.framework}-`;
 export const issueSuffix = (c) => ` breaks ${pairId(c)}`;
 export const issueTitle = (pkg, version, c) => `${ISSUE_PREFIX}${pkg}@${version}${issueSuffix(c)}`;
 export const driftPrefix = (c) => `${DRIFT_PREFIX}${pairId(c)}: `;
@@ -67,11 +73,12 @@ export function versionDiff(pinned = {}, latest = {}, vendored = []) {
 }
 
 /**
- * Pure. cells: status.json cells. openPrs: [{number, headRefName}].
+ * Pure. cells: status.json cells. Bump PRs are decided separately
+ * (bumpActions in scripts/lib/upgrade-policy.mjs).
  * openIssues: [{number, title}]. vendored: {"t/f": [names]}. inject: {name, version}|null.
  * Only cells last run on `date` count, so a stale latest cell never acts.
  */
-export function decide({ cells, openPrs = [], openIssues = [], date, vendored = {}, inject = null }) {
+export function decide({ cells, openIssues = [], date, vendored = {}, inject = null }) {
   const pairs = new Map();
   for (const c of cells ?? []) {
     if (c.last_run !== date) continue;
@@ -93,10 +100,6 @@ export function decide({ cells, openPrs = [], openIssues = [], date, vendored = 
       for (const i of openIssues) {
         if (isIssueFor(i.title, p)) actions.push({ type: "close_issue", ...base, number: i.number, title: i.title });
       }
-      if (pinned?.result === "green" && diff.length) {
-        const dup = openPrs.find((pr) => pr.headRefName.startsWith(bumpBranchPrefix(p)));
-        if (!dup) actions.push({ type: "bump", ...base, branch: `${bumpBranchPrefix(p)}${date}`, versions: diff });
-      }
     } else if (latest.result === "red" && pinned?.result === "green") {
       const attribution = latest.attribution ?? null;
       const title = breakTitle({ pair: p, diff, attribution, inject, failingStep: latest.failing_step });
@@ -109,8 +112,12 @@ export function decide({ cells, openPrs = [], openIssues = [], date, vendored = 
 }
 
 export function bumpBody(a) {
-  const rows = a.versions.map((v) => `| \`${v.name}\` | ${v.from ?? "(new)"} | ${v.to} |`).join("\n");
-  return `The latest lane for \`${a.template}/${a.framework}\` passed tonight's checks with newer upstream versions than the pinned lane.\n\n| package | pinned | latest (passed tonight's checks) |\n|---|---|---|\n${rows}\n\nThis PR moves the exact pins and the lockfile to those versions. The pinned lane re-verifies them on this PR.\n\nOpened by the nightly status job (scripts/latest-lane.mjs).\n`;
+  const rows = a.versions.map((v) => `| \`${v.name}\` | ${a.class} | ${v.from ?? "(new)"} | ${v.to} |`).join("\n");
+  const held = (a.held ?? []).map((h) => `| \`${h.pkg}\` | ${h.class ?? ""} | ${h.pinned} | ${h.latest} | ${h.reason} |`).join("\n");
+  const heldText = held
+    ? `Held by the update policy (not in this PR):\n\n| package | class | pinned | newest published | reason |\n|---|---|---|---|---|\n${held}\n`
+    : "Held by the update policy: nothing.\n";
+  return `Update-policy bump for \`${a.template}/${a.framework}\`, class \`${a.class}\` (${a.class === "devDependencies" ? "tooling" : "runtime code"}).\n\nEach version is the highest published on registry.npmjs.org that \`upgrade-policy.json\` allows. It is not the latest lane's set: the latest lane tests newest-of-everything as an early warning, and this PR carries only what the policy permits.\n\n| package | class | pinned | bump to |\n|---|---|---|---|\n${rows}\n\n${heldText}\nThe status job dispatches \`ci.yml\` on this branch after every push, so the checks shown here ran on exactly this commit. Merge only when they are green.\n\nOpened by the nightly status job (scripts/latest-lane.mjs).\n`;
 }
 
 /** Pure: one paragraph on how (or whether) the cause was established. */
@@ -172,33 +179,82 @@ export const PR_PERMISSION_HINT =
 
 function applyBump(a) {
   const dir = join("templates", a.template, a.framework);
-  const pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
+  sh("git", ["fetch", "--quiet", "origin", "main"]);
   sh("git", ["checkout", "-B", a.branch, "origin/main"]);
-  const prod = a.versions.filter((v) => !pkg.devDependencies?.[v.name]).map((v) => `${v.name}@${v.to}`);
-  const dev = a.versions.filter((v) => pkg.devDependencies?.[v.name]).map((v) => `${v.name}@${v.to}`);
-  for (const [specs, flag] of [[prod, "--save-prod"], [dev, "--save-dev"]]) {
-    if (!specs.length) continue;
-    sh("npm", ["install", ...specs, flag, "--save-exact", "--package-lock-only", "--ignore-scripts", "--no-audit", "--no-fund", "--registry=https://registry.npmjs.org/"], { cwd: dir });
-  }
+  const specs = a.versions.map((v) => `${v.name}@${v.to}`);
+  sh("npm", ["install", ...specs, a.class === "devDependencies" ? "--save-dev" : "--save-prod", "--save-exact", "--package-lock-only", "--ignore-scripts", "--no-audit", "--no-fund", "--registry=https://registry.npmjs.org/"], { cwd: dir });
   sh("node", ["scripts/check-lock-registry.mjs", join(dir, "package-lock.json")]);
   const manifestPath = join(dir, "sato.template.json");
   writeFileSync(manifestPath, bumpUpstreamText(readFileSync(manifestPath, "utf8"), a.versions));
   sh("git", ["add", join(dir, "package.json"), join(dir, "package-lock.json"), manifestPath]);
-  sh("git", ["-c", "user.name=Sato Hub", "-c", "user.email=satohub88@gmail.com", "commit", "-m", `deps(${a.template}/${a.framework}): bump to versions that passed the latest lane`]);
-  // bump/ branches are ours and rebuilt from origin/main every run, so a force
-  // push is safe and lets a later night reuse a branch an earlier one left.
-  sh("git", ["push", "--force", "origin", `HEAD:refs/heads/${a.branch}`]);
-  const bodyFile = join(process.env.RUNNER_TEMP || ".", `bump-${a.template}-${a.framework}.md`);
+  sh("git", ["-c", "user.name=Sato Hub", "-c", "user.email=satohub88@gmail.com", "commit", "-m", `deps(${a.template}/${a.framework}): ${a.class} per the update policy`]);
+  const bodyFile = join(process.env.RUNNER_TEMP || ".", `bump-${a.template}-${a.framework}-${a.class}.md`);
   writeFileSync(bodyFile, bumpBody(a));
-  try {
-    sh("gh", ["pr", "create", "--base", "main", "--head", a.branch, "--title", `deps(${a.template}/${a.framework}): bump pins to the latest green versions`, "--body-file", bodyFile]);
-  } catch (e) {
-    // Leave nothing behind: a branch with no pull request is noise, and the
-    // next green night rebuilds it. The usual cause is the repo setting.
-    try { sh("git", ["push", "origin", "--delete", a.branch]); } catch { /* already gone */ }
-    throw new Error(`pull request not opened (${String(e.message).split("\n")[0]}); branch removed. If Actions may not open PRs here, enable: ${PR_PERMISSION_HINT}`);
+  if (a.mode === "update") {
+    // Same contents already on the open PR: nothing to push, nothing to re-run.
+    let same = false;
+    try {
+      sh("git", ["fetch", "--quiet", "origin", `+refs/heads/${a.branch}:refs/remotes/origin/${a.branch}`]);
+      same = sh("git", ["rev-parse", "HEAD^{tree}"]).trim() === sh("git", ["rev-parse", `origin/${a.branch}^{tree}`]).trim();
+    } catch { same = false; }
+    if (same) { console.log(`bump ${a.branch}: open PR #${a.number} already carries these versions`); sh("git", ["checkout", "--detach", "origin/main"]); return; }
+    // bump/ branches are ours and rebuilt from origin/main every run.
+    sh("git", ["push", "--force", "origin", `HEAD:refs/heads/${a.branch}`]);
+    sh("gh", ["pr", "edit", String(a.number), "--body-file", bodyFile]);
+  } else {
+    sh("git", ["push", "--force", "origin", `HEAD:refs/heads/${a.branch}`]);
+    try {
+      sh("gh", ["pr", "create", "--base", "main", "--head", a.branch, "--title", `deps(${a.template}/${a.framework}): ${a.class} per the update policy`, "--body-file", bodyFile]);
+    } catch (e) {
+      // Leave nothing behind: a branch with no pull request is noise, and the
+      // next night rebuilds it. The usual cause is the repo setting.
+      try { sh("git", ["push", "origin", "--delete", a.branch]); } catch { /* already gone */ }
+      throw new Error(`pull request not opened (${String(e.message).split("\n")[0]}); branch removed. If Actions may not open PRs here, enable: ${PR_PERMISSION_HINT}`);
+    }
   }
+  // A push by GITHUB_TOKEN triggers no pull_request workflow; a
+  // workflow_dispatch does, and its checks attach to the bump commit.
+  sh("gh", ["workflow", "run", "ci.yml", "--ref", a.branch, "-f", `ref=${a.branch}`]);
   sh("git", ["checkout", "--detach", "origin/main"]);
+}
+
+function npmVersions(spec, field = "versions") {
+  try {
+    const out = execFileSync("npm", ["view", spec, field, "--json", "--registry=https://registry.npmjs.org/"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], maxBuffer: 256 * 1024 * 1024 }).trim();
+    const v = out ? JSON.parse(out) : [];
+    return Array.isArray(v) ? v : [v];
+  } catch { return []; }
+}
+
+/** Reads each template run tonight and plans its bumps under the policy. */
+function planAll(cells, date, policy) {
+  const pairs = [...new Map(cells.filter((c) => c.last_run === date).map((c) => [pairId(c), { template: c.template, framework: c.framework }])).values()];
+  const cache = new Map();
+  const plans = [];
+  for (const p of pairs) {
+    const dir = join("templates", p.template, p.framework);
+    let pkg, manifest;
+    try {
+      pkg = JSON.parse(readFileSync(join(dir, "package.json"), "utf8"));
+      manifest = JSON.parse(readFileSync(join(dir, "sato.template.json"), "utf8"));
+    } catch { continue; }
+    let lock = {};
+    try { lock = JSON.parse(readFileSync(join(dir, "package-lock.json"), "utf8")); } catch { /* no lockfile: no framework constraints */ }
+    const direct = Object.keys({ ...pkg.dependencies, ...pkg.devDependencies });
+    const registry = {}, constraints = {};
+    for (const cls of CLASSES) for (const [name, spec] of Object.entries(pkg[cls] ?? {})) {
+      if (String(spec).startsWith("file:")) continue;
+      if (!cache.has(name)) cache.set(name, npmVersions(name));
+      registry[name] = cache.get(name);
+      constraints[name] = peerRanges(lock, name, direct).map((r) => {
+        const key = `${name}@${r.range}`;
+        if (!cache.has(key)) cache.set(key, npmVersions(key, "version"));
+        return { ...r, versions: cache.get(key) };
+      });
+    }
+    plans.push({ ...p, plan: planBumps({ pkg, registry, policy, runtime: runtimeMajor(manifest), constraints }) });
+  }
+  return plans;
 }
 
 function arg(argv, name, fallback) {
@@ -215,10 +271,12 @@ export function main(argv = process.argv.slice(2)) {
   const inject = injectRaw && at > 0 ? { name: injectRaw.slice(0, at), version: injectRaw.slice(at + 1) } : null;
   const openPrs = dry ? [] : JSON.parse(sh("gh", ["pr", "list", "--state", "open", "--limit", "200", "--json", "number,headRefName"]));
   const openIssues = dry ? [] : JSON.parse(sh("gh", ["issue", "list", "--state", "open", "--limit", "200", "--search", `upstream in:title`, "--json", "number,title"]));
-  const actions = decide({ cells: status.cells, openPrs, openIssues, date, vendored: vendoredMap(status.cells), inject });
+  const actions = decide({ cells: status.cells, openIssues, date, vendored: vendoredMap(status.cells), inject });
+  const policy = loadPolicy(arg(argv, "--policy", "upgrade-policy.json"));
+  actions.push(...bumpActions({ plans: dry && argv.includes("--offline") ? [] : planAll(status.cells, date, policy), openPrs }));
   let page = false;
   for (const a of actions) {
-    console.log(`${a.type} ${a.template}/${a.framework}${a.title ? `: ${a.title}` : ""}${a.branch ? `: ${a.branch}` : ""}`);
+    console.log(`${a.type} ${a.template}/${a.framework}${a.title ? `: ${a.title}` : ""}${a.branch ? `: ${a.branch} (${a.mode}${a.number ? ` #${a.number}` : ""}) ${a.versions.map((v) => `${v.name} ${v.from}→${v.to}`).join(", ")}` : ""}`);
     if (a.type === "page") { page = true; continue; }
     if (dry) continue;
     try {

@@ -9,6 +9,24 @@ Every night `nightly.yml` verifies each template × framework on two lanes:
 
 **`SATO_LANE`.** The verify action exports `SATO_LANE=<pinned|latest>` to every step. Each template's "upstream pins match the lockfile" test skips when `SATO_LANE=latest` (the lane changes versions on purpose) and runs on pinned. Before this, that self-consistency test failed every latest cell whose versions moved, whether or not anything upstream broke.
 
+## The update policy (`upgrade-policy.json`)
+
+The latest lane is the early warning: it still tests the newest published version of everything. What a bump PR may carry is decided separately, by `upgrade-policy.json` (schema `sato.upgrade-policy/v1`, pure rules in `scripts/lib/upgrade-policy.mjs`):
+
+| Rule | Meaning |
+|---|---|
+| (a) `types_node_follows_runtime` | `@types/node` stays on the template's runtime major (`runtime.version` in `sato.template.json`, Node 22 today). Never a higher major, even if listed in `allow_major`. |
+| (b) `allow_major` | No automatic major upgrade of any package unless it is named here. Empty by default: a major is a human decision. |
+| (c) `zero_minor_is_major` | For `0.x` packages a change of the minor counts as a major (`0.18 → 0.19`), and for `0.0.x` a change of the patch does. |
+| (d) `split_bump_by_class` | One PR for `dependencies` (runtime code, branch `bump/<t>-<f>-deps`) and one for `devDependencies` (tooling, `bump/<t>-<f>-dev`), per template × framework. |
+| (e) `never_bump_vendored` | `file:` dependencies (the `@satohub/kit` tarball) are never bumped by the lane. |
+
+The framework rule above applies to bumps too: a version outside a peer range, or outside another direct dependency's range, is not proposed.
+
+Each latest cell in `status.json` carries `held: [{pkg, pinned, latest, reason}]`: every version the latest lane tested that the policy would not put in a bump PR (additive; pinned cells have no `held`).
+
+Why: on 2026-09-28 the nightly opened bump PRs moving `@types/node` 22 → 26 on Node 22 templates, `typescript` 5.9.3 → 7.0.2 (which `@solana/kit`'s `typescript ^5` rejects), and a `0.x` runtime SDK in the same PR as tooling, and those PRs had no CI. All were closed.
+
 The matrix is discovered, not listed: every `templates/*/*/sato.template.json` is a cell (`scripts/discover-templates.mjs`), in both `nightly.yml` and `ci.yml` (CI runs the pinned lane).
 
 ## What the status job does (`scripts/latest-lane.mjs`)
@@ -16,7 +34,7 @@ The matrix is discovered, not listed: every `templates/*/*/sato.template.json` i
 | Tonight | Action |
 |---|---|
 | pinned red or error | status is recorded, then the job fails (page) |
-| latest green, pinned green, pinned behind | one PR per template/framework on `bump/<template>-<framework>-<date>`, moving the exact pins and the lockfile to the versions that passed tonight's checks; never a second open bump PR for the same pair |
+| any upgrade the policy allows (independent of the latest lane's set) | one PR per template × framework × class on `bump/<template>-<framework>-deps` or `-dev`, moving the exact pins, the lockfile and the `sato.template.json` upstream pins to the highest version the policy allows (`npm view <pkg> versions`, registry.npmjs.org only). The body lists every change with its class and every held version with its reason. An open PR for the same branch is updated in place (force-push + new body), never duplicated; unchanged contents are not re-pushed. After each push the job runs `gh workflow run ci.yml --ref <branch>`, so the checks run on exactly the bump commit and show on the PR. |
 | latest red, pinned green | one issue, deduped by title, with the failing step, the attribution, every changed version and a log excerpt (titles below) |
 | latest green | closes any open `upstream break: … breaks <template>/<framework>` or `upstream drift in <template>/<framework>: …` issue |
 | latest error (runner problem) | nothing |
@@ -33,9 +51,15 @@ A red latest cell runs `scripts/bisect-latest.mjs` inside the verify action (ste
 
 A package is never named because it sorts first. The issue body lists every single-upgrade trial and every changed version.
 
-The decisions are pure functions (`decide()`), unit-tested in `scripts/latest-lane.test.mjs` and `scripts/attribution.test.mjs`. Only the status job has write permissions (`contents`, `pull-requests`, `issues`), through `GITHUB_TOKEN`; no secrets.
+The decisions are pure functions (`decide()`, and `planBumps()` / `bumpActions()` / `heldInLatest()` for the policy), unit-tested in `scripts/latest-lane.test.mjs`, `scripts/attribution.test.mjs` and `scripts/upgrade-policy.test.mjs`.
 
-Owner settings: "Allow GitHub Actions to create and approve pull requests" must be on (Settings → Actions → General) for bump PRs. PRs opened with `GITHUB_TOKEN` do not trigger `ci.yml` on their own; close and reopen the PR (or push to it) to run CI.
+Only the status job has write permissions (`contents`, `pull-requests`, `issues`, and `actions` to dispatch `ci.yml`), through `GITHUB_TOKEN`; no secrets.
+
+Owner settings: "Allow GitHub Actions to create and approve pull requests" must be on (Settings → Actions → General) for bump PRs. A PR opened or pushed with `GITHUB_TOKEN` triggers no `pull_request` run; `workflow_dispatch` is the exception GitHub allows, which is why the status job dispatches `ci.yml` itself. Do not merge a bump PR whose `ci` run is missing or red.
+
+## CI scope
+
+`ci.yml` verifies only the templates a change touches (`scripts/discover-templates.mjs --changed`): a file under `templates/<t>/<f>/` selects that cell, a file directly under `templates/<t>/` selects every framework of `<t>`, and a change under `.github/` or `scripts/`, or to `upgrade-policy.json` or the root package files, verifies every template. The `scripts` job (`npm test`) always runs, including `scripts/templates-consistency.test.mjs`: every template's `@types/node` major equals its runtime major, every `package.json` pin is exact, and `sato.template.json` upstream pins equal `package.json`.
 
 ## Drift drill
 

@@ -7,8 +7,12 @@
 //     prints {"include":[{template,framework,lane},...]} for fromJSON
 //   node scripts/discover-templates.mjs --lanes pinned --expect
 //     prints the comma list update-status.mjs takes as --expect
+//   node scripts/discover-templates.mjs --lanes pinned --changed <file>
+//     only the cells a change touches (<file>: one changed path per line);
+//     a change under .github/, scripts/ or to the root policy/package files
+//     selects every cell
 
-import { existsSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -30,6 +34,20 @@ export function discoverCells(root = ".") {
   return out;
 }
 
+/** Paths whose change can affect every cell. */
+export const FULL_RUN = [/^\.github\//, /^scripts\//, /^upgrade-policy\.json$/, /^package(-lock)?\.json$/];
+
+/**
+ * Pure: the cells a set of changed paths touches. A file under
+ * templates/<t>/<f>/ selects that cell; a file directly under templates/<t>/
+ * selects every framework of <t>; anything matching FULL_RUN selects all.
+ */
+export function selectCells(cells, changed) {
+  const files = (changed ?? []).map((f) => String(f).trim()).filter(Boolean);
+  if (files.some((f) => FULL_RUN.some((re) => re.test(f)))) return cells;
+  return cells.filter((c) => files.some((f) => f.startsWith(`templates/${c.template}/${c.framework}/`) || (f.startsWith(`templates/${c.template}/`) && f.split("/").length === 3)));
+}
+
 export function matrixFor(cells, lanes) {
   for (const l of lanes) if (!LANES.includes(l)) throw new Error(`unknown lane ${l}`);
   const include = [];
@@ -48,8 +66,10 @@ function arg(argv, name, fallback) {
 
 export function main(argv = process.argv.slice(2)) {
   const lanes = arg(argv, "--lanes", "pinned").split(",").map((s) => s.trim()).filter(Boolean);
-  const cells = discoverCells(arg(argv, "--root", "."));
+  let cells = discoverCells(arg(argv, "--root", "."));
   if (!cells.length) throw new Error("no templates/*/*/sato.template.json found");
+  const changed = arg(argv, "--changed", "");
+  if (changed) cells = selectCells(cells, readFileSync(changed, "utf8").split("\n"));
   const m = matrixFor(cells, lanes);
   console.log(argv.includes("--expect") ? expectList(m) : JSON.stringify(m));
 }

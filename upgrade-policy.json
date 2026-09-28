@@ -1,0 +1,8 @@
+{
+  "schema": "sato.upgrade-policy/v1",
+  "types_node_follows_runtime": true,
+  "allow_major": [],
+  "zero_minor_is_major": true,
+  "split_bump_by_class": true,
+  "never_bump_vendored": true
+}

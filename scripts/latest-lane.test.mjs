@@ -20,29 +20,9 @@ test("both green, same versions: nothing", () => {
   assert.deepEqual(decide({ cells: [cell("pinned", "green"), cell("latest", "green")], date: D, vendored: V }), []);
 });
 
-test("latest green and pinned behind: one bump PR with the diff", () => {
-  const a = decide({ cells: [cell("pinned", "green"), cell("latest", "green", { ...PIN, viem: "2.60.0" })], date: D, vendored: V });
-  assert.equal(a.length, 1);
-  assert.equal(a[0].type, "bump");
-  assert.equal(a[0].branch, `bump/base-guarded-trader-plain-ts-${D}`);
-  assert.deepEqual(a[0].versions, [{ name: "viem", from: "2.56.9", to: "2.60.0" }]);
-  assert.match(bumpBody(a[0]), /passed tonight's checks/);
-});
-
-test("bump dedupe: an open bump PR for the pair (any date) blocks a second", () => {
-  const a = decide({
-    cells: [cell("pinned", "green"), cell("latest", "green", { ...PIN, viem: "2.60.0" })], date: D, vendored: V,
-    openPrs: [{ number: 7, headRefName: "bump/base-guarded-trader-plain-ts-2026-09-28" }],
-  });
+test("decide never opens a bump PR: bumps come from the update policy, not the latest lane's set", () => {
+  const a = decide({ cells: [cell("pinned", "green"), cell("latest", "green", { ...PIN, typescript: "7.0.2", viem: "2.60.0" })], date: D, vendored: V });
   assert.deepEqual(a, []);
-});
-
-test("an open bump PR for a different pair does not block", () => {
-  const a = decide({
-    cells: [cell("pinned", "green"), cell("latest", "green", { ...PIN, viem: "2.60.0" })], date: D, vendored: V,
-    openPrs: [{ number: 7, headRefName: "bump/base-guarded-trader-plain-ts2-2026-09-28" }, { number: 8, headRefName: "bump/treasury-monitor-plain-ts-2026-09-28" }],
-  });
-  assert.equal(a[0].type, "bump");
 });
 
 test("latest red, pinned green: one issue naming the package and version", () => {
@@ -158,8 +138,7 @@ test("end to end over update-status: a latest-lane red night files the issue, th
     { template: "t", framework: "plain-ts", lane: "latest", result: "green", resolved: { viem: "3.0.1" } },
   ], { date: "2026-10-02" });
   const a2 = decide({ cells: night2.cells, date: "2026-10-02", openIssues: [{ number: 9, title: a1[0].title }] });
-  assert.deepEqual(a2.map((a) => a.type), ["close_issue", "bump"]);
-  assert.deepEqual(a2[1].versions, [{ name: "viem", from: "2.56.9", to: "3.0.1" }]);
+  assert.deepEqual(a2.map((a) => a.type), ["close_issue"]);
 });
 
 test("bumpUpstreamText moves only the bumped pins inside template.upstream, byte for byte elsewhere", async () => {
