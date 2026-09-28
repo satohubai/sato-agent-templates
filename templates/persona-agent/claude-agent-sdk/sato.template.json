@@ -65,6 +65,6 @@
       "intent_ttl_s": 300,
       "human_approval": true
     },
-    "upstream": { "@satohub/kit": "0.1.0", "@anthropic-ai/claude-agent-sdk": "0.3.283", "viem": "2.56.9", "zod": "4.6.5", "tsx": "4.23.15", "typescript": "5.9.3" }
+    "upstream": { "@satohub/kit": "0.1.0", "@anthropic-ai/claude-agent-sdk": "0.3.284", "viem": "2.56.9", "zod": "4.6.5", "tsx": "4.23.15", "typescript": "5.9.3" }
   }
 }
