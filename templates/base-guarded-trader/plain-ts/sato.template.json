@@ -68,6 +68,6 @@
       "unknown_verdict": "refuse",
       "intent_ttl_s": 300
     },
-    "upstream": { "@satohub/kit": "0.1.0", "viem": "2.56.9", "tsx": "4.23.15", "typescript": "5.9.3" }
+    "upstream": { "@satohub/kit": "0.1.0", "viem": "2.56.9", "tsx": "4.23.15", "typescript": "7.0.2" }
   }
 }
