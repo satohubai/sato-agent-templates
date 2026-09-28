@@ -58,15 +58,28 @@ export function candidates(pinnedPkg, latestPkg) {
 
 /**
  * Pure: the tried single upgrades → the attribution.
- * trials: [{name, from, to, reproduced: bool, step?}] in the order tried.
+ * trials: [{name, from, to, reproduced: bool, step?, failed_other?}] in the order tried.
+ * A trial reproduces the failure only when it fails at the SAME step the cell
+ * failed at. A trial that fails somewhere else (e.g. its own install hits
+ * ERESOLVE against a pinned peer) carries `failed_other: <step>` and is not a
+ * reproduction.
  *   single       — the first single upgrade that reproduced the failure
- *   combination  — every changed package was tried alone and none reproduced it
- *   inconclusive — the time box (or an error) stopped it before either
+ *   combination  — every changed package was tried alone, each passed, none reproduced it
+ *   inconclusive — the time box (or an error) stopped it, or a trial failed at another step
  */
+export function reproduces(t, failingStep) {
+  return t.reproduced === true && !t.failed_other && (t.step ?? failingStep) === failingStep;
+}
+
 export function attribute({ failingStep, changes, trials, reason = null }) {
-  const hit = trials.find((t) => t.reproduced);
+  const hit = trials.find((t) => reproduces(t, failingStep));
   const base = { failing_step: failingStep, changes, trials };
-  if (hit) return { kind: "single", name: hit.name, from: hit.from, to: hit.to, step: hit.step ?? failingStep, ...base };
+  if (hit) return { kind: "single", name: hit.name, from: hit.from, to: hit.to, step: failingStep, ...base };
+  const other = trials.filter((t) => t.failed_other || (t.reproduced === true && !reproduces(t, failingStep)));
+  if (other.length) {
+    const what = other.map((t) => `${t.name}@${t.to} alone failed at ${t.failed_other ?? t.step}`).join("; ");
+    return { kind: "inconclusive", reason: `${what}, not at the failing step (${failingStep ?? "unknown"})`, ...base };
+  }
   if (changes.length && trials.length === changes.length && trials.every((t) => t.reproduced === false)) return { kind: "combination", ...base };
   return { kind: "inconclusive", reason: reason ?? "not every changed package was tried", ...base };
 }
@@ -122,9 +135,12 @@ export function main(env = process.env) {
           const pass = STEP_COMMANDS[step].every(([cmd, args]) => run(cmd, args, { root, deadline, logFile }));
           if (!pass) { failedAt = step; break; }
         }
-        trials.push({ name: c.name, from: c.from, to: c.to, reproduced: failedAt !== null, step: failedAt });
-        console.log(`bisect: ${c.name}@${c.to} alone → ${failedAt ? `fails ${failedAt}` : "passes"}`);
-        if (failedAt) break;
+        const reproduced = failedAt !== null && failedAt === failingStep;
+        const trial = { name: c.name, from: c.from, to: c.to, reproduced, step: failedAt };
+        if (failedAt !== null && !reproduced) trial.failed_other = failedAt;
+        trials.push(trial);
+        console.log(`bisect: ${c.name}@${c.to} alone → ${failedAt ? `fails ${failedAt}${reproduced ? "" : ` (not the failing step ${failingStep})`}` : "passes"}`);
+        if (reproduced) break;
       }
     } catch (e) {
       reason = e.message;

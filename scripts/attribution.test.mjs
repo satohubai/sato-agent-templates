@@ -136,3 +136,30 @@ test("SATO_LANE: the skip really fires under node --test (lockfile pins delibera
   assert.match(latest.stdout, /# skip(ped)? 1/);
   assert.notEqual(run("pinned").status, 0);
 });
+
+test("bisect: a trial that fails at its own install while the cell failed at typecheck names nobody", () => {
+  const trials = [
+    { name: "@types/node", from: "22.20.4", to: "26.6.3", reproduced: false, step: null },
+    { name: "typescript", from: "5.9.3", to: "7.0.2", reproduced: false, step: "install", failed_other: "install" },
+  ];
+  const at = attribute({ failingStep: "typecheck", changes, trials });
+  assert.equal(at.kind, "inconclusive");
+  assert.equal(at.name, undefined);
+  assert.match(at.reason, /typescript@7\.0\.2 alone failed at install/);
+});
+
+test("bisect: a legacy trial marked reproduced at install is not a reproduction of a typecheck failure", () => {
+  const trials = [{ name: "typescript", from: "5.9.3", to: "7.0.2", reproduced: true, step: "install" }];
+  const at = attribute({ failingStep: "typecheck", changes, trials });
+  assert.notEqual(at.kind, "single");
+});
+
+test("bisect: a trial failing at test while the cell failed at fork_check is not single, and not combination", () => {
+  const trials = [
+    { name: "@types/node", from: "22.20.4", to: "26.6.3", reproduced: false, step: "test", failed_other: "test" },
+    { name: "typescript", from: "5.9.3", to: "7.0.2", reproduced: false, step: null },
+  ];
+  const at = attribute({ failingStep: "fork_check", changes, trials });
+  assert.equal(at.kind, "inconclusive");
+  assert.match(at.reason, /failed at test/);
+});
