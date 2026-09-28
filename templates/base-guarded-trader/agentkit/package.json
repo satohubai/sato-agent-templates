@@ -1,0 +1,27 @@
+{
+  "name": "base-guarded-trader-agentkit",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Coinbase AgentKit agent on Base. The Sato Kit reaches AgentKit through one action provider; every intent goes through quote, prepare, simulate and a policy pre-flight that explains every refusal. It signs only on a local fork with a throwaway key, or on Base Sepolia with a CDP smart wallet, and execute needs a person to approve it.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/agent.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "fork-check": "tsx scripts/fork-check.ts"
+  },
+  "dependencies": {
+    "@coinbase/agentkit": "0.10.4",
+    "@satohub/kit": "file:vendor/satohub-kit-0.1.0.tgz",
+    "viem": "2.38.3"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.4",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

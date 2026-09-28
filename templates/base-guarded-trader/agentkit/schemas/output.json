@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "base-guarded-trader out/report.json",
+  "type": "object",
+  "required": ["schema", "mode", "user_agent", "model", "venue", "market", "intents", "executed"],
+  "properties": {
+    "schema": { "const": "base-guarded-trader.report/v1" },
+    "mode": { "type": "string", "enum": ["fixture", "fork", "testnet"] },
+    "user_agent": { "type": "string" },
+    "model": { "type": "string" },
+    "venue": { "type": "string", "enum": ["sato", "direct"] },
+    "market": { "type": "object" },
+    "executed": { "type": "boolean" },
+    "intents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "demo_refusal", "intent_id", "action", "summary", "policy_ok", "refusals", "unsigned"],
+        "properties": {
+          "intent_id": { "type": "string", "pattern": "^si_[A-Za-z0-9_-]{43}$" },
+          "policy_ok": { "type": "boolean" },
+          "refusals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["rule", "limit", "observed", "message"],
+              "properties": { "rule": { "type": "string" }, "limit": { "type": "string" }, "observed": { "type": "string" }, "message": { "type": "string" } }
+            }
+          }
+        }
+      }
+    }
+  }
+}
