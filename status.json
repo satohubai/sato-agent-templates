@@ -39,6 +39,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -80,6 +84,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -93,9 +101,9 @@
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
-        "@anthropic-ai/claude-agent-sdk": "0.3.283",
-        "@anthropic-ai/sdk": "0.128.0",
-        "@modelcontextprotocol/sdk": "1.30.1",
+        "@anthropic-ai/claude-agent-sdk": "0.3.284",
+        "@anthropic-ai/sdk": "0.129.0",
+        "@modelcontextprotocol/sdk": "1.31.0",
         "@satohub/kit": "0.1.0",
         "@types/node": "26.6.3",
         "tsx": "4.23.15",
@@ -116,6 +124,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -149,6 +161,10 @@
       },
       "attribution": null,
       "history": [
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        },
         {
           "date": "2026-09-28",
           "result": "green"
@@ -210,6 +226,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -233,6 +253,10 @@
       },
       "attribution": null,
       "history": [
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        },
         {
           "date": "2026-09-28",
           "result": "green"
@@ -284,6 +308,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -344,6 +372,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -357,8 +389,8 @@
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
-        "@anthropic-ai/claude-agent-sdk": "0.3.283",
-        "@anthropic-ai/sdk": "0.128.0",
+        "@anthropic-ai/claude-agent-sdk": "0.3.284",
+        "@anthropic-ai/sdk": "0.129.0",
         "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.0",
         "@types/node": "26.6.3",
@@ -380,6 +412,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         },
         {
           "date": "2026-09-28",
@@ -413,6 +449,10 @@
       },
       "attribution": null,
       "history": [
+        {
+          "date": "2026-09-28",
+          "result": "green"
+        },
         {
           "date": "2026-09-28",
           "result": "green"
@@ -472,6 +512,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -499,6 +543,10 @@
         },
         {
           "date": "2026-09-27",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-28",
           "result": "green"
         },
         {
@@ -560,6 +608,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-28",
+          "result": "green"
         }
       ]
     },
@@ -587,6 +639,10 @@
         },
         {
           "date": "2026-09-27",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-28",
           "result": "green"
         },
         {
