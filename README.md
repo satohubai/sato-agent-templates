@@ -11,12 +11,21 @@ Onchain-agent templates built on the Sato Kit (`@satohub/kit`). Every template h
 | Template | Framework | What it does | Last green |
 |---|---|---|---|
 | [`base-guarded-trader`](templates/base-guarded-trader/plain-ts) | plain TypeScript | Reads Base market data, decides with a small `Model` interface, and runs every intent through the kit: quote, prepare, simulate and a policy pre-flight that names the rule, limit and observed value of every refusal. Signs only on a local fork with a throwaway key or on Base Sepolia with a managed wallet. | ![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Fbase-guarded-trader-plain-ts.json) |
+| [`base-guarded-trader`](templates/base-guarded-trader/agentkit) | Coinbase AgentKit | The same agent as the plain TypeScript version, with the kit reached through one AgentKit action provider (`@satohub/kit/agentkit`). A local fork uses a throwaway key; Base Sepolia uses a CDP smart wallet. | ![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Fbase-guarded-trader-agentkit.json) |
+| [`base-guarded-trader`](templates/base-guarded-trader/claude-agent-sdk) | Claude Agent SDK | The same agent, with the kit's tools handed to the Claude Agent SDK as an in-process MCP server (`@satohub/kit/claude-agent-sdk`). A `PreToolUse` hook asks a person before `swap_prepare` and `execute`. The SDK itself is under Anthropic's own terms, not MIT. | ![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Fbase-guarded-trader-claude-agent-sdk.json) |
+| [`base-guarded-trader`](templates/base-guarded-trader/openai-agents) | OpenAI Agents SDK | The same agent, with the kit's tools as function tools (`@satohub/kit/openai-agents`). Tools that prepare or execute carry `needsApproval`, so the runner stops for a person. | ![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Fbase-guarded-trader-openai-agents.json) |
+| [`persona-agent`](templates/persona-agent/claude-agent-sdk) | Claude Agent SDK | A character with a memory that answers on Telegram and Discord, with a wallet through the kit. It covers what builders use ElizaOS for, with no ElizaOS dependency. Connectors stay off until their bot tokens are set; wallet writes need a person's approval. | ![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Fpersona-agent-claude-agent-sdk.json) |
 | [`treasury-monitor`](templates/treasury-monitor/plain-ts) | plain TypeScript | Reads the native and ERC-20 balances of a public address list on Base through the kit's `chain.read`, reports them in exact base units, and fires a threshold alert once per crossing. Holds no key and moves no funds. | ![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Ftreasury-monitor-plain-ts.json) |
 | [`research-report`](templates/research-report/plain-ts) | plain TypeScript | Answers a question from a closed corpus of supplied sources plus onchain reads made through the kit's `chain.read`. A model proposes findings; a deterministic gate refuses any that cite an unsupplied source or carry a number no cited source contains. Holds no key and moves no funds. | ![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Fresearch-report-plain-ts.json) |
 
 ## The nightly checks
 
-`.github/workflows/nightly.yml` runs every night at 06:23 UTC for each template × framework on the **pinned** lane (the exact versions in the template's lockfile):
+`.github/workflows/nightly.yml` runs every night at 06:23 UTC. It finds every `templates/*/*/sato.template.json` on its own, so a new template needs no workflow change, and checks each template × framework on two lanes:
+
+- **pinned**: the exact versions in the template's lockfile. This lane must always be green; a red here is ours to fix.
+- **latest**: the same checks after moving every non-vendored dependency to its newest published version. When latest is green and pinned is behind, the workflow opens one pull request bumping the pins. When latest is red and pinned is green, it opens one issue named `upstream break: <package>@<version> breaks <template>/<framework>` and closes it when latest passes again. A drill forces a known-bad version to prove this path: `gh workflow run nightly.yml -f inject_drift=viem@1.0.0`.
+
+Each lane runs:
 
 1. `npm ci` from the npm registry only, with install scripts off;
 2. `npm run typecheck`;
@@ -27,7 +36,7 @@ Onchain-agent templates built on the Sato Kit (`@satohub/kit`). Every template h
 
 ## status.json
 
-One entry per template × framework × lane:
+One entry per template × framework × lane (`pinned` or `latest`):
 
 | Field | Meaning |
 |---|---|
@@ -45,11 +54,11 @@ A green entry means the template passed tonight's checks on that date. It is not
 
 ## Sato Status: third-party actions
 
-`.github/workflows/actions-status.yml` runs every night at 07:23 UTC, an hour after the templates, and checks the onchain actions agents reach for most — from other projects, plus the Sato Kit's own core five as the reference consumer. The list, and how each is checked, is [`scripts/actions-catalog.mjs`](scripts/actions-catalog.mjs). Every check runs with no secrets.
+`.github/workflows/actions-status.yml` runs every night at 07:23 UTC, an hour after the templates, and checks the onchain actions agents reach for most — from other projects, plus the Sato Kit's own core five as the reference consumer. Checks read Base and Ethereum (anvil forks at pinned blocks) and Solana (public mainnet reads); each entry names its `chain`. The list, and how each is checked, is [`scripts/actions-catalog.mjs`](scripts/actions-catalog.mjs). Every check runs with no secrets.
 
 Per action, each night:
 
-1. **conformance** — one read-only call: against an anvil fork of Base at block 51800000 (balances and allowances are compared with the fork's own `eth_call`), or a public read with a fixed expected shape. Never a write, never a key. AgentKit actions are handed a read-only wallet provider that can only read; anything that tries to sign or send throws;
+1. **conformance** — one read-only call: against an anvil fork of Base at block 51800000 or Ethereum at block 23000000 (balances and allowances are compared with the fork's own `eth_call`), or a public read with a fixed expected shape. Never a write, never a key. AgentKit actions are handed a read-only wallet provider that can only read; anything that tries to sign or send throws;
 2. **schema lint** — the tool's input and output schemas through the portable rules (`scripts/lib/oda-lint.mjs`, vendored from Sato Hub), plus what each host does with the tool as published: OpenAI (name characters, schema root), Cursor (tool budget), Claude (name characters, schema root, description length). Findings are reported, never a failure;
 3. **custody** — Sato Check's three answers for the action's source (`GET https://satohub.ai/api/check`), as returned. `unknown` stays `unknown`;
 4. **description drift** — the sha256 of the tool description, compared with the previous night.
