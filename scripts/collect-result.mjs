@@ -34,6 +34,13 @@ if (existsSync(lockPath) && existsSync(pkgPath)) {
   }
 }
 
+// Latest lane only: the one-package bisect's attribution, when it ran.
+let attribution = null;
+const attrPath = join(env.LOG_DIR || ".", "attribution.json");
+if (env.LANE === "latest" && failing && existsSync(attrPath)) {
+  try { attribution = JSON.parse(readFileSync(attrPath, "utf8")); } catch { attribution = null; }
+}
+
 const result = failing ? "red" : anyMissing ? "error" : "green";
 const out = {
   template: env.TEMPLATE,
@@ -43,6 +50,7 @@ const out = {
   failing_step: failing ?? (anyMissing ? "incomplete" : null),
   log_excerpt,
   resolved,
+  attribution,
 };
 writeFileSync(env.OUT || "result.json", JSON.stringify(out, null, 2) + "\n");
 console.log(`${out.template}/${out.framework}/${out.lane}: ${result}${out.failing_step ? ` (${out.failing_step})` : ""}`);

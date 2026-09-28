@@ -66,6 +66,10 @@ runs:
         mkdir -p "$RUNNER_TEMP/logs"
         echo "TEMPLATE_DIR=templates/${{ inputs.template }}/${{ inputs.framework }}" >> "$GITHUB_ENV"
         echo "LOG_DIR=$RUNNER_TEMP/logs" >> "$GITHUB_ENV"
+        # Every later step (and the template's own tests) can tell the lanes
+        # apart: on latest, the pin-consistency tests skip, because the lane
+        # moves versions on purpose.
+        echo "SATO_LANE=${{ inputs.lane }}" >> "$GITHUB_ENV"
 
     # Latest lane: move every non-vendored dependency to its newest published
     # version (registry.npmjs.org only, install scripts off) before the same
@@ -150,6 +154,24 @@ runs:
       run: |
         set -o pipefail
         npm run fork-check 2>&1 | tee "$LOG_DIR/fork_check.log"
+
+    # Latest lane, red cell: one-package bisect. Pinned versions plus exactly
+    # one upgraded package at a time, re-running the steps up to the one that
+    # failed; the first single upgrade that fails again is named in the issue.
+    # Time-boxed; its outcome never changes the cell's result.
+    - id: bisect
+      if: failure() && inputs.lane == 'latest'
+      continue-on-error: true
+      shell: bash
+      working-directory: ${{ env.TEMPLATE_DIR }}
+      env:
+        STEPS_JSON: ${{ toJSON(steps) }}
+        STEP_ORDER: ${{ steps.detect.outputs.step_order }}
+        ANVIL_RPC_URL: http://127.0.0.1:8547
+        BISECT_BUDGET_S: "600"
+      run: |
+        set -o pipefail
+        node "$GITHUB_WORKSPACE/scripts/bisect-latest.mjs" 2>&1 | tee "$LOG_DIR/bisect_summary.log"
 
     - id: anvil_stop
       if: always()

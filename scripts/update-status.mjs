@@ -36,6 +36,7 @@ export function parseResult(r) {
     failing_step: result === "green" ? null : typeof r.failing_step === "string" ? r.failing_step : "unknown",
     log_excerpt: result === "green" ? null : typeof r.log_excerpt === "string" ? r.log_excerpt.slice(-8000) : null,
     resolved: r.resolved && typeof r.resolved === "object" && !Array.isArray(r.resolved) ? r.resolved : {},
+    attribution: result !== "green" && r.attribution && typeof r.attribution === "object" && ["single", "combination", "inconclusive"].includes(r.attribution.kind) ? r.attribution : null,
   };
 }
 
@@ -63,6 +64,7 @@ export function applyResults(status, results, { date, expected = [] }) {
       failing_step: r.failing_step,
       log_excerpt: r.log_excerpt,
       resolved: Object.keys(r.resolved).length ? r.resolved : (prev?.resolved ?? {}),
+      attribution: r.attribution,
       history,
     });
   }
