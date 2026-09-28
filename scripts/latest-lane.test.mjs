@@ -161,3 +161,26 @@ test("end to end over update-status: a latest-lane red night files the issue, th
   assert.deepEqual(a2.map((a) => a.type), ["close_issue", "bump"]);
   assert.deepEqual(a2[1].versions, [{ name: "viem", from: "2.56.9", to: "3.0.1" }]);
 });
+
+test("bumpUpstreamText moves only the bumped pins inside template.upstream, byte for byte elsewhere", async () => {
+  const { bumpUpstreamText } = await import("./latest-lane.mjs");
+  const text = '{\n  "id": "x",\n  "runtime": { "typescript": "5.9.3" },\n  "template": {\n    "upstream": { "viem": "2.56.9", "typescript": "5.9.3" }\n  }\n}\n';
+  const out = bumpUpstreamText(text, [{ name: "typescript", to: "7.0.2" }, { name: "not-there", to: "1.0.0" }]);
+  assert.equal(JSON.parse(out).template.upstream.typescript, "7.0.2");
+  assert.equal(JSON.parse(out).template.upstream.viem, "2.56.9");
+  assert.equal(JSON.parse(out).runtime.typescript, "5.9.3", "a same-named key outside upstream is untouched");
+  assert.equal(out.replace('"7.0.2"', '"5.9.3"'), text);
+  for (const f of ["base-guarded-trader/plain-ts", "base-guarded-trader/agentkit", "persona-agent/claude-agent-sdk", "treasury-monitor/plain-ts"]) {
+    const { readFileSync } = await import("node:fs");
+    const t = readFileSync(`templates/${f}/sato.template.json`, "utf8");
+    const pins = JSON.parse(t).template.upstream;
+    const [name] = Object.keys(pins);
+    const moved = JSON.parse(bumpUpstreamText(t, [{ name, to: "99.0.0" }])).template.upstream;
+    assert.deepEqual(moved, { ...pins, [name]: "99.0.0" }, f);
+  }
+});
+
+test("a failed pull request names the repo setting", async () => {
+  const { PR_PERMISSION_HINT } = await import("./latest-lane.mjs");
+  assert.match(PR_PERMISSION_HINT, /Allow GitHub Actions to create and approve pull requests/);
+});
