@@ -1,0 +1,237 @@
+name: journey
+
+# Weekly end-to-end journey, the way a builder meets it: the create-sato-agent
+# CLI and the Sato Kit, built and packed from source (neither is on npm yet),
+# call the real create API at satohub.ai, then the generated repo is installed,
+# typechecked, tested and run in fixture mode, and `sato-kit doctor` reads it.
+# No secrets: nothing is signed, sent or spent. The packages send their real
+# published user agents; this runner counts as ours because it also sends a
+# SatoHub-journey/1.0 request right before the CLI and before doctor (the
+# Observatory treats a published-package UA as ours when the same runner sent a
+# SatoHub- request within 15 minutes — lib/observatory/burst.ts).
+#
+# A create API that is missing or refuses is recorded as it answered (error
+# code + HTTP status) in the cell's info. Template drift that doctor reports is
+# info, never a failure. The result is one lane "journey" cell in status.json
+# on the `status` branch, never main.
+#
+# Source pin: satohubai/sato-hub-integrations at a main commit; move it when
+# the kit or CLI changes.
+
+on:
+  schedule:
+    - cron: "17 9 * * 3"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: journey
+  cancel-in-progress: false
+
+env:
+  INTEGRATIONS_REF: 6bb8da9fadd009370aa4293f1c49b613dac944bd # sato-hub-integrations main
+  CREATE_API: https://satohub.ai/api/create
+  OWN_UA: SatoHub-journey/1.0
+  GOAL: trading agent on Base with a wallet and spend limits
+  FRAMEWORK: plain-ts
+
+jobs:
+  journey:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - id: checkout_integrations
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: satohubai/sato-hub-integrations
+          ref: ${{ env.INTEGRATIONS_REF }}
+          path: integrations
+          persist-credentials: false
+
+      - id: setup_node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+
+      - id: prepare
+        run: |
+          mkdir -p "$RUNNER_TEMP/logs" "$RUNNER_TEMP/packs" "$RUNNER_TEMP/journey"
+          echo "LOG_DIR=$RUNNER_TEMP/logs" >> "$GITHUB_ENV"
+          echo "PACKS=$RUNNER_TEMP/packs" >> "$GITHUB_ENV"
+          echo "WORK=$RUNNER_TEMP/journey" >> "$GITHUB_ENV"
+
+      # Build from source and pack the two tarballs a builder would install.
+      - id: pack
+        working-directory: integrations
+        timeout-minutes: 10
+        run: |
+          set -o pipefail
+          { npm install --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/ && \
+            npm run build -w satohub-core && \
+            npm run build -w create-sato-agent -w @satohub/kit && \
+            npm pack -w create-sato-agent -w @satohub/kit --pack-destination "$PACKS" ; } 2>&1 | tee "$LOG_DIR/pack.log"
+
+      - id: install_tools
+        working-directory: ${{ env.WORK }}
+        timeout-minutes: 5
+        run: |
+          set -o pipefail
+          { npm init -y >/dev/null && \
+            npm install --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/ "$PACKS"/create-sato-agent-*.tgz "$PACKS"/satohub-kit-*.tgz ; } 2>&1 | tee "$LOG_DIR/install_tools.log"
+
+      # Mark this runner as ours before the published-package requests below.
+      - id: own_marker_create
+        timeout-minutes: 1
+        run: curl -fsS -o /dev/null --max-time 20 -A "$OWN_UA" https://satohub.ai/api/openapi.json || echo "own marker request failed (not fatal)"
+
+      # The real create API. Its answer (or refusal) is recorded either way.
+      - id: create
+        working-directory: ${{ env.WORK }}
+        timeout-minutes: 5
+        run: |
+          set -o pipefail
+          code=0
+          timeout 240 npx --no-install create-sato-agent "$GOAL" --framework "$FRAMEWORK" --json --no-git --dir gen --api "$CREATE_API" \
+            > create.json 2> >(tee "$LOG_DIR/create.log" >&2) || code=$?
+          cat create.json | tee -a "$LOG_DIR/create.log"
+          node "$GITHUB_WORKSPACE/scripts/journey-info.mjs" create create.json --out "$LOG_DIR/create-info.json" --github-output "$GITHUB_OUTPUT" 2>&1 | tee -a "$LOG_DIR/create.log"
+          exit $code
+
+      - id: npm_ci
+        working-directory: ${{ env.WORK }}/gen
+        timeout-minutes: 5
+        run: |
+          set -o pipefail
+          npm ci --ignore-scripts --no-audit --no-fund 2>&1 | tee "$LOG_DIR/npm_ci.log"
+
+      - id: typecheck
+        working-directory: ${{ env.WORK }}/gen
+        timeout-minutes: 5
+        run: |
+          set -o pipefail
+          timeout 240 npm run typecheck 2>&1 | tee "$LOG_DIR/typecheck.log"
+
+      - id: test
+        working-directory: ${{ env.WORK }}/gen
+        timeout-minutes: 5
+        run: |
+          set -o pipefail
+          timeout 240 npm test 2>&1 | tee "$LOG_DIR/test.log"
+
+      - id: start_fixture
+        working-directory: ${{ env.WORK }}/gen
+        timeout-minutes: 5
+        run: |
+          set -o pipefail
+          timeout --kill-after=10 240 npm start -- --mode fixture 2>&1 | tee "$LOG_DIR/start_fixture.log"
+
+      # Mark this runner as ours before the published-package requests below.
+      - id: own_marker_doctor
+        timeout-minutes: 1
+        run: curl -fsS -o /dev/null --max-time 20 -A "$OWN_UA" https://satohub.ai/api/openapi.json || echo "own marker request failed (not fatal)"
+
+      # Doctor from the packed kit. Only a missing or unparseable answer fails
+      # this step; drift changes go into the cell's info.
+      - id: doctor
+        working-directory: ${{ env.WORK }}/gen
+        timeout-minutes: 3
+        run: |
+          set -o pipefail
+          timeout 120 "$WORK/node_modules/.bin/sato-kit" doctor --json > "$WORK/doctor.json" 2> >(tee "$LOG_DIR/doctor.log" >&2) || true
+          node "$GITHUB_WORKSPACE/scripts/journey-info.mjs" doctor "$WORK/doctor.json" --out "$LOG_DIR/doctor-info.json" 2>&1 | tee -a "$LOG_DIR/doctor.log"
+
+      - id: result
+        if: always()
+        env:
+          TEMPLATE: ${{ steps.create.outputs.template || 'unplanned' }}
+          LANE: journey
+          STEPS_JSON: ${{ toJSON(steps) }}
+          STEP_ORDER: pack,install_tools,create,npm_ci,typecheck,test,start_fixture,doctor
+          TEMPLATE_DIR: ${{ env.WORK }}/gen
+          INFO_FILES: create=${{ env.LOG_DIR }}/create-info.json,doctor=${{ env.LOG_DIR }}/doctor-info.json
+          OUT: ${{ runner.temp }}/result-journey.json
+        run: node scripts/collect-result.mjs
+
+      - id: upload
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: result-journey
+          path: ${{ runner.temp }}/result-journey.json
+          if-no-files-found: warn
+          retention-days: 30
+
+      # Nothing started above outlives its step; this catches a stray child.
+      - id: cleanup
+        if: always()
+        run: pkill -f "$RUNNER_TEMP/journey" || true
+
+  status:
+    needs: [journey]
+    if: always() && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # The only job that writes, and only to the `status` branch.
+    permissions:
+      contents: write
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - id: checkout_status
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: status
+          path: status-data
+
+      - id: setup_node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+
+      - id: download
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: result-journey
+          path: results
+          merge-multiple: true
+
+      # A run that died before writing a result still leaves a cell: an error
+      # under the "unplanned" template, never a silent week.
+      - id: update
+        run: |
+          if [ ! -f results/result-journey.json ]; then
+            mkdir -p results
+            printf '{"template":"unplanned","framework":"%s","lane":"journey","result":"error","failing_step":"no_result","log_excerpt":"The journey job left no result file."}\n' "$FRAMEWORK" > results/result-journey.json
+          fi
+          node scripts/update-status.mjs \
+            --results results --status status-data/status.json --badges status-data/badges \
+            --date "$(date -u +%F)"
+
+      - id: commit
+        working-directory: status-data
+        run: |
+          git add status.json badges
+          if git diff --cached --quiet; then
+            echo "status unchanged"
+            exit 0
+          fi
+          git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" \
+            commit -m "status: journey $(date -u +%F)"
+          # nightly, testnet, actions-status and this job all write the status
+          # branch: a rejected push is rebased and retried, never forced.
+          for attempt in 1 2 3 4 5; do
+            git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" pull --rebase origin status && git push origin HEAD:status && exit 0
+            sleep $((attempt * 5))
+          done
+          exit 1

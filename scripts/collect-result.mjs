@@ -46,6 +46,18 @@ let test_count = null;
 const countPath = join(env.LOG_DIR || ".", "test_count.json");
 if (existsSync(countPath)) { try { test_count = JSON.parse(readFileSync(countPath, "utf8")); } catch { test_count = null; } }
 
+// Journey lane only: facts the run recorded (create API answer, doctor drift),
+// as JSON files named in INFO_FILES ("key=path,key=path"). Info, never a verdict.
+let info = null;
+if (env.LANE === "journey" && env.INFO_FILES) {
+  info = {};
+  for (const pair of env.INFO_FILES.split(",")) {
+    const [k, p] = pair.split("=");
+    if (!k || !p || !existsSync(p)) continue;
+    try { info[k.trim()] = JSON.parse(readFileSync(p.trim(), "utf8")); } catch { /* unreadable: left out */ }
+  }
+}
+
 const result = failing ? "red" : anyMissing ? "error" : "green";
 const out = {
   template: env.TEMPLATE,
@@ -57,6 +69,7 @@ const out = {
   resolved,
   test_count,
   attribution,
+  ...(info ? { info } : {}),
 };
 writeFileSync(env.OUT || "result.json", JSON.stringify(out, null, 2) + "\n");
 console.log(`${out.template}/${out.framework}/${out.lane}: ${result}${out.failing_step ? ` (${out.failing_step})` : ""}`);

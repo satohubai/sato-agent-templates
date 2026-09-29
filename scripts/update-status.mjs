@@ -38,6 +38,7 @@ export function parseResult(r) {
     log_excerpt: result === "green" ? null : typeof r.log_excerpt === "string" ? r.log_excerpt.slice(-8000) : null,
     resolved: r.resolved && typeof r.resolved === "object" && !Array.isArray(r.resolved) ? r.resolved : {},
     held: r.lane === "latest" && Array.isArray(r.held) ? r.held.filter((h) => h && typeof h.pkg === "string").map((h) => ({ pkg: h.pkg, pinned: String(h.pinned ?? ""), latest: String(h.latest ?? ""), reason: String(h.reason ?? "") })) : null,
+    info: r.lane === "journey" && r.info && typeof r.info === "object" && !Array.isArray(r.info) && JSON.stringify(r.info).length <= 16000 ? r.info : null,
     attribution: result !== "green" && r.attribution && typeof r.attribution === "object" && ["single", "combination", "inconclusive"].includes(r.attribution.kind) ? r.attribution : null,
   };
 }
@@ -68,6 +69,7 @@ export function applyResults(status, results, { date, expected = [] }) {
       resolved: Object.keys(r.resolved).length ? r.resolved : (prev?.resolved ?? {}),
       attribution: r.attribution,
       ...(r.lane === "latest" ? { held: r.held ?? [] } : {}),
+      ...(r.lane === "journey" ? { info: r.info } : {}),
       history,
     });
   }
