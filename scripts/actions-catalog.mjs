@@ -14,6 +14,11 @@
 // "polygon" / "any" for a check that reads no chain of ours (a skill for a
 // Polygon protocol, a multi-chain skill, an oracle feed id).
 //
+// An action marked `write: true` is a Sato Kit prepare (it builds an unsigned
+// transaction or a proposal for a signer). It is NEVER called here: its
+// record carries the schema lint of its descriptor and the custody answer
+// only, and its result is "lint_only", never green.
+//
 // Each conformance `assert` is pure: (output, expected) → null when it passes,
 // or a sentence naming what differed.
 
@@ -47,7 +52,7 @@ export const CHAINS = {
   solana: { kind: "svm", public_rpc: "https://api.mainnet-beta.solana.com", agentkit_network: "solana-mainnet" },
 };
 /** Every value an action's `chain` may take. */
-export const CHAIN_VALUES = [...Object.keys(CHAINS), "polygon", "any"];
+export const CHAIN_VALUES = [...Object.keys(CHAINS), "base-sepolia", "polygon", "any"];
 
 export const USDC_BASE = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913";
 export const WETH_BASE = "0x4200000000000000000000000000000000000006";
@@ -64,6 +69,11 @@ export const WETH_ETH = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
 export const HOLDER_ETH = "0x37305B1cD40574E4C5Ce33f8e8306Be057fD7341";
 /** The ENS base registrar (ERC-721) on Ethereum. */
 export const ENS_REGISTRAR_ETH = "0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85";
+
+/** A Safe on Base Sepolia (threshold 1), read from the public Safe Transaction Service; the kit's safe.info fixture records the same Safe. */
+export const SAFE_BASE_SEPOLIA = "0x981778Bc0E01C87973c448bc2A866609961D05b4";
+/** USDC on Arbitrum One, the destination of the bridge quote. */
+export const USDC_ARBITRUM = "0xaf88d065e77c8cC2239327C5EDb3A432268e5831";
 
 export const USDC_SOLANA = "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v";
 /** A Solana address used only to read its USDC balance (the check reads the shape of the answer, not its value). */
@@ -669,6 +679,83 @@ export const ACTIONS = [
       return output?.unsigned?.kind === "x402_payment" ? null : `expected an unsigned x402_payment; got ${JSON.stringify(output?.unsigned ?? null).slice(0, 200)}`;
     },
   },
+  // The kit's Phase 2 reads. Keyless, read-only; the quote goes to LI.FI
+  // directly (venue "lifi") and never to satohub.ai.
+  {
+    id: "sato-kit:token.approvals.list",
+    name: "token_approvals_list",
+    source: "sato-kit",
+    chain: "base",
+    needs_fork: true,
+    args: { chain: "base", owner: HOLDER, token: USDC_BASE, spenders: [PERMIT2] },
+    expected: { kind: "erc20_allowance", token: USDC_BASE, owner: HOLDER, spender: PERMIT2 },
+    assert(output, exp) {
+      const a = Array.isArray(output?.approvals) ? output.approvals[0] : null;
+      if (!a || String(a.spender).toLowerCase() !== PERMIT2.toLowerCase()) return `expected one approval row for ${PERMIT2}; got ${JSON.stringify(output?.approvals ?? null).slice(0, 200)}`;
+      return a.allowance === exp.value ? null : `the fork holds an allowance of ${exp.value}; the action returned ${JSON.stringify(a.allowance)}`;
+    },
+  },
+  {
+    id: "sato-kit:tx.simulate",
+    name: "tx_simulate",
+    source: "sato-kit",
+    chain: "base",
+    needs_fork: true,
+    // balanceOf(HOLDER) on USDC: a view call, simulated on the fork.
+    args: { chain: "base", to: USDC_BASE, data: `0x70a08231${"0".repeat(24)}${HOLDER.slice(2).toLowerCase()}` },
+    assert(output) {
+      return output?.ok === true && /^[0-9]+$/.test(output.gas_estimate ?? "") ? null : `expected ok with a gas estimate; got ${JSON.stringify(output ?? null).slice(0, 200)}`;
+    },
+  },
+  {
+    id: "sato-kit:bridge.quote",
+    name: "bridge_quote",
+    source: "sato-kit",
+    chain: "base",
+    args: { from_chain: "base", to_chain: "arbitrum", from_token: USDC_BASE, to_token: USDC_ARBITRUM, from_amount: "1000000", from_address: HOLDER, venue: "lifi" },
+    assert(output) {
+      const qs = Array.isArray(output?.quotes) ? output.quotes : [];
+      if (qs.some((q) => q?.venue === "sato")) return "the direct venue must not return a Sato quote";
+      const q = qs.find((x) => x?.venue === "lifi");
+      if (!q) return `expected a LI.FI quote; got ${JSON.stringify(output ?? null).slice(0, 200)}`;
+      if (q.error) return `LI.FI answered with an error: ${String(q.error).slice(0, 200)}`;
+      return /^[0-9]+$/.test(String(q.to_amount ?? "")) ? null : `expected a to_amount in base units; got ${JSON.stringify(q.to_amount)}`;
+    },
+  },
+  {
+    id: "sato-kit:safe.info",
+    name: "safe_info",
+    source: "sato-kit",
+    chain: "base-sepolia",
+    args: { chain: "base-sepolia", safe_address: SAFE_BASE_SEPOLIA },
+    assert(output) {
+      if (output?.safe_address !== SAFE_BASE_SEPOLIA) return `expected the Safe ${SAFE_BASE_SEPOLIA}; got ${JSON.stringify(output?.safe_address ?? null)}`;
+      if (!(Number.isInteger(output.threshold) && output.threshold >= 1)) return `expected a threshold of at least 1; got ${JSON.stringify(output.threshold)}`;
+      if (!Array.isArray(output.owners) || output.owners.length < output.threshold) return "expected at least threshold-many owners";
+      return /^[0-9]+$/.test(String(output.nonce)) ? null : `expected a numeric nonce; got ${JSON.stringify(output.nonce)}`;
+    },
+  },
+  {
+    id: "sato-kit:solana.read",
+    name: "solana_read",
+    source: "sato-kit",
+    chain: "solana",
+    // Shape only: the balance moves, so its value is not compared.
+    args: { chain: "solana", kind: "sol_balance", address: SOLANA_OWNER },
+    assert(output) {
+      if (output?.kind !== "sol_balance" || output.address !== SOLANA_OWNER) return `expected a sol_balance answer for ${SOLANA_OWNER}; got ${JSON.stringify(output ?? null).slice(0, 200)}`;
+      return /^[0-9]+$/.test(String(output.amount)) && output.decimals === 9 ? null : `expected an amount in lamports with 9 decimals; got ${JSON.stringify({ amount: output.amount, decimals: output.decimals })}`;
+    },
+  },
+  // The kit's prepares: schema lint + custody only, never executed.
+  ...[
+    ["token.approvals.revoke", "base"],
+    ["erc8004.register", "base"],
+    ["bridge.prepare", "base"],
+    ["safe.propose", "base-sepolia"],
+    ["solana.transfer", "solana"],
+    ["solana.swap.prepare", "solana"],
+  ].map(([odaId, chain]) => ({ id: `sato-kit:${odaId}`, name: odaId.replace(/\./g, "_"), source: "sato-kit", chain, write: true })),
 ];
 
 export function thirdParty(actions = ACTIONS) {
