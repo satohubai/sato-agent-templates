@@ -1,6 +1,6 @@
 {
   "schema": "sato.action-status/v1",
-  "updated": "2026-09-28",
+  "updated": "2026-09-29",
   "actions": [
     {
       "id": "agentkit-provider:defillama.find_protocol",
@@ -45,8 +45,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -62,6 +62,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -109,8 +113,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -126,6 +130,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -173,8 +181,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -190,6 +198,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -237,8 +249,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -246,6 +258,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -293,8 +309,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -310,6 +326,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -357,8 +377,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -366,6 +386,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -413,8 +437,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -422,6 +446,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -469,8 +497,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -478,6 +506,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -531,8 +563,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -540,6 +572,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -593,8 +629,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -602,6 +638,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -649,8 +689,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -666,6 +706,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -719,7 +763,7 @@
       "result": "red",
       "failing_step": "call",
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
+      "last_run": "2026-09-29",
       "last_green": null,
       "history": [
         {
@@ -736,6 +780,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "red"
+        },
+        {
+          "date": "2026-09-29",
           "result": "red"
         }
       ]
@@ -789,8 +837,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -798,6 +846,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -851,8 +903,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -860,6 +912,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -913,8 +969,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -922,6 +978,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -975,8 +1035,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -984,6 +1044,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1037,8 +1101,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -1046,6 +1110,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1093,8 +1161,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -1102,6 +1170,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1149,8 +1221,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -1158,6 +1230,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1205,8 +1281,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -1214,6 +1290,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1225,7 +1305,7 @@
       "source": {
         "kind": "protocol-mcp",
         "package": "dexpaprika-mcp",
-        "version": "2.6.0",
+        "version": "2.6.1",
         "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
       },
       "checks": {
@@ -1266,9 +1346,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "2.6.0",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "upstream_version": "2.6.1",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -1276,6 +1356,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1287,7 +1371,7 @@
       "source": {
         "kind": "protocol-mcp",
         "package": "dexpaprika-mcp",
-        "version": "2.6.0",
+        "version": "2.6.1",
         "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
       },
       "checks": {
@@ -1322,9 +1406,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "2.6.0",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "upstream_version": "2.6.1",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -1341,6 +1425,10 @@
         {
           "date": "2026-09-28",
           "result": "green"
+        },
+        {
+          "date": "2026-09-29",
+          "result": "green"
         }
       ]
     },
@@ -1351,7 +1439,7 @@
       "source": {
         "kind": "protocol-mcp",
         "package": "dexpaprika-mcp",
-        "version": "2.6.0",
+        "version": "2.6.1",
         "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
       },
       "checks": {
@@ -1402,8 +1490,8 @@
       },
       "result": "red",
       "failing_step": "assert",
-      "upstream_version": "2.6.0",
-      "last_run": "2026-09-28",
+      "upstream_version": "2.6.1",
+      "last_run": "2026-09-29",
       "last_green": null,
       "history": [
         {
@@ -1421,6 +1509,10 @@
         {
           "date": "2026-09-28",
           "result": "red"
+        },
+        {
+          "date": "2026-09-29",
+          "result": "red"
         }
       ]
     },
@@ -1431,7 +1523,7 @@
       "source": {
         "kind": "protocol-mcp",
         "package": "dexpaprika-mcp",
-        "version": "2.6.0",
+        "version": "2.6.1",
         "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
       },
       "checks": {
@@ -1482,9 +1574,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "2.6.0",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "upstream_version": "2.6.1",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -1492,6 +1584,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1503,7 +1599,7 @@
       "source": {
         "kind": "protocol-mcp",
         "package": "dexpaprika-mcp",
-        "version": "2.6.0",
+        "version": "2.6.1",
         "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
       },
       "checks": {
@@ -1554,9 +1650,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "2.6.0",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "upstream_version": "2.6.1",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -1564,6 +1660,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1611,8 +1711,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "2.0.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -1628,6 +1728,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1675,8 +1779,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "2.0.4",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -1692,6 +1796,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1739,8 +1847,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.7.1",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -1756,6 +1864,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1803,8 +1915,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.0",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -1820,6 +1932,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1867,8 +1983,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.0",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -1884,6 +2000,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1931,8 +2051,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.0",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -1948,6 +2068,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -1995,8 +2119,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.0",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -2012,6 +2136,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2059,8 +2187,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.0",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -2076,6 +2204,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2123,8 +2255,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "21347a28f7d8",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -2132,6 +2264,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2179,8 +2315,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "21347a28f7d8",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -2188,6 +2324,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2235,8 +2375,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "a2211e3f6a7c",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -2244,6 +2384,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2291,8 +2435,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "a2211e3f6a7c",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -2300,6 +2444,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2347,8 +2495,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "a2211e3f6a7c",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -2356,6 +2504,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2419,8 +2571,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "46c07deae989",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -2428,6 +2580,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2501,8 +2657,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "46c07deae989",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -2510,6 +2666,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2557,8 +2717,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "91ee44ae113e",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -2566,6 +2726,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2613,8 +2777,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "bff480cf4617",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -2622,6 +2786,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2669,8 +2837,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "bff480cf4617",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -2686,6 +2854,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2733,8 +2905,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "bff480cf4617",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -2750,6 +2922,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2797,8 +2973,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "bff480cf4617",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-28",
@@ -2806,6 +2982,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
@@ -2853,8 +3033,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "bff480cf4617",
-      "last_run": "2026-09-28",
-      "last_green": "2026-09-28",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
       "history": [
         {
           "date": "2026-09-27",
@@ -2870,6 +3050,10 @@
         },
         {
           "date": "2026-09-28",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-29",
           "result": "green"
         }
       ]
