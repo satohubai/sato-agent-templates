@@ -25,5 +25,10 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "overrides": {
+    "@satohub/kit": {
+      "@solana/kit": "5.5.1"
+    }
   }
 }
