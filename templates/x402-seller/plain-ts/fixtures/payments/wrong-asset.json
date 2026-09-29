@@ -1,0 +1,32 @@
+{
+  "_note": "A correctly signed authorization naming WETH (0x4200…0006) as the asset; the route accepts USDC only. Signed once with a throwaway test key that was generated for this purpose and never stored; the address holds nothing on any real chain.",
+  "payload": {
+    "x402Version": 2,
+    "resource": {
+      "url": "http://localhost:4021/api/item"
+    },
+    "accepted": {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "asset": "0x4200000000000000000000000000000000000006",
+      "amount": "1000",
+      "payTo": "0x000000000000000000000000000000000000dEaD",
+      "maxTimeoutSeconds": 60,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    },
+    "payload": {
+      "signature": "0xcf35e8eaeb27da8be93c7947b5914e5041d426d445aed6897168538b957adfd944f1e62ffee687147696193675581c3674d95ba8124313f0bbd0a276d76dc1281b",
+      "authorization": {
+        "from": "0xeD38E923631420417400Fba51918C1Cf2DFEafd8",
+        "to": "0x000000000000000000000000000000000000dEaD",
+        "value": "1000",
+        "validAfter": "0",
+        "validBefore": "4102444800",
+        "nonce": "0x5cb7b1a8181d658d91a97b7e5922b7d152bcad46eec50a81b97881674f015717"
+      }
+    }
+  }
+}

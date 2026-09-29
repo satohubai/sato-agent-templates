@@ -1,0 +1,1 @@
+{ "_note": "The same signed payment again: the facilitator reports the nonce as used.", "request": { "method": "GET", "path": "/api/item", "query": { "id": "x402-v2" }, "payment": "valid" }, "expect": { "status": 402, "reason": "nonce_already_used" } }

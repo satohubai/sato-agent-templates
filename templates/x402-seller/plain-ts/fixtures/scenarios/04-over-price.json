@@ -1,0 +1,1 @@
+{ "_note": "An authorization for more than the route price: the seller refuses it before any facilitator call.", "request": { "method": "GET", "path": "/api/item", "query": { "id": "x402-v2" }, "payment": "over-price" }, "expect": { "status": 402, "reason": "amount_exceeds_price" } }

@@ -1,0 +1,70 @@
+{
+  "schema": "sato.template/v1",
+  "id": "x402-seller",
+  "version": "0.1.0",
+  "title": "x402 seller (plain TypeScript)",
+  "summary": "Puts a small HTTP API behind x402 v2: each paid route answers 402 with a PAYMENT-REQUIRED offer priced from config.json, refuses a payment for a different price, asset or payee with the reason, has a facilitator verify and settle an exact-scheme ERC-3009 payment, confirms the settlement through the Sato Kit's chain.read, and writes a discovery listing file that the builder submits. The seller holds no key. Fixture mode needs no network.",
+  "runtime": { "kind": "node", "version": "22", "entrypoint": "src/agent.ts", "package_manager": "npm" },
+  "io_schemas": { "input": "schemas/input.json", "output": "schemas/output.json" },
+  "harness": {
+    "fixture_command": ["npm", "start", "--", "--mode", "fixture"],
+    "fixtures_dir": "fixtures",
+    "output_dir": "out",
+    "max_output_bytes": 262144
+  },
+  "model_policy": null,
+  "declared_secret_names": ["ANVIL_RPC_URL", "SATO_RPC_URL_BASE_SEPOLIA"],
+  "capabilities": ["serve:http", "receive:x402-exact", "read:erc3009-authorization-state", "read:erc20-balance"],
+  "requested_permissions": ["network:listen", "network:rpc-read", "network:facilitator"],
+  "network": { "install": "registry-only", "test": "none" },
+  "tests": [
+    {
+      "id": "platform.fixtures",
+      "kind": "package",
+      "description": "The platform runs the fixture command (no network, no key, a fake facilitator, recorded chain reads) and checks out/report.json against schemas/output.json: an unpaid request gets 402 with an offer, the fixture payment gets 200 with a confirmed receipt, and a replay, an over-price, a wrong-asset and a tampered payment are each refused with their reason."
+    },
+    {
+      "id": "package.own",
+      "kind": "package",
+      "advisory": true,
+      "command": ["npm", "test"],
+      "description": "The template's own tests. Recorded, never the verdict."
+    },
+    {
+      "id": "unit.fork-check",
+      "kind": "unit",
+      "description": "Nightly in satohubai/sato-agent-templates: an anvil fork of Base at block 51800000; the fixture payment settled through the payment gate by transferWithAuthorization on the fork, confirmed through the kit's chain.read, the payee balance up by exactly the price, and a replay refused."
+    }
+  ],
+  "licenses": [
+    { "name": "x402-seller", "license": "MIT", "url": "https://github.com/satohubai/sato-agent-templates" },
+    { "name": "@satohub/kit", "license": "MIT", "url": "https://github.com/satohubai/sato-hub-integrations" },
+    { "name": "viem", "license": "MIT", "url": "https://github.com/wevm/viem" }
+  ],
+  "provenance": {
+    "authored_by": "sato-hub",
+    "first_party": true,
+    "notes": "The x402 v2 wire format is written out in src/x402.ts rather than taken from a framework. Fork and testnet modes are opt-in and never run in the platform's offline test phase."
+  },
+  "template": {
+    "framework": "plain-ts",
+    "intents": ["payments"],
+    "chains": ["base", "base-sepolia"],
+    "networks": ["fork", "testnet"],
+    "default_network": "fork",
+    "slots_filled": {},
+    "swappable": [],
+    "policy_defaults": {
+      "network": "fork",
+      "allow_chains": ["base", "base-sepolia"],
+      "allow_tokens": ["base:0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", "base-sepolia:0x036CbD53842c5426634e7929541eC2318f3dCF7e"],
+      "max_usd_per_trade": 1,
+      "max_usd_per_day": 1,
+      "max_slippage_bps": 0,
+      "unknown_verdict": "refuse",
+      "intent_ttl_s": 60,
+      "human_approval": true
+    },
+    "upstream": { "@satohub/kit": "0.1.0", "viem": "2.56.9", "tsx": "4.23.15", "typescript": "5.9.3" }
+  }
+}
