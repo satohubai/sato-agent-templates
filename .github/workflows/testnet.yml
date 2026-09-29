@@ -1,0 +1,180 @@
+name: testnet
+
+# Weekly, keyless Base Sepolia lane. Every template whose package.json defines
+# a `testnet-check` script runs it against a public Base Sepolia RPC: exact
+# chain reads through the kit (contract constants and answer shapes, never
+# moving balances), a tx.simulate of an unsigned approve from a fixed address,
+# and the pre-flight's answers. This repository holds no secrets: no key, no
+# managed wallet, nothing is signed, nothing is broadcast. Results are written
+# as lane "testnet" cells to status.json on the `status` branch, never main.
+
+on:
+  schedule:
+    - cron: "41 7 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: testnet
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.list.outputs.matrix }}
+      expect: ${{ steps.list.outputs.expect }}
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - id: setup_node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+      # A template joins the lane by defining a testnet-check script: no
+      # workflow edit.
+      - id: list
+        run: |
+          echo "matrix=$(node scripts/discover-templates.mjs --lanes testnet --script testnet-check)" >> "$GITHUB_OUTPUT"
+          echo "expect=$(node scripts/discover-templates.mjs --lanes testnet --script testnet-check --expect)" >> "$GITHUB_OUTPUT"
+
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: discover
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - id: runtime
+        run: |
+          v=$(node scripts/template-guards.mjs runtime-version "templates/${{ matrix.template }}/${{ matrix.framework }}/sato.template.json")
+          echo "node=$v" >> "$GITHUB_OUTPUT"
+
+      - id: setup_node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ steps.runtime.outputs.node }}
+
+      - id: prepare
+        run: |
+          set -o pipefail
+          mkdir -p "$RUNNER_TEMP/logs"
+          echo "TEMPLATE_DIR=templates/${{ matrix.template }}/${{ matrix.framework }}" >> "$GITHUB_ENV"
+          echo "LOG_DIR=$RUNNER_TEMP/logs" >> "$GITHUB_ENV"
+          echo "SATO_LANE=testnet" >> "$GITHUB_ENV"
+          node scripts/template-guards.mjs check-node "templates/${{ matrix.template }}/${{ matrix.framework }}/sato.template.json" 2>&1 | tee "$RUNNER_TEMP/logs/prepare.log"
+
+      # Same constrained install as the nightly: registry.npmjs.org or the
+      # template's vendored kit only, install scripts off.
+      - id: install
+        working-directory: ${{ env.TEMPLATE_DIR }}
+        run: |
+          set -o pipefail
+          { node "$GITHUB_WORKSPACE/scripts/check-lock-registry.mjs" package-lock.json && \
+            npm ci --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/ ; } 2>&1 | tee "$LOG_DIR/install.log"
+
+      # The first public Base Sepolia RPC that answers chain id 84532.
+      - id: rpc
+        run: |
+          set -o pipefail
+          url=$(node scripts/testnet-rpc.mjs https://sepolia.base.org https://base-sepolia-rpc.publicnode.com 2> >(tee "$LOG_DIR/rpc.log" >&2))
+          echo "BASE_SEPOLIA_RPC_URL=$url" >> "$GITHUB_ENV"
+
+      - id: testnet_check
+        working-directory: ${{ env.TEMPLATE_DIR }}
+        run: |
+          set -o pipefail
+          npm run testnet-check 2>&1 | tee "$LOG_DIR/testnet_check.log"
+
+      - id: result
+        if: always()
+        env:
+          TEMPLATE: ${{ matrix.template }}
+          FRAMEWORK: ${{ matrix.framework }}
+          LANE: testnet
+          STEPS_JSON: ${{ toJSON(steps) }}
+          STEP_ORDER: runtime,setup_node,prepare,install,rpc,testnet_check
+          OUT: ${{ runner.temp }}/result-${{ matrix.template }}-${{ matrix.framework }}-testnet.json
+        run: node scripts/collect-result.mjs
+
+      - id: upload
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: result-${{ matrix.template }}-${{ matrix.framework }}-testnet
+          path: ${{ runner.temp }}/result-${{ matrix.template }}-${{ matrix.framework }}-testnet.json
+          if-no-files-found: warn
+          retention-days: 30
+
+  status:
+    needs: [discover, check]
+    if: always() && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # The only job that writes, and only to the `status` branch.
+    permissions:
+      contents: write
+    steps:
+      - id: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - id: checkout_status
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: status
+          path: status-data
+
+      - id: setup_node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+
+      - id: download
+        # A week where every check died before uploading is still recorded:
+        # a missing cell is written as error/no_result.
+        continue-on-error: true
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: result-*
+          path: results
+          merge-multiple: true
+
+      - id: update
+        env:
+          EXPECT: ${{ needs.discover.outputs.expect }}
+        run: |
+          node scripts/update-status.mjs \
+            --results results --status status-data/status.json --badges status-data/badges \
+            --date "$(date -u +%F)" \
+            --expect "$EXPECT"
+
+      - id: commit
+        working-directory: status-data
+        run: |
+          git add status.json badges
+          if git diff --cached --quiet; then
+            echo "status unchanged"
+            exit 0
+          fi
+          git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" \
+            commit -m "status: testnet $(date -u +%F)"
+          # nightly, actions-status and this job all write the status branch:
+          # a rejected push is rebased and retried, never forced.
+          for attempt in 1 2 3 4 5; do
+            git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" pull --rebase origin status && git push origin HEAD:status && exit 0
+            sleep $((attempt * 5))
+          done
+          exit 1
