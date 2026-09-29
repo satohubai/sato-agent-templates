@@ -2,7 +2,7 @@
 
 Onchain-agent templates built on the Sato Kit (`@satohub/kit`). Every template here is installed and checked every night, and the result is committed to [`status.json`](https://github.com/satohubai/sato-agent-templates/blob/status/status.json) on the `status` branch.
 
-**Where the data lives.** The nightly bots write to the [`status`](https://github.com/satohubai/sato-agent-templates/tree/status) branch, which holds data only; `main` is code-only and every change to it goes through a pull request with the `ci-result` check. The canonical URLs are `https://raw.githubusercontent.com/satohubai/sato-agent-templates/status/status.json`, `https://raw.githubusercontent.com/satohubai/sato-agent-templates/status/actions-status.json` and `https://raw.githubusercontent.com/satohubai/sato-agent-templates/status/badges/<template>-<framework>.json`. The copies of those files still on `main` are frozen at the switch and will be removed; read the `status` branch, and fall back to `main` only on a 404.
+**Where the data lives.** The nightly bots write to the [`status`](https://github.com/satohubai/sato-agent-templates/tree/status) branch, which holds data only; `main` is code-only and every change to it goes through a pull request with the `ci-result` check. The canonical URLs are `https://raw.githubusercontent.com/satohubai/sato-agent-templates/status/status.json`, `https://raw.githubusercontent.com/satohubai/sato-agent-templates/status/actions-status.json` and `https://raw.githubusercontent.com/satohubai/sato-agent-templates/status/badges/<template>-<framework>.json`. Read the `status` branch; `main` no longer carries these files.
 
 - Templates live at `templates/<id>/<framework>/`.
 - The default network is a local fork. No template here signs on mainnet.
