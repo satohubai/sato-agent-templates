@@ -1,6 +1,6 @@
 # treasury-monitor (plain TypeScript)
 
-[![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Ftreasury-monitor-plain-ts.json)](https://github.com/satohubai/sato-agent-templates/blob/main/status.json)
+[![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fstatus%2Fbadges%2Ftreasury-monitor-plain-ts.json)](https://github.com/satohubai/sato-agent-templates/blob/status/status.json)
 
 Reads the native and ERC-20 balances of a list of **public** addresses on Base through the Sato Kit's `chain.read` (`@satohub/kit`), reports each one in exact base units and exact native units, and fires a threshold alert when a holding crosses a floor or a ceiling — once per crossing, not once per run.
 
@@ -8,7 +8,7 @@ It holds no key, signs nothing and moves no funds. It reads.
 
 > **The kit is a vendored preview.** `@satohub/kit` 0.1.0 is not on npm yet; `vendor/` holds a preview build (the source commit is in `vendor/README.md`) and `package.json` installs it from there.
 
-The badge shows the last date this template passed the nightly checks in [`status.json`](https://github.com/satohubai/sato-agent-templates/blob/main/status.json): install, typecheck, the fixture run, the tests, a fork check at a pinned Base block and a dependency custody check. It is a dated result, not a review.
+The badge shows the last date this template passed the nightly checks in [`status.json`](https://github.com/satohubai/sato-agent-templates/blob/status/status.json): install, typecheck, the fixture run, the tests, a fork check at a pinned Base block and a dependency custody check. It is a dated result, not a review.
 
 ## Run it
 
