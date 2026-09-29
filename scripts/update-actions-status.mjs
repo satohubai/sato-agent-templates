@@ -12,7 +12,9 @@
 // side (no fork, fork read failed) is "error", never "red". last_green only
 // moves on a green run; history keeps the last 30 runs. Each action carries
 // the chain its check reads (`chain`, additive to v1; null when a record
-// predates it).
+// predates it). A write action (a Sato Kit prepare) is never executed: its
+// result is "lint_only" (schema lint and custody only), never green, and
+// last_green does not move for it.
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -52,6 +54,7 @@ export function parseRecord(r) {
     digest: typeof r.description_digest === "string" && /^sha256:[0-9a-f]{64}$/.test(r.description_digest) ? r.description_digest : null,
     upstream_version: strOrNull(r.upstream_version) ?? strOrNull(r.source.version),
     run_error: strOrNull(r.run_error),
+    lint_only: r.lint_only === true,
   };
 }
 
@@ -63,6 +66,7 @@ export function drift(prevCheck, digest) {
 }
 
 export function resultFor(rec) {
+  if (rec.lint_only) return "lint_only";
   if (rec.conformance.result === "pass") return "green";
   if (rec.run_error || rec.conformance.result === "not_run") return "error";
   return "red";
@@ -92,7 +96,7 @@ export function applyActionResults(status, records, { date, expected = [] }) {
         description_drift: drift(prev?.checks?.description_drift, r.digest),
       },
       result,
-      failing_step: result === "green" ? null : r.conformance.step,
+      failing_step: result === "green" || result === "lint_only" ? null : r.conformance.step,
       upstream_version: r.upstream_version,
       last_run: date,
       last_green: result === "green" ? date : (prev?.last_green ?? null),

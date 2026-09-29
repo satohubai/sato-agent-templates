@@ -102,3 +102,23 @@ test("chain is carried per action (additive); a record without one keeps the pre
   assert.equal(parseRecord({ ...green, chain: "Not A Chain!" }).chain, null);
   assert.equal(applyActionResults(empty, [green], { date: "2026-09-26" }).actions[0].chain, null);
 });
+
+test("a write action is lint_only: never green, last_green never moves, no failing step", () => {
+  const w = {
+    ...base,
+    id: "sato-kit:bridge.prepare",
+    name: "bridge_prepare",
+    source: { kind: "sato-kit", package: "@satohub/kit", version: "0.1.0", repo_url: "https://github.com/satohubai/sato-hub-integrations" },
+    lint_only: true,
+    checks: { ...base.checks, conformance: { result: "not_run", step: "not_executed", detail: "never executed" } },
+  };
+  const s = applyActionResults(empty, [w], { date: "2026-09-29" });
+  const a = s.actions[0];
+  assert.equal(a.result, "lint_only");
+  assert.equal(a.failing_step, null);
+  assert.equal(a.last_green, null);
+  assert.equal(a.checks.schema_lint.result, "findings");
+  assert.deepEqual(a.history, [{ date: "2026-09-29", result: "lint_only" }]);
+  // a record without the flag is not lint_only
+  assert.equal(parseRecord(base).lint_only, false);
+});
