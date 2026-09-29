@@ -72,6 +72,11 @@
       "id": "unit.fork-check",
       "kind": "unit",
       "description": "Nightly in satohubai/sato-agent-templates: an anvil fork of Base at block 51800000 with recorded quotes; exact reads, an approve simulation and pre-flight outcomes. Never broadcasts."
+    },
+    {
+      "id": "unit.testnet-check",
+      "kind": "unit",
+      "description": "Weekly in satohubai/sato-agent-templates: against the public Base Sepolia RPC with no key, chain reads through the kit checked on contract constants and answer shapes (never on moving balances), plus this template's testnet answers. Never signs, never broadcasts."
     }
   ],
   "licenses": [
