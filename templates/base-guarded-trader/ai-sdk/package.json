@@ -1,0 +1,28 @@
+{
+  "name": "base-guarded-trader",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Vercel AI SDK agent on Base: the Sato Kit's tools run in a generateText loop that stops for approval before anything that would sign, and every intent is quoted, prepared, simulated and checked by a policy pre-flight that explains every refusal. Fixture mode drives the loop with the AI SDK's mock model and calls no model API. It signs only on a local fork with a throwaway key, or on Base Sepolia with a managed wallet.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/agent.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "fork-check": "tsx scripts/fork-check.ts"
+  },
+  "dependencies": {
+    "@satohub/kit": "file:vendor/satohub-kit-0.1.0.tgz",
+    "ai": "7.0.122",
+    "viem": "2.56.9",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.4",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
