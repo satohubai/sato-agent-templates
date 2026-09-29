@@ -26,6 +26,7 @@ import { MockModel, SCRIPTED_MODEL_NAME, scriptedNext, type Model, type TradeIde
 import { loadPolicy } from "./policy.js";
 import { intentReport, line, printPrepared, type IntentReport } from "./report.js";
 import { buildRuntime, USER_AGENT, type Runtime } from "./runtime.js";
+import { handOff, printHandOff, satoOsClock, satoOsRuntimeOptions, type HandOffItem, type HandOffResult } from "./sato-os.js";
 import { TOKENS } from "./tokens.js";
 
 const FIXTURES_DIR = "fixtures";
@@ -95,7 +96,7 @@ async function main(): Promise<number> {
   line("intent ttl", `${policy.intent_ttl_s}s`);
   line("venue", cfg.venue === "sato" ? "sato (Sato Swap, labelled default; a no-Sato-fee quote is shown alongside)" : "direct (no Sato call)");
 
-  const rt = await buildRuntime({ mode: args.mode, policy, fixturesDir: FIXTURES_DIR, env: process.env, record: args.record });
+  const rt = await buildRuntime({ mode: args.mode, policy, fixturesDir: FIXTURES_DIR, env: process.env, record: args.record, ...(args.mode === "sato-os" ? { satoOs: await satoOsRuntimeOptions(args, process.env) } : {}) });
   line("signer", rt.signer ? `${rt.signer.kind} ${await rt.signer.address(rt.chain)}` : "none — fixture mode holds no key");
   line("intents built for", rt.taker);
   line("user-agent", USER_AGENT);
@@ -160,16 +161,26 @@ async function main(): Promise<number> {
     return over ? swapInput(rt, cfg, over).sell_amount : null;
   })();
   const reports: IntentReport[] = [];
+  const handOffItems: HandOffItem[] = [];
   let demoRefused = false;
   let ownAllowed = false;
   for (const p of host.prepared) {
     const demo = overAmount !== null && p.input.sell_amount === overAmount;
     const idea = ideas.find((i) => swapInput(rt, cfg, i).sell_amount === p.input.sell_amount);
     reports.push(intentReport(idea?.label ?? `prepared ${String(p.input.sell_amount)} base units`, demo, p.intent));
+    handOffItems.push({ label: reports[reports.length - 1].label, intent: p.intent });
     if (demo && !p.intent.policy.ok && p.intent.policy.refusals.length > 0) demoRefused = true;
     if (!demo && p.intent.policy.ok) ownAllowed = true;
   }
   const executed = run.calls.some((c) => c.tool === "execute" && c.approval.approved && c.envelope?.ok === true);
+
+  // --mode sato-os: allowed intents go to Sato OS as proposals; refused ones are never sent.
+  let satoOs: HandOffResult[] | null = null;
+  if (rt.mode === "sato-os") {
+    console.log("\nSato OS hand-off (a person approves in Sato OS; Sato OS signs, this agent does not)");
+    satoOs = await handOff(handOffItems, { dir: args.sato_dir, clock: satoOsClock(args.data) });
+    printHandOff(satoOs, line);
+  }
 
   mkdirSync(args.out, { recursive: true });
   const report = {
@@ -181,6 +192,7 @@ async function main(): Promise<number> {
     venue: cfg.venue,
     market,
     intents: reports,
+    ...(satoOs ? { sato_os: satoOs } : {}),
     executed,
   };
   writeFileSync(join(args.out, "report.json"), JSON.stringify(report, null, 2) + "\n");
@@ -198,7 +210,7 @@ async function main(): Promise<number> {
     return 1;
   }
   console.log(ownAllowed ? "\nDone. The agent's own intent passed the pre-flight; the over-cap intent was refused." : "\nDone. The agent's own intent did not pass the pre-flight (see the lines above); the over-cap intent was refused.");
-  console.log(executed ? "" : "Nothing was signed, sent or spent.");
+  console.log(satoOs ? "Nothing was signed or sent from here; allowed intents wait in Sato OS for a person's approval." : executed ? "" : "Nothing was signed, sent or spent.");
   return 0;
 }
 

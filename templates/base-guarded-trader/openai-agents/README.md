@@ -92,9 +92,37 @@ A `sato.policy/v1` file:
 
 A refusal names its rule id, the limit and the value observed. The kit's pre-flight explains every refusal; enforcement lives in the signer.
 
+## Run it for real with Sato OS
+
+Sato OS is Sato Hub's paid, self-hosted runtime. You run it on your own machine or server. It holds the agent's wallet, shows each proposed action to a person, and signs only what that person approves. This template can hand its intents to Sato OS instead of signing anything itself. The hand-off is optional; every other mode works without it.
+
+```bash
+# 1. Attach this agent to your Sato OS. Name the wallet Sato OS holds for it (an address, never a key).
+npm run sato-os:attach -- --url https://your-sato-os.example --wallet 0xYourAgentWallet
+#    The agent's scoped token is stored in .sato/sato-os.json (mode 0600, gitignored) and never printed.
+
+# 2. Run a pass. Reads Base through BASE_RPC_URL (read-only); intents are built for the attached wallet.
+BASE_RPC_URL=https://mainnet.base.org npm start -- --mode sato-os
+
+# Offline rehearsal over the shipped recordings (attach with --wallet 0x000000000000000000000000000000000000dEaD):
+npm start -- --mode sato-os --data fixture
+```
+
+What `--mode sato-os` does:
+
+- Quotes, prepares, simulates and pre-flights every intent with the kit, exactly as the other modes do.
+- Files each intent the pre-flight **allowed** as a proposal in Sato OS (`sato_os_create_action_proposal`), with the prepared intent attached. The run ends there; the report lists each proposal id and its status.
+- Sends nothing for a **refused** intent. It is recorded as "not proposed" with the rules that refused it.
+
+What it does not do:
+
+- It holds no key, signs nothing and broadcasts nothing. Approval and signing happen inside Sato OS, under Sato OS's own policy, after a person says yes.
+- It does not lift this template's policy. The kit's pre-flight still runs first; an intent on Base mainnet is refused (`network_mainnet_not_enabled`) until you set `"network": "mainnet"` in `policy.json` yourself.
+- A proposal is not a trade. Sato OS may decline it, the person may reject it, and the intent expires after `intent_ttl_s`.
+
 ## What it does NOT do
 
-- **It never signs on mainnet.** Mainnet is not a mode here.
+- **It never signs on mainnet.** Mainnet is not a mode here. With `--mode sato-os` it signs nothing at all; Sato OS signs what a person approves there.
 - **It signs only in two places:** on a local fork with a throwaway key the kit generates in memory (never written to disk, funded only with fork money), or on Base Sepolia with a managed CDP wallet. There is no raw-private-key path.
 - **It builds and simulates a transaction on a fork, and never broadcasts it.** Fixture and fork runs never call `execute`; the fork signer is wrapped so a send throws.
 - **The quote is not a fill.** Prices move between a quote and any trade.
@@ -115,6 +143,8 @@ A refusal names its rule id, the limit and the value observed. The kit's pre-fli
 | `src/live.ts` | `--model openai`: the live prompt and the terminal approval |
 | `src/model.ts` | the `Model` interface, `MockModel` and the scripted turn list |
 | `src/runtime.ts` | builds the kit for each mode (signer, RPC, fetch) |
+| `src/sato-os.ts` | the optional Sato OS hand-off: attach, then propose allowed intents |
+| `scripts/sato-os-attach.ts` | `npm run sato-os:attach` |
 | `src/kit-io.ts` | the kit action ids and input shapes, in one place |
 | `src/pricing.ts` | the USD facts for the caps, handed to the kit's pre-flight |
 | `src/fixtures.ts` | the offline transport and fetch; anything unrecorded throws |

@@ -5,7 +5,7 @@
   "required": ["schema", "mode", "user_agent", "model", "venue", "market", "intents", "executed"],
   "properties": {
     "schema": { "const": "base-guarded-trader.report/v1" },
-    "mode": { "type": "string", "enum": ["fixture", "fork", "testnet"] },
+    "mode": { "type": "string", "enum": ["fixture", "fork", "testnet", "sato-os"] },
     "user_agent": { "type": "string" },
     "model": { "type": "string" },
     "venue": { "type": "string", "enum": ["sato", "direct"] },
