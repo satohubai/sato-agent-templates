@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test test/*.test.ts",
     "fork-check": "tsx scripts/fork-check.ts",
-    "testnet-check": "tsx scripts/testnet-check.ts"
+    "testnet-check": "tsx scripts/testnet-check.ts",
+    "sato-os:attach": "tsx scripts/sato-os-attach.ts"
   },
   "dependencies": {
     "@coinbase/agentkit": "0.10.4",
