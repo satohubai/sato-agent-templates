@@ -1,6 +1,9 @@
 // Command line and config.json. Pure functions, so the tests can call them.
 
-export const MODES = ["fixture", "fork", "testnet"] as const;
+export const MODES = ["fixture", "fork", "testnet", "sato-os"] as const;
+/** --mode sato-os only: where market reads and quotes come from. "live" = BASE_RPC_URL; "fixture" = the recordings (offline). */
+export const DATA_SOURCES = ["live", "fixture"] as const;
+export type DataSource = (typeof DATA_SOURCES)[number];
 export type Mode = (typeof MODES)[number];
 
 export const MODEL_KINDS = ["scripted", "claude"] as const;
@@ -22,6 +25,10 @@ export type Args = {
   execute: boolean;
   /** fork only: write every RPC call the run makes into fixtures/ (to refresh the recordings). */
   record: boolean;
+  /** --mode sato-os only: "live" (default) reads Base through BASE_RPC_URL; "fixture" answers from the recordings. */
+  data: DataSource;
+  /** Where sato-os:attach stored the Sato OS token (default .sato). */
+  sato_dir: string;
   config: string;
   policy: string;
   out: string;
@@ -44,7 +51,8 @@ const DECIMAL_RE = /^(?:0|[1-9][0-9]{0,11})(?:\.[0-9]{1,6})?$/;
 export class UsageError extends Error {}
 
 export function parseArgs(argv: readonly string[]): Args {
-  const args: Args = { mode: "fixture", model: "scripted", model_id: DEFAULT_MODEL_ID, execute: false, record: false, config: "config.json", policy: "policy.json", out: "out" };
+  const args: Args = { mode: "fixture", model: "scripted", model_id: DEFAULT_MODEL_ID, execute: false, record: false, data: "live", sato_dir: ".sato", config: "config.json", policy: "policy.json", out: "out" };
+  let dataGiven = false;
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     const next = () => {
@@ -64,6 +72,12 @@ export function parseArgs(argv: readonly string[]): Args {
     } else if (a === "--model-id") args.model_id = next();
     else if (a === "--execute") args.execute = true;
     else if (a === "--record") args.record = true;
+    else if (a === "--data") {
+      const d = next();
+      if (!(DATA_SOURCES as readonly string[]).includes(d)) throw new UsageError(`--data must be one of ${DATA_SOURCES.join(", ")}`);
+      args.data = d as DataSource;
+      dataGiven = true;
+    } else if (a === "--sato-dir") args.sato_dir = next();
     else if (a === "--config") args.config = next();
     else if (a === "--policy") args.policy = next();
     else if (a === "--out") args.out = next();
@@ -73,6 +87,7 @@ export function parseArgs(argv: readonly string[]): Args {
   if (args.model_id !== DEFAULT_MODEL_ID && args.model !== "claude") throw new UsageError("--model-id is only accepted with --model claude");
   if (args.record && args.model !== "scripted") throw new UsageError("--record is only accepted with the scripted model, so recordings stay reproducible");
   if (args.record && args.mode !== "fork") throw new UsageError("--record is only accepted with --mode fork");
+  if (dataGiven && args.mode !== "sato-os") throw new UsageError("--data is only accepted with --mode sato-os");
   return args;
 }
 
