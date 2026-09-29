@@ -1,6 +1,6 @@
 # base-guarded-trader (Claude Agent SDK)
 
-[![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Fbase-guarded-trader-claude-agent-sdk.json)](https://github.com/satohubai/sato-agent-templates/blob/main/status.json)
+[![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fstatus%2Fbadges%2Fbase-guarded-trader-claude-agent-sdk.json)](https://github.com/satohubai/sato-agent-templates/blob/status/status.json)
 
 The same agent as [`base-guarded-trader/plain-ts`](../plain-ts), hosted by the [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-typescript). It reads market data on Base (block, gas, the Chainlink ETH/USD feed) and hands the Sato Kit's tools to the SDK as an in-process MCP server, built by `createSatoKitSdkServer` from `@satohub/kit/claude-agent-sdk`. Every intent is quoted, prepared as an unsigned transaction, simulated and checked against `policy.json` before anything could be signed. A `requireApprovalHook` on `PreToolUse` answers "ask" before `swap_prepare` and before `execute`, so a person decides.
 
@@ -10,7 +10,7 @@ The model only sees the kit's tools. It holds no key and builds no transaction i
 
 **The kit's pre-flight explains every refusal; enforcement lives in the signer.** `policy.json` is read in this process, so anyone who can edit the process can edit the policy. On testnet the managed wallet enforces its own policy where the key lives.
 
-The badge shows the last date this template passed the nightly checks in [`status.json`](https://github.com/satohubai/sato-agent-templates/blob/main/status.json): install, typecheck, the fixture run, the tests, a fork check at a pinned Base block and a dependency custody check. It is a dated result, not a review.
+The badge shows the last date this template passed the nightly checks in [`status.json`](https://github.com/satohubai/sato-agent-templates/blob/status/status.json): install, typecheck, the fixture run, the tests, a fork check at a pinned Base block and a dependency custody check. It is a dated result, not a review.
 
 ## Run it
 

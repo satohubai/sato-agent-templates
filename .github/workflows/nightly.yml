@@ -1,9 +1,10 @@
 name: nightly
 
 # Every template × framework on the pinned lane, every night, with no secrets.
-# The status job commits status.json and the badges to main daily; that commit
-# is by design — it also keeps this schedule alive past GitHub's 60-day idle
-# cutoff for scheduled workflows.
+# The status job commits status.json and the badges to the `status` branch
+# daily (main is code-only, behind a required check). That commit is by
+# design: it also keeps this schedule alive past GitHub's 60-day idle cutoff
+# for scheduled workflows.
 
 on:
   schedule:
@@ -95,6 +96,13 @@ jobs:
       - id: checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - id: checkout_status
+        # Bot data lives on the `status` branch; main is code-only.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: status
+          path: status-data
+
       - id: setup_node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -115,11 +123,12 @@ jobs:
           EXPECT: ${{ needs.discover.outputs.expect }}
         run: |
           node scripts/update-status.mjs \
-            --results results --status status.json --badges badges \
+            --results results --status status-data/status.json --badges status-data/badges \
             --date "$(date -u +%F)" \
             --expect "$EXPECT"
 
       - id: commit
+        working-directory: status-data
         run: |
           git add status.json badges
           if git diff --cached --quiet; then
@@ -128,7 +137,13 @@ jobs:
           fi
           git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" \
             commit -m "status: nightly $(date -u +%F)"
-          git push origin HEAD:main
+          # nightly and actions-status both write the status branch (different
+          # files): a rejected push is rebased and retried, never forced.
+          for attempt in 1 2 3 4 5; do
+            git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" pull --rebase origin status && git push origin HEAD:status && exit 0
+            sleep $((attempt * 5))
+          done
+          exit 1
 
       # Pinned red pages (this step fails, after the status is recorded);
       # bump PRs come from upgrade-policy.json (one per template/framework
@@ -139,4 +154,4 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           INJECT_DRIFT: ${{ inputs.inject_drift }}
-        run: node scripts/latest-lane.mjs --status status.json --date "$(date -u +%F)"
+        run: node scripts/latest-lane.mjs --status status-data/status.json --date "$(date -u +%F)"

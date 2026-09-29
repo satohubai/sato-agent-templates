@@ -1,6 +1,6 @@
 # base-guarded-trader (Coinbase AgentKit)
 
-[![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fmain%2Fbadges%2Fbase-guarded-trader-agentkit.json)](https://github.com/satohubai/sato-agent-templates/blob/main/status.json)
+[![last green](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsatohubai%2Fsato-agent-templates%2Fstatus%2Fbadges%2Fbase-guarded-trader-agentkit.json)](https://github.com/satohubai/sato-agent-templates/blob/status/status.json)
 
 A [Coinbase AgentKit](https://github.com/coinbase/agentkit) agent on Base. The Sato Kit (`@satohub/kit`) reaches AgentKit through one action provider, `satoKitActionProvider` from `@satohub/kit/agentkit`. The agent reads market data (block, gas, the Chainlink ETH/USD feed), a small `Model` names the AgentKit actions to call, and every intent goes through the kit: quote, prepare an unsigned transaction, simulate it, and check it against `policy.json` before anything could be signed.
 
@@ -10,7 +10,7 @@ It has the same goal as [`base-guarded-trader/plain-ts`](../plain-ts); only the 
 
 **The kit's pre-flight explains every refusal; enforcement lives in the signer.** `policy.json` is read in this process, so anyone who can edit the process can edit the policy. On testnet the CDP wallet enforces the policies you attach to it in CDP, where the key lives.
 
-The badge shows the last date this template passed tonight's checks in [`status.json`](https://github.com/satohubai/sato-agent-templates/blob/main/status.json): install, typecheck, the fixture run, the tests, a fork check at a pinned Base block and a dependency custody check. It is a dated result, not a review.
+The badge shows the last date this template passed tonight's checks in [`status.json`](https://github.com/satohubai/sato-agent-templates/blob/status/status.json): install, typecheck, the fixture run, the tests, a fork check at a pinned Base block and a dependency custody check. It is a dated result, not a review.
 
 ## Run it
 

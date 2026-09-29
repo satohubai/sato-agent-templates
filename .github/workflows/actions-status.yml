@@ -6,7 +6,8 @@ name: actions-status
 # block, or a public read — Solana mainnet RPC, a public API, a repo file), a schema lint, Sato Check's custody answers for its source and
 # a digest of its description. No secrets: installs come from the npm registry
 # with install scripts off, and third-party code runs with PATH and HOME only.
-# The status job commits actions-status.json to main.
+# The status job commits actions-status.json to the `status` branch (main is
+# code-only, behind a required check).
 
 on:
   schedule:
@@ -131,6 +132,13 @@ jobs:
       - id: checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - id: checkout_status
+        # Bot data lives on the `status` branch; main is code-only.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: status
+          path: status-data
+
       - id: setup_node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -148,10 +156,11 @@ jobs:
       - id: update
         run: |
           node scripts/update-actions-status.mjs \
-            --results action-results --status actions-status.json \
+            --results action-results --status status-data/actions-status.json \
             --date "$(date -u +%F)" --expect catalog
 
       - id: commit
+        working-directory: status-data
         run: |
           git add actions-status.json
           if git diff --cached --quiet; then
@@ -160,8 +169,10 @@ jobs:
           fi
           git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" \
             commit -m "actions status: nightly $(date -u +%F)"
-          for attempt in 1 2 3; do
-            git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" pull --rebase origin main && git push origin HEAD:main && exit 0
-            sleep 5
+          # nightly and actions-status both write the status branch (different
+          # files): a rejected push is rebased and retried, never forced.
+          for attempt in 1 2 3 4 5; do
+            git -c user.name="Sato Hub" -c user.email="satohub88@gmail.com" pull --rebase origin status && git push origin HEAD:status && exit 0
+            sleep $((attempt * 5))
           done
           exit 1
