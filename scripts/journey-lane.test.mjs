@@ -57,7 +57,12 @@ test("journey.yml: weekly + dispatch, pinned actions, no secrets, status-branch 
   assert.match(t, /^permissions:\n\s+contents: read$/m);
   for (const m of t.matchAll(/uses:\s*(\S+)/g)) assert.match(m[1], /@[0-9a-f]{40}$/, `unpinned: ${m[1]}`);
   assert.doesNotMatch(t, /secrets\./);
-  assert.match(t, /SATO_USER_AGENT: SatoHub-journey\/1\.0/);
+  // Marks this runner as ours with a SatoHub- request before the published-package
+  // requests (no user-agent override ships in the packages).
+  assert.match(t, /OWN_UA: SatoHub-journey\/1\.0/);
+  assert.match(t, /- id: own_marker_create[\s\S]*- id: create/);
+  assert.match(t, /- id: own_marker_doctor[\s\S]*- id: doctor/);
+  assert.doesNotMatch(t, /SATO_USER_AGENT/);
   assert.match(t, /INTEGRATIONS_REF: [0-9a-f]{40}/);
   for (const step of ["create-sato-agent", "npm run typecheck", "npm test", "npm start -- --mode fixture", "doctor --json"]) assert.ok(t.includes(step), step);
   assert.match(t, /LANE: journey/);

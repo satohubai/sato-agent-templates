@@ -4,17 +4,19 @@ name: journey
 # CLI and the Sato Kit, built and packed from source (neither is on npm yet),
 # call the real create API at satohub.ai, then the generated repo is installed,
 # typechecked, tested and run in fixture mode, and `sato-kit doctor` reads it.
-# No secrets: nothing is signed, sent or spent. Our own requests carry
-# SATO_USER_AGENT=SatoHub-journey/1.0 so they count as ours.
+# No secrets: nothing is signed, sent or spent. The packages send their real
+# published user agents; this runner counts as ours because it also sends a
+# SatoHub-journey/1.0 request right before the CLI and before doctor (the
+# Observatory treats a published-package UA as ours when the same runner sent a
+# SatoHub- request within 15 minutes — lib/observatory/burst.ts).
 #
 # A create API that is missing or refuses is recorded as it answered (error
 # code + HTTP status) in the cell's info. Template drift that doctor reports is
 # info, never a failure. The result is one lane "journey" cell in status.json
 # on the `status` branch, never main.
 #
-# Source pin: satohubai/sato-hub-integrations at branch chore/ua-override
-# (the SATO_USER_AGENT override). When that branch merges, switch
-# INTEGRATIONS_REF to main's merge commit.
+# Source pin: satohubai/sato-hub-integrations at a main commit; move it when
+# the kit or CLI changes.
 
 on:
   schedule:
@@ -29,9 +31,9 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  INTEGRATIONS_REF: 15eec05b79839356491740f00a6891bd2c90ec3b # chore/ua-override; switch to main once merged
+  INTEGRATIONS_REF: 6bb8da9fadd009370aa4293f1c49b613dac944bd # sato-hub-integrations main
   CREATE_API: https://satohub.ai/api/create
-  SATO_USER_AGENT: SatoHub-journey/1.0
+  OWN_UA: SatoHub-journey/1.0
   GOAL: trading agent on Base with a wallet and spend limits
   FRAMEWORK: plain-ts
 
@@ -84,6 +86,11 @@ jobs:
           { npm init -y >/dev/null && \
             npm install --ignore-scripts --no-audit --no-fund --registry=https://registry.npmjs.org/ "$PACKS"/create-sato-agent-*.tgz "$PACKS"/satohub-kit-*.tgz ; } 2>&1 | tee "$LOG_DIR/install_tools.log"
 
+      # Mark this runner as ours before the published-package requests below.
+      - id: own_marker_create
+        timeout-minutes: 1
+        run: curl -fsS -o /dev/null --max-time 20 -A "$OWN_UA" https://satohub.ai/api/openapi.json || echo "own marker request failed (not fatal)"
+
       # The real create API. Its answer (or refusal) is recorded either way.
       - id: create
         working-directory: ${{ env.WORK }}
@@ -124,6 +131,11 @@ jobs:
         run: |
           set -o pipefail
           timeout --kill-after=10 240 npm start -- --mode fixture 2>&1 | tee "$LOG_DIR/start_fixture.log"
+
+      # Mark this runner as ours before the published-package requests below.
+      - id: own_marker_doctor
+        timeout-minutes: 1
+        run: curl -fsS -o /dev/null --max-time 20 -A "$OWN_UA" https://satohub.ai/api/openapi.json || echo "own marker request failed (not fatal)"
 
       # Doctor from the packed kit. Only a missing or unparseable answer fails
       # this step; drift changes go into the cell's info.
