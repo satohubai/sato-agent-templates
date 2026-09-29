@@ -141,6 +141,31 @@
     },
     {
       "template": "base-guarded-trader",
+      "framework": "agentkit",
+      "lane": "testnet",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@coinbase/agentkit": "0.10.4",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.38.3"
+      },
+      "attribution": null,
+      "history": [
+        {
+          "date": "2026-09-29",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
       "framework": "ai-sdk",
       "lane": "latest",
       "last_run": "2026-09-29",
@@ -183,6 +208,32 @@
       "template": "base-guarded-trader",
       "framework": "ai-sdk",
       "lane": "pinned",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "ai": "7.0.122",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.56.9",
+        "zod": "4.6.5"
+      },
+      "attribution": null,
+      "history": [
+        {
+          "date": "2026-09-29",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
+      "framework": "ai-sdk",
+      "lane": "testnet",
       "last_run": "2026-09-29",
       "last_green": "2026-09-29",
       "result": "green",
@@ -363,6 +414,34 @@
     },
     {
       "template": "base-guarded-trader",
+      "framework": "claude-agent-sdk",
+      "lane": "testnet",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@anthropic-ai/claude-agent-sdk": "0.3.284",
+        "@anthropic-ai/sdk": "0.128.0",
+        "@modelcontextprotocol/sdk": "1.30.1",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.56.9",
+        "zod": "4.6.5"
+      },
+      "attribution": null,
+      "history": [
+        {
+          "date": "2026-09-29",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
       "framework": "openai-agents",
       "lane": "latest",
       "last_run": "2026-09-29",
@@ -501,6 +580,32 @@
           "date": "2026-09-29",
           "result": "green"
         },
+        {
+          "date": "2026-09-29",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "template": "base-guarded-trader",
+      "framework": "openai-agents",
+      "lane": "testnet",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@openai/agents": "0.18.0",
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.56.9",
+        "zod": "4.6.5"
+      },
+      "attribution": null,
+      "history": [
         {
           "date": "2026-09-29",
           "result": "green"
@@ -662,6 +767,30 @@
       ]
     },
     {
+      "template": "base-guarded-trader",
+      "framework": "plain-ts",
+      "lane": "testnet",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.56.9"
+      },
+      "attribution": null,
+      "history": [
+        {
+          "date": "2026-09-29",
+          "result": "green"
+        }
+      ]
+    },
+    {
       "template": "persona-agent",
       "framework": "claude-agent-sdk",
       "lane": "latest",
@@ -1118,6 +1247,30 @@
       ]
     },
     {
+      "template": "treasury-monitor",
+      "framework": "plain-ts",
+      "lane": "testnet",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.56.9"
+      },
+      "attribution": null,
+      "history": [
+        {
+          "date": "2026-09-29",
+          "result": "green"
+        }
+      ]
+    },
+    {
       "template": "x402-seller",
       "framework": "plain-ts",
       "lane": "latest",
@@ -1159,6 +1312,30 @@
       "template": "x402-seller",
       "framework": "plain-ts",
       "lane": "pinned",
+      "last_run": "2026-09-29",
+      "last_green": "2026-09-29",
+      "result": "green",
+      "failing_step": null,
+      "log_excerpt": null,
+      "resolved": {
+        "@satohub/kit": "0.1.0",
+        "@types/node": "22.20.4",
+        "tsx": "4.23.15",
+        "typescript": "5.9.3",
+        "viem": "2.56.9"
+      },
+      "attribution": null,
+      "history": [
+        {
+          "date": "2026-09-29",
+          "result": "green"
+        }
+      ]
+    },
+    {
+      "template": "x402-seller",
+      "framework": "plain-ts",
+      "lane": "testnet",
       "last_run": "2026-09-29",
       "last_green": "2026-09-29",
       "result": "green",
