@@ -1,0 +1,1 @@
+{ "_note": "An authorization altered after signing: the facilitator refuses the signature.", "request": { "method": "GET", "path": "/api/item", "query": { "id": "x402-v2" }, "payment": "bad-signature" }, "expect": { "status": 402, "reason": "invalid_signature" } }

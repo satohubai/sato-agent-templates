@@ -1,0 +1,32 @@
+{
+  "_note": "A correctly signed authorization for 5000 base units on a route that costs exactly 1000. Signed once with a throwaway test key that was generated for this purpose and never stored; the address holds nothing on any real chain.",
+  "payload": {
+    "x402Version": 2,
+    "resource": {
+      "url": "http://localhost:4021/api/item"
+    },
+    "accepted": {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "amount": "1000",
+      "payTo": "0x000000000000000000000000000000000000dEaD",
+      "maxTimeoutSeconds": 60,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    },
+    "payload": {
+      "signature": "0x02da2a6c6ae9defa3fb12a88452598db9624e59065806b16cf94ed0d4b1117c9042268e731b206b7948c915ec8f8a61c1be0b5db570e4e29a9c2f5e91db1ee051b",
+      "authorization": {
+        "from": "0xeD38E923631420417400Fba51918C1Cf2DFEafd8",
+        "to": "0x000000000000000000000000000000000000dEaD",
+        "value": "5000",
+        "validAfter": "0",
+        "validBefore": "4102444800",
+        "nonce": "0x79628d11629b0bbafcff9927c25cf63dec142a36138e8a1bb92b1396c6b787b7"
+      }
+    }
+  }
+}

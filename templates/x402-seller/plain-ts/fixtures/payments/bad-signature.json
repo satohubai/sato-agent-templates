@@ -1,0 +1,32 @@
+{
+  "_note": "The authorization's nonce was changed after signing, so the signature recovers a different address. Signed once with a throwaway test key that was generated for this purpose and never stored; the address holds nothing on any real chain.",
+  "payload": {
+    "x402Version": 2,
+    "resource": {
+      "url": "http://localhost:4021/api/item"
+    },
+    "accepted": {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "amount": "1000",
+      "payTo": "0x000000000000000000000000000000000000dEaD",
+      "maxTimeoutSeconds": 60,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    },
+    "payload": {
+      "signature": "0x85f67fb94a7c58a92bb7f4466c65572c07731f94030a0a2910dabe4edfe39b034d7453e0f1518e11a335e1e3ef071e4180190d11ff74889f6379d1e5ab9c1ef41c",
+      "authorization": {
+        "from": "0xeD38E923631420417400Fba51918C1Cf2DFEafd8",
+        "to": "0x000000000000000000000000000000000000dEaD",
+        "value": "1000",
+        "validAfter": "0",
+        "validBefore": "4102444800",
+        "nonce": "0xbb5af39e20d38e4fbc9ed19568684928d5ad7a2687981a0426274af130b04bac"
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+// policy.json: a sato.policy/v1 file, parsed by the kit's own parser.
+//
+// This template prepares nothing and holds no signer: it only RECEIVES
+// payments, so no intent ever reaches the pre-flight. The file is here so a
+// write added later starts from a
+// refusing default: human approval on, 1 USD caps, unknown refuses. The kit's
+// pre-flight explains refusals; enforcement lives in a signer, and this
+// template has none.
+
+import { readFileSync } from "node:fs";
+import { parsePolicyFile, type SatoPolicy } from "@satohub/kit";
+
+export function loadPolicy(path: string): SatoPolicy {
+  const parsed = parsePolicyFile(JSON.parse(readFileSync(path, "utf8")));
+  if (!parsed.ok) throw new Error(`policy.json: ${parsed.error}`);
+  if (parsed.policy.network === "mainnet") throw new Error("policy.json: this template does not run on mainnet");
+  return parsed.policy;
+}

@@ -1,0 +1,32 @@
+{
+  "_note": "An exact-scheme ERC-3009 authorization for 1000 base units of USDC to the configured payee. Signed once with a throwaway test key that was generated for this purpose and never stored; the address holds nothing on any real chain.",
+  "payload": {
+    "x402Version": 2,
+    "resource": {
+      "url": "http://localhost:4021/api/item"
+    },
+    "accepted": {
+      "scheme": "exact",
+      "network": "eip155:8453",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "amount": "1000",
+      "payTo": "0x000000000000000000000000000000000000dEaD",
+      "maxTimeoutSeconds": 60,
+      "extra": {
+        "name": "USD Coin",
+        "version": "2"
+      }
+    },
+    "payload": {
+      "signature": "0xccebf85c038303bea649c38a22e27b29a0ccc6240475340b0173cc9b9681a8ee5683bd1f73c2693fb5c105c9024b67d1b4f7b20c35ce62b922da2f9868cbb1e51b",
+      "authorization": {
+        "from": "0xeD38E923631420417400Fba51918C1Cf2DFEafd8",
+        "to": "0x000000000000000000000000000000000000dEaD",
+        "value": "1000",
+        "validAfter": "0",
+        "validBefore": "4102444800",
+        "nonce": "0x7623bfe3ab3cf5c94b23b6d193513d3002ca1542c54a871b143b26a8b80f8bfb"
+      }
+    }
+  }
+}

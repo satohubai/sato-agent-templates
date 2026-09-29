@@ -1,0 +1,8 @@
+{
+  "_note": "The small dataset the example API serves. Replace it with your own data or handler in src/api.ts.",
+  "items": {
+    "erc-3009": { "id": "erc-3009", "title": "ERC-3009 transferWithAuthorization", "summary": "A token transfer authorised by an off-chain EIP-712 signature and submitted by anyone; the x402 exact scheme on EVM uses it for USDC." },
+    "x402-v2": { "id": "x402-v2", "title": "x402 protocol version 2", "summary": "HTTP 402 with a PAYMENT-REQUIRED header, a PAYMENT-SIGNATURE request header and a PAYMENT-RESPONSE settlement header." },
+    "eip-712": { "id": "eip-712", "title": "EIP-712 typed data", "summary": "Structured data signing with a domain separator bound to a chain id and a verifying contract." }
+  }
+}

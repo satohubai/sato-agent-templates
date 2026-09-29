@@ -1,0 +1,1 @@
+{ "_note": "An authorization in a token the route does not accept: refused before any facilitator call.", "request": { "method": "GET", "path": "/api/item", "query": { "id": "x402-v2" }, "payment": "wrong-asset" }, "expect": { "status": 402, "reason": "asset_not_accepted" } }
