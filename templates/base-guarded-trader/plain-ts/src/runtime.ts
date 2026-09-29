@@ -1,6 +1,10 @@
 // One kit per run, wired for the chosen mode.
 //
 //   fixture  no network, no key: recorded RPC answers + recorded venue quotes.
+//   sato-os  no key: the same read-only kit as fixture mode, but reading Base
+//            through BASE_RPC_URL (or the recordings with --data fixture),
+//            with intents built for the wallet attached to Sato OS. Allowed
+//            intents are handed to Sato OS as proposals (src/sato-os.ts).
 //   fork     a local anvil fork of Base (ANVIL_RPC_URL) and a throwaway key the
 //            kit generates in memory, funded with anvil_setBalance. The signer
 //            is wrapped so it cannot broadcast.
@@ -79,24 +83,28 @@ export async function buildRuntime(opts: {
   record?: boolean;
   /** fork only: serve venue quotes from fixtures/http instead of the network. */
   recordedQuotes?: boolean;
+  /** --mode sato-os: rpcUrl null = answer from the recordings; taker = the Sato OS wallet. */
+  satoOs?: { rpcUrl: string | null; taker: `0x${string}` };
 }): Promise<Runtime> {
   const secret = new Uint8Array(randomBytes(32)); // intent-id HMAC secret, memory only
   const { mode, env } = opts;
 
-  if (mode === "fixture") {
+  if (mode === "fixture" || mode === "sato-os") {
     const chain: ChainName = "base";
-    const transport = fixtureTransport(loadRpcFixtures(opts.fixturesDir));
+    const live = mode === "sato-os" && opts.satoOs?.rpcUrl ? opts.satoOs.rpcUrl : null;
+    if (mode === "sato-os" && !opts.satoOs) throw new Error("sato-os mode needs the attached wallet");
+    const taker = mode === "sato-os" ? opts.satoOs!.taker : FIXTURE_TAKER;
+    const transport = live ? http(live, { timeout: 30_000 }) : fixtureTransport(loadRpcFixtures(opts.fixturesDir));
     const client = createPublicClient({ chain: base, transport }) as PublicClient;
     const rpc: RpcProvider = () => client;
     const usd: UsdSource = { eth_usd: null };
-    const clock = () => FIXTURE_CLOCK_MS;
+    const clock = live ? () => Date.now() : () => FIXTURE_CLOCK_MS;
     const ledger = new SpendLedger(clock);
     const kit = createKit({
       policy: opts.policy,
       secret,
       rpc,
-      fetch: fixtureFetch(loadHttpFixtures(opts.fixturesDir)),
-      fixtures: kitFixtureSource(opts.fixturesDir),
+      ...(live ? { fetch: globalThis.fetch } : { fetch: fixtureFetch(loadHttpFixtures(opts.fixturesDir)), fixtures: kitFixtureSource(opts.fixturesDir) }),
       clock,
       evaluate: pricedPreflight(() => usd, ledger),
       actions: CORE_ACTIONS.list(),
@@ -104,7 +112,7 @@ export async function buildRuntime(opts: {
       receipts: memoryReceiptLog(),
       userAgent: USER_AGENT,
     });
-    return { mode, chain, kit, client, signer: null, taker: FIXTURE_TAKER, policy: opts.policy, usd, ledger };
+    return { mode, chain, kit, client, signer: null, taker, policy: opts.policy, usd, ledger };
   }
 
   if (mode === "fork") {

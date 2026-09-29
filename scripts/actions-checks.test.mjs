@@ -20,7 +20,11 @@ test("catalog: at least thirty third-party actions, unique ids, every source kno
     assert.ok(a.id.startsWith(`${SOURCES[a.source].kind}:`), a.id);
   }
   const kit = ACTIONS.filter((a) => a.source === "sato-kit").map((a) => a.name).sort();
-  assert.deepEqual(kit, ["chain_read", "erc8004_lookup", "swap_prepare", "swap_quote", "x402_prepare"]);
+  assert.deepEqual(kit, [
+    "bridge_prepare", "bridge_quote", "chain_read", "erc8004_lookup", "erc8004_register", "safe_info", "safe_propose",
+    "solana_read", "solana_swap_prepare", "solana_transfer", "swap_prepare", "swap_quote", "token_approvals_list",
+    "token_approvals_revoke", "tx_simulate", "x402_prepare",
+  ]);
 });
 
 test("catalog: installs come from the npm registry or the vendored kit only", () => {
@@ -29,8 +33,71 @@ test("catalog: installs come from the npm registry or the vendored kit only", ()
   }
 });
 
-test("catalog: no check writes — no call names a transfer, approve, sign or send", () => {
-  for (const a of ACTIONS) assert.doesNotMatch(a.name, /transfer|approve|sign|send|write|execute|wrap/i, a.id);
+test("catalog: no check writes — no called action names a transfer, approve, sign or send", () => {
+  for (const a of ACTIONS.filter((x) => !x.write)) assert.doesNotMatch(a.name, /transfer|approve|sign|send|write|execute|wrap|revoke|register|propose/i, a.id);
+});
+
+test("catalog: write actions are the kit's prepares, carry no call and no expectation", () => {
+  const w = ACTIONS.filter((a) => a.write);
+  assert.deepEqual(w.map((a) => a.id).sort(), [
+    "sato-kit:bridge.prepare", "sato-kit:erc8004.register", "sato-kit:safe.propose",
+    "sato-kit:solana.swap.prepare", "sato-kit:solana.transfer", "sato-kit:token.approvals.revoke",
+  ]);
+  for (const a of w) {
+    assert.equal(a.source, "sato-kit", a.id);
+    assert.equal(a.args, undefined, a.id);
+    assert.equal(a.expected, undefined, a.id);
+    assert.equal(a.assert, undefined, a.id);
+    assert.ok(!a.needs_fork, a.id);
+  }
+});
+
+test("catalog: no kit quote is sent to satohub.ai — quotes name a direct venue", () => {
+  for (const a of ACTIONS.filter((x) => x.source === "sato-kit" && /swap|bridge|quote/.test(x.name) && x.args)) {
+    assert.ok(["lifi", "direct", "jupiter"].includes(a.args.venue), `${a.id} venue ${a.args.venue}`);
+  }
+});
+
+test("kit reads: recorded outputs pass, wrong ones fail with a reason", () => {
+  const appr = byId["sato-kit:token.approvals.list"];
+  const row = { spender: "0x000000000022D473030F116dDEE9F6B43aC78BA3", allowance: "7", is_max_uint256: false, approved_for_all: null };
+  assert.equal(appr.assert({ approvals: [row] }, { value: "7" }), null);
+  assert.match(appr.assert({ approvals: [row] }, { value: "8" }), /allowance/);
+  assert.ok(appr.assert({ approvals: [] }, { value: "7" }));
+
+  const sim = byId["sato-kit:tx.simulate"];
+  assert.equal(sim.assert({ ok: true, method: "eth_call+estimateGas", block: "51800000", gas_estimate: "29000", error: null }), null);
+  assert.ok(sim.assert({ ok: false, gas_estimate: null, error: "rpc_unreachable" }));
+
+  const br = byId["sato-kit:bridge.quote"];
+  const lifi = { venue: "lifi", to_amount: "998000", error: null };
+  assert.equal(br.assert({ quotes: [lifi] }), null);
+  assert.match(br.assert({ quotes: [{ venue: "sato", to_amount: "1" }, lifi] }), /Sato/);
+  assert.match(br.assert({ quotes: [{ ...lifi, error: "HTTP 429" }] }), /error/);
+
+  const safe = byId["sato-kit:safe.info"];
+  // Recorded 2026-09-28 from the public Safe Transaction Service (the kit's own fixture).
+  const info = { chain: "base-sepolia", safe_address: "0x981778Bc0E01C87973c448bc2A866609961D05b4", nonce: "1", threshold: 1, owners: ["0x35444b5D850257a0E48168798eEA73f336464dA4", "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"], version: "1.3.0+L2", modules: [], guard: null };
+  assert.equal(safe.assert(info), null);
+  assert.ok(safe.assert({ ...info, owners: [] }));
+  assert.ok(safe.assert({ ...info, nonce: "x" }));
+
+  const sol = byId["sato-kit:solana.read"];
+  const bal = { kind: "sol_balance", chain: "solana", address: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM", mint: null, amount: "1234", decimals: 9, slot: 1 };
+  assert.equal(sol.assert(bal), null);
+  assert.ok(sol.assert({ ...bal, amount: null }));
+});
+
+test("buildRecord: a write action is lint_only, never called, never green", () => {
+  const a = byId["sato-kit:bridge.prepare"];
+  const tool = { description: "Builds the unsigned transaction for a cross-chain transfer.", inputSchema: { type: "object", properties: {} }, outputSchema: null };
+  const custody = { result: "not_run", answers: null, check_url: null };
+  const r = buildRecord(a, SOURCES["sato-kit"], { version: "0.1.0", call: { ok: true, output: {} }, tool, custody });
+  assert.equal(r.lint_only, true);
+  assert.equal(r.checks.conformance.result, "not_run");
+  assert.equal(r.checks.conformance.step, "not_executed");
+  assert.notEqual(r.checks.schema_lint.result, "not_run");
+  assert.equal(r.description_digest, sha256(tool.description));
 });
 
 test("formatUnits", () => {

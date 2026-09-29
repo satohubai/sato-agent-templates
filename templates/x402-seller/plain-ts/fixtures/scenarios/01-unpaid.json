@@ -1,0 +1,1 @@
+{ "_note": "No payment header: the route answers 402 with its offer in PAYMENT-REQUIRED.", "request": { "method": "GET", "path": "/api/item", "query": { "id": "x402-v2" } }, "expect": { "status": 402 } }

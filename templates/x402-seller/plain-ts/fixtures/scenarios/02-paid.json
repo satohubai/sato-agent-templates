@@ -1,0 +1,1 @@
+{ "_note": "A payment for exactly this offer: verified, the API answers, the payment is settled and confirmed through chain.read, 200 with PAYMENT-RESPONSE and a receipt.", "request": { "method": "GET", "path": "/api/item", "query": { "id": "x402-v2" }, "payment": "valid" }, "expect": { "status": 200 } }

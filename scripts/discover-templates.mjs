@@ -7,6 +7,9 @@
 //     prints {"include":[{template,framework,lane},...]} for fromJSON
 //   node scripts/discover-templates.mjs --lanes pinned --expect
 //     prints the comma list update-status.mjs takes as --expect
+//   node scripts/discover-templates.mjs --lanes testnet --script testnet-check
+//     only the cells whose package.json defines that npm script (the weekly
+//     Base Sepolia lane runs just the templates with a testnet-check)
 //   node scripts/discover-templates.mjs --lanes pinned --changed <file>
 //     only the cells a change touches (<file>: one changed path per line);
 //     a change under .github/, scripts/ or to the root policy/package files
@@ -16,7 +19,7 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 
-export const LANES = ["pinned", "latest"];
+export const LANES = ["pinned", "latest", "testnet"];
 const ID_RE = /^[a-z0-9][a-z0-9-]*$/;
 
 /** Every templates/<t>/<f> directory holding a sato.template.json, sorted. */
@@ -32,6 +35,23 @@ export function discoverCells(root = ".") {
     }
   }
   return out;
+}
+
+/** Pure: does a parsed package.json define a non-empty npm script `name`? */
+export function hasScript(pkg, name) {
+  const s = pkg && typeof pkg === "object" ? pkg.scripts : null;
+  return !!s && typeof s === "object" && typeof s[name] === "string" && s[name].trim().length > 0;
+}
+
+/** The cells whose templates/<t>/<f>/package.json defines script `name`. A cell with no readable package.json is left out. */
+export function cellsWithScript(cells, name, root = ".") {
+  return cells.filter((c) => {
+    try {
+      return hasScript(JSON.parse(readFileSync(join(root, "templates", c.template, c.framework, "package.json"), "utf8")), name);
+    } catch {
+      return false;
+    }
+  });
 }
 
 /** Paths whose change can affect every cell. */
@@ -66,8 +86,14 @@ function arg(argv, name, fallback) {
 
 export function main(argv = process.argv.slice(2)) {
   const lanes = arg(argv, "--lanes", "pinned").split(",").map((s) => s.trim()).filter(Boolean);
-  let cells = discoverCells(arg(argv, "--root", "."));
+  const root = arg(argv, "--root", ".");
+  let cells = discoverCells(root);
   if (!cells.length) throw new Error("no templates/*/*/sato.template.json found");
+  const script = arg(argv, "--script", "");
+  if (script) {
+    cells = cellsWithScript(cells, script, root);
+    if (!cells.length) throw new Error(`no template defines an npm script named ${script}`);
+  }
   const changed = arg(argv, "--changed", "");
   if (changed) cells = selectCells(cells, readFileSync(changed, "utf8").split("\n"));
   const m = matrixFor(cells, lanes);

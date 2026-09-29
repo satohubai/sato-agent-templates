@@ -131,6 +131,9 @@ async function satoKit() {
   const kit = await load("@satohub/kit");
   const client = await viemClient("base");
   const actions = kit.coreActions();
+  // Catalog actions marked `write` are never passed in (check-actions.mjs).
+  // A prepare that is passed in only builds its unsigned payload; nothing
+  // here holds a key, signs or sends.
   const tools = {};
   for (const a of actions) tools[a.descriptor.name] = { description: a.descriptor.description, inputSchema: a.descriptor.input_schema, outputSchema: a.descriptor.output_schema };
   const policy = {
@@ -142,6 +145,11 @@ async function satoKit() {
     fetch: (u, init = {}) => fetch(u, { ...init, headers: { ...(init.headers ?? {}), "user-agent": "SatoHub-templates-ci/1.0" }, signal: init.signal ?? AbortSignal.timeout(30_000) }),
     clock: () => Date.now(),
     rpc: () => { if (!client) throw new Error("no fork RPC given"); return client; },
+    // Solana: the public mainnet RPC (reads only; nothing here can sign).
+    solanaRpc: (chain) => {
+      if (chain !== "solana" || !chains.solana?.public_rpc) throw new Error(`no public RPC for ${chain}`);
+      return kit.solanaJsonRpc(chains.solana.public_rpc, { userAgent: "SatoHub-templates-ci/1.0", fetch: ctx.fetch });
+    },
     policy,
     userAgent: "SatoHub-templates-ci/1.0",
   };

@@ -1,0 +1,41 @@
+{
+  "service": {
+    "name": "Example x402 API",
+    "public_url": "http://localhost:4021",
+    "tags": ["example", "reference"],
+    "pay_to": "0x000000000000000000000000000000000000dEaD"
+  },
+  "networks": {
+    "fork": {
+      "chain": "base",
+      "network": "eip155:8453",
+      "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "asset_symbol": "USDC",
+      "asset_decimals": 6,
+      "eip712": { "name": "USD Coin", "version": "2" },
+      "facilitator": "fork"
+    },
+    "testnet": {
+      "chain": "base-sepolia",
+      "network": "eip155:84532",
+      "asset": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
+      "asset_symbol": "USDC",
+      "asset_decimals": 6,
+      "eip712": { "name": "USDC", "version": "2" },
+      "facilitator": "https://x402.org/facilitator"
+    }
+  },
+  "max_timeout_seconds": 60,
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/api/item",
+      "price_base_units": "1000",
+      "description": "One reference item by id, as JSON.",
+      "mime_type": "application/json",
+      "query_example": { "id": "x402-v2" },
+      "query_schema": { "type": "object", "properties": { "id": { "type": "string" } }, "required": ["id"] },
+      "output_example": { "id": "x402-v2", "title": "x402 protocol version 2", "summary": "HTTP 402 with a PAYMENT-REQUIRED header, a PAYMENT-SIGNATURE request header and a PAYMENT-RESPONSE settlement header." }
+    }
+  ]
+}

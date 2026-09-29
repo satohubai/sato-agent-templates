@@ -9,6 +9,9 @@
 // fork for any other EVM chain in CHAINS. An action whose chain has no fork is
 // recorded as our error (no_fork); the other actions still run.
 //
+// A catalog action marked `write` (a Sato Kit prepare) is never called: its
+// record has the schema lint and custody cells and `lint_only: true`.
+//
 // Per action: (a) conformance — one read-only call (a fork read at the pinned
 // block of the action's chain, or a public read; never a write, never a key); (b) schema lint —
 // portable rules plus host facts; (c) custody — Sato Check's answers for the
@@ -246,7 +249,8 @@ export function buildRecord(action, src, { version, call, tool, toolCount, expec
       description = tool.description ?? "";
       lint = lintTool({ name: action.name, description: tool.description, inputSchema: tool.inputSchema, outputSchema: tool.outputSchema }, { serverToolCount: toolCount ?? undefined });
     }
-    if (!call) conformance = { result: "not_run", step: "no_call", detail: null };
+    if (action.write) conformance = { result: "not_run", step: "not_executed", detail: "A write action (it prepares a transaction for a signer): checked by schema lint and custody only, never executed." };
+    else if (!call) conformance = { result: "not_run", step: "no_call", detail: null };
     else if (!call.ok) conformance = { result: "fail", step: call.step ?? "call", detail: call.error ?? null };
     else {
       let why;
@@ -260,6 +264,7 @@ export function buildRecord(action, src, { version, call, tool, toolCount, expec
     chain: action.chain ?? null,
     source: { kind: src.kind, package: src.package, version: version ?? null, repo_url: src.repo_url },
     upstream_version: version ?? null,
+    ...(action.write ? { lint_only: true } : {}),
     checks: { conformance, schema_lint: schemaLintCell(lint), custody },
     description_digest: description === null ? null : sha256(description),
   };
@@ -317,14 +322,16 @@ export async function main(argv = process.argv.slice(2)) {
             expected[a.id] = await expectedValue(at, a.expected);
           } catch (e) { expected[a.id] = { error: e.message }; }
         }
-        const toRun = runnable.filter((a) => !expected[a.id]?.error);
-        if (toRun.length) {
+        // Write actions are never called; a library run still happens for them
+        // (with no calls) so their descriptors reach the schema lint.
+        const toRun = runnable.filter((a) => !a.write && !expected[a.id]?.error);
+        if (toRun.length || runnable.some((a) => a.write)) {
           result = src.runner === "mcp" ? await runMcp(src, inst.dir, toRun) : await runLibrary(srcId, inst.dir, toRun, rpcs);
         }
       }
     }
     for (const a of actions) {
-      let call = blocked ? { ok: false, step: blocked.step, error: blocked.error } : result.calls[a.id];
+      let call = a.write ? null : blocked ? { ok: false, step: blocked.step, error: blocked.error } : result.calls[a.id];
       if (!blocked && noFork.has(a.id)) call = { ok: false, step: "no_fork", error: `no fork RPC for ${a.chain}; pass --rpc-${a.chain}` };
       if (expected[a.id]?.error) call = { ok: false, step: a.expected.kind === "spl_mint" ? "rpc_read" : "anvil_read", error: expected[a.id].error };
       const rec = buildRecord(a, src, { version, call, tool: result.tools?.[a.name], toolCount: result.toolCount ?? null, expected: expected[a.id], custody });

@@ -13,6 +13,12 @@ Instructions for a coding agent working in this repository.
 
 The kit is a vendored preview: `@satohub/kit` 0.1.0 is installed from `vendor/` until it is published to npm. Rebuild it with `scripts/vendor-kit.sh <ref>` at the repository root; do not edit the tarball.
 
+## Sato OS hand-off (optional)
+
+- `npm run sato-os:attach -- --url <Sato OS URL> --wallet <0x address>` stores the agent's token in `.sato/sato-os.json`. Never print, log or commit that file.
+- `npm start -- --mode sato-os` (add `--data fixture` offline) proposes allowed intents to Sato OS through `proposeIntent` from `@satohub/kit/sato-os` (`src/sato-os.ts`). Refused intents are never proposed.
+- In this mode the agent never signs or executes. Do not add a signer or an `execute` call to the sato-os path; Sato OS signs after a person approves.
+
 ## Rules
 
 - The model reaches the chain only through the kit server from `createSatoKitSdkServer` (`src/host.ts`). Do not give it built-in tools (`tools: []`), and do not add `swap_prepare`, `x402_prepare` or `execute` to `allowedTools`: the `requireApprovalHook` must keep asking before them.

@@ -32,7 +32,9 @@
     "BASE_SEPOLIA_RPC_URL",
     "CDP_API_KEY_ID",
     "CDP_API_KEY_SECRET",
-    "CDP_WALLET_SECRET"
+    "CDP_WALLET_SECRET",
+    "BASE_RPC_URL",
+    "SATO_OS_URL"
   ],
   "capabilities": [
     "read:evm-contract",
@@ -68,6 +70,11 @@
       "id": "unit.fork-check",
       "kind": "unit",
       "description": "Nightly in satohubai/sato-agent-templates: an anvil fork of Base at block 51800000 with recorded quotes; exact reads, an approve simulation, pre-flight outcomes through the AgentKit actions, and execute refused without an approve callback. Never broadcasts."
+    },
+    {
+      "id": "unit.testnet-check",
+      "kind": "unit",
+      "description": "Weekly in satohubai/sato-agent-templates: against the public Base Sepolia RPC with no key, chain reads through the kit checked on contract constants and answer shapes (never on moving balances), plus this template's testnet answers. Never signs, never broadcasts."
     }
   ],
   "licenses": [
