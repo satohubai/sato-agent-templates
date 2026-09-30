@@ -9,7 +9,7 @@ Instructions for a coding agent working in this repository.
 - `npm test`
 - `npm start -- --mode fixture` — the default run; fake provider, recorded reads, no network, no key
 
-The kit is a vendored preview: `@satohub/kit` 0.1.0 is installed from `vendor/` until it is published to npm. Rebuild it with `scripts/vendor-kit.sh <ref>` at the repository root; do not edit the tarball.
+The kit is vendored: `@satohub/kit` 0.1.1 is installed from `vendor/`, a build of the source commit named in `vendor/README.md`. Rebuild it with `scripts/vendor-kit.sh <ref>` at the repository root; do not edit the tarball.
 
 ## Rules
 

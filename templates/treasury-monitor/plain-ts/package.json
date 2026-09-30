@@ -13,7 +13,7 @@
     "testnet-check": "tsx scripts/testnet-check.ts"
   },
   "dependencies": {
-    "@satohub/kit": "file:vendor/satohub-kit-0.1.0.tgz",
+    "@satohub/kit": "file:vendor/satohub-kit-0.1.1.tgz",
     "viem": "2.56.9"
   },
   "devDependencies": {

@@ -6,7 +6,7 @@ A [Coinbase AgentKit](https://github.com/coinbase/agentkit) agent on Base. The S
 
 It has the same goal as [`base-guarded-trader/plain-ts`](../plain-ts); only the host framework differs.
 
-> **The kit is a vendored preview.** `@satohub/kit` 0.1.0 is not on npm yet; `vendor/` holds a preview build (the source commit is in `vendor/README.md`) and `package.json` installs it from there. When the kit is published, this template moves to the npm package at an exact version.
+> **The kit is vendored.** `@satohub/kit` 0.1.1 is installed from `vendor/`, a build of the source commit named in `vendor/README.md`; `package.json` installs it from there. When the kit is published, this template moves to the npm package at an exact version.
 
 **The kit's pre-flight explains every refusal; enforcement lives in the signer.** `policy.json` is read in this process, so anyone who can edit the process can edit the policy. On testnet the CDP wallet enforces the policies you attach to it in CDP, where the key lives.
 

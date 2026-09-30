@@ -11,7 +11,7 @@ Instructions for a coding agent working in this repository.
 - `npm start -- --mode fixture --model openai` — a real OpenAI model; needs `OPENAI_API_KEY`; never in tests or CI
 - `npm run fork-check` — needs anvil on `ANVIL_RPC_URL` forked from Base at block 51800000
 
-The kit is a vendored preview: `@satohub/kit` 0.1.0 is installed from `vendor/` until it is published to npm. Rebuild it with `scripts/vendor-kit.sh <ref>` at the repository root; do not edit the tarball.
+The kit is vendored: `@satohub/kit` 0.1.1 is installed from `vendor/`, a build of the source commit named in `vendor/README.md`. Rebuild it with `scripts/vendor-kit.sh <ref>` at the repository root; do not edit the tarball.
 
 ## Sato OS hand-off (optional)
 
