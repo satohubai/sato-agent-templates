@@ -10,7 +10,7 @@ Instructions for a coding agent working in this repository.
 - `npm start -- --mode fixture` — the default run; no network, no key
 - `npm run fork-check` — needs anvil on `ANVIL_RPC_URL` forked from Base at block 51800000
 
-The kit is a vendored preview: `@satohub/kit` 0.1.0 is installed from `vendor/` until it is published to npm. Do not edit the tarball.
+The kit is vendored: `@satohub/kit` 0.1.1 is installed from `vendor/`, a build of the source commit named in `vendor/README.md`. Do not edit the tarball.
 
 ## Rules
 

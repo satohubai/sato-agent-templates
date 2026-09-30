@@ -165,10 +165,11 @@
       "max_usd_per_day": 100,
       "max_slippage_bps": 100,
       "unknown_verdict": "refuse",
-      "intent_ttl_s": 300
+      "intent_ttl_s": 300,
+      "scan": { "lookalike": "refuse", "token": "refuse_not_canonical", "payto_changed": "caution", "treasury_recipients": "allowlist_only", "hosted_check": false }
     },
     "upstream": {
-      "@satohub/kit": "0.1.0",
+      "@satohub/kit": "0.1.1",
       "@anthropic-ai/claude-agent-sdk": "0.3.284",
       "@anthropic-ai/sdk": "0.128.0",
       "@modelcontextprotocol/sdk": "1.30.1",

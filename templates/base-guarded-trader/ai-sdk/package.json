@@ -14,7 +14,7 @@
     "sato-os:attach": "tsx scripts/sato-os-attach.ts"
   },
   "dependencies": {
-    "@satohub/kit": "file:vendor/satohub-kit-0.1.0.tgz",
+    "@satohub/kit": "file:vendor/satohub-kit-0.1.1.tgz",
     "ai": "7.0.122",
     "viem": "2.56.9",
     "zod": "4.6.5"

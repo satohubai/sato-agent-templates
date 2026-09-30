@@ -14,5 +14,6 @@
   "intent_ttl_s": 60,
   "unknown_verdict": "refuse",
   "require_simulation": true,
-  "human_approval": true
+  "human_approval": true,
+  "scan": { "lookalike": "refuse", "token": "refuse_not_canonical", "payto_changed": "caution", "treasury_recipients": "allowlist_only", "hosted_check": false }
 }

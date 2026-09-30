@@ -6,7 +6,7 @@ Answers a question from a **closed corpus**: sources you supply, plus onchain re
 
 It holds no key, signs nothing and moves no funds. It reads, and it asks a model.
 
-> **The kit is a vendored preview.** `@satohub/kit` 0.1.0 is not on npm yet; `vendor/` holds a preview build (the source commit is in `vendor/README.md`) and `package.json` installs it from there.
+> **The kit is vendored.** `@satohub/kit` 0.1.1 is installed from `vendor/`, a build of the source commit named in `vendor/README.md`; `package.json` installs it from there.
 
 The badge shows the last date this template passed the nightly checks in [`status.json`](https://github.com/satohubai/sato-agent-templates/blob/status/status.json): install, typecheck, the fixture run, the tests and a dependency custody check. It is a dated result, not a review.
 

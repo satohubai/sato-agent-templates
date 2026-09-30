@@ -142,10 +142,11 @@
       "max_usd_per_day": 100,
       "max_slippage_bps": 100,
       "unknown_verdict": "refuse",
-      "intent_ttl_s": 300
+      "intent_ttl_s": 300,
+      "scan": { "lookalike": "refuse", "token": "refuse_not_canonical", "payto_changed": "caution", "treasury_recipients": "allowlist_only", "hosted_check": false }
     },
     "upstream": {
-      "@satohub/kit": "0.1.0",
+      "@satohub/kit": "0.1.1",
       "@coinbase/agentkit": "0.10.4",
       "viem": "2.38.3",
       "tsx": "4.23.15",

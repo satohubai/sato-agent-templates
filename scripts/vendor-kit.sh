@@ -32,7 +32,8 @@ TGZ="$(ls "$WORK"/satohub-kit-*.tgz | head -n1)"
 NAME="$(basename "$TGZ")"
 
 if [ "$#" -eq 0 ]; then
-  set -- $(ls -d "$ROOT"/templates/*/*/ 2>/dev/null)
+  # A glob, not `ls` output: a checkout path with a space in it must not split into two arguments.
+  set -- "$ROOT"/templates/*/*/
 fi
 
 for dir in "$@"; do

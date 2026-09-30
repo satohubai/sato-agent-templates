@@ -163,8 +163,8 @@ export const SOURCES = {
     repo_url: "https://github.com/satohubai/sato-hub-integrations",
     runner: "library",
     // Unpublished: the preview tarball the templates vendor.
-    install: ["./vendor/satohub-kit-0.1.0.tgz", "viem@2"],
-    vendor: "templates/base-guarded-trader/plain-ts/vendor/satohub-kit-0.1.0.tgz",
+    install: ["./vendor/satohub-kit-0.1.1.tgz", "viem@2"],
+    vendor: "templates/base-guarded-trader/plain-ts/vendor/satohub-kit-0.1.1.tgz",
     custody: { kind: "package", target: "@satohub/kit" },
   },
 };

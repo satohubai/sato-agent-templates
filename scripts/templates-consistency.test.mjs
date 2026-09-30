@@ -3,10 +3,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { discoverCells } from "./discover-templates.mjs";
 import { parseSemver, runtimeMajor } from "./lib/upgrade-policy.mjs";
 
-const ROOT = new URL("..", import.meta.url).pathname;
+// fileURLToPath, not .pathname: a checkout path with a space in it stays a real path, not "%20".
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const cells = discoverCells(ROOT);
 const read = (c, f) => JSON.parse(readFileSync(join(ROOT, "templates", c.template, c.framework, f), "utf8"));
 

@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@coinbase/agentkit": "0.10.4",
-    "@satohub/kit": "file:vendor/satohub-kit-0.1.0.tgz",
+    "@satohub/kit": "file:vendor/satohub-kit-0.1.1.tgz",
     "viem": "2.38.3"
   },
   "devDependencies": {

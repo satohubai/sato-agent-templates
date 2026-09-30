@@ -4,7 +4,7 @@
 
 A TypeScript agent on Base. It reads market data (block, gas, the Chainlink ETH/USD feed), decides with a small `Model` interface, and runs every intent through the Sato Kit (`@satohub/kit`): quote, prepare an unsigned transaction, simulate it, and check it against `policy.json` before anything could be signed.
 
-> **The kit is a vendored preview.** `@satohub/kit` 0.1.0 is not on npm yet; `vendor/` holds a preview build (the source commit is in `vendor/README.md`) and `package.json` installs it from there. When the kit is published, this template moves to the npm package at an exact version.
+> **The kit is vendored.** `@satohub/kit` 0.1.1 is installed from `vendor/`, a build of the source commit named in `vendor/README.md`; `package.json` installs it from there. When the kit is published, this template moves to the npm package at an exact version.
 
 **The kit's pre-flight explains every refusal; enforcement lives in the signer.** `policy.json` is read in this process, so anyone who can edit the process can edit the policy. On testnet the managed wallet enforces its own policy where the key lives.
 
