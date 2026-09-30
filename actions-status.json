@@ -1,6 +1,6 @@
 {
   "schema": "sato.action-status/v1",
-  "updated": "2026-09-29",
+  "updated": "2026-09-30",
   "actions": [
     {
       "id": "agentkit-provider:defillama.find_protocol",
@@ -45,8 +45,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -74,6 +74,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -121,8 +125,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -150,6 +154,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -197,8 +205,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -226,6 +234,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -273,8 +285,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -294,6 +306,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -341,8 +357,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -370,6 +386,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -417,8 +437,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -438,6 +458,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -485,8 +509,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -506,6 +530,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -553,8 +581,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -574,6 +602,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -627,8 +659,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -648,6 +680,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -701,8 +737,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -722,6 +758,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -769,8 +809,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -798,6 +838,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -851,7 +895,7 @@
       "result": "red",
       "failing_step": "call",
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
+      "last_run": "2026-09-30",
       "last_green": null,
       "history": [
         {
@@ -880,6 +924,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "red"
+        },
+        {
+          "date": "2026-09-30",
           "result": "red"
         }
       ]
@@ -933,8 +981,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -954,6 +1002,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1007,8 +1059,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -1028,6 +1080,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1081,8 +1137,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -1102,6 +1158,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1155,8 +1215,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -1176,6 +1236,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1229,8 +1293,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -1250,6 +1314,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1297,8 +1365,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -1318,6 +1386,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1365,8 +1437,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -1386,6 +1458,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1433,8 +1509,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -1454,6 +1530,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1493,7 +1573,7 @@
           "result": "answered",
           "answers": {
             "takes_key": "none_found",
-            "key_leaves": "not_observed",
+            "key_leaves": "unknown",
             "moves_funds": "none_found"
           },
           "check_url": "https://satohub.ai/check/package/npm%3Adexpaprika-mcp"
@@ -1507,8 +1587,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "2.7.1",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -1528,6 +1608,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1561,7 +1645,7 @@
           "result": "answered",
           "answers": {
             "takes_key": "none_found",
-            "key_leaves": "not_observed",
+            "key_leaves": "unknown",
             "moves_funds": "none_found"
           },
           "check_url": "https://satohub.ai/check/package/npm%3Adexpaprika-mcp"
@@ -1575,8 +1659,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "2.7.1",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -1604,6 +1688,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1653,7 +1741,7 @@
           "result": "answered",
           "answers": {
             "takes_key": "none_found",
-            "key_leaves": "not_observed",
+            "key_leaves": "unknown",
             "moves_funds": "none_found"
           },
           "check_url": "https://satohub.ai/check/package/npm%3Adexpaprika-mcp"
@@ -1667,7 +1755,7 @@
       "result": "red",
       "failing_step": "assert",
       "upstream_version": "2.7.1",
-      "last_run": "2026-09-29",
+      "last_run": "2026-09-30",
       "last_green": null,
       "history": [
         {
@@ -1696,6 +1784,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "red"
+        },
+        {
+          "date": "2026-09-30",
           "result": "red"
         }
       ]
@@ -1745,7 +1837,7 @@
           "result": "answered",
           "answers": {
             "takes_key": "none_found",
-            "key_leaves": "not_observed",
+            "key_leaves": "unknown",
             "moves_funds": "none_found"
           },
           "check_url": "https://satohub.ai/check/package/npm%3Adexpaprika-mcp"
@@ -1759,8 +1851,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "2.7.1",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -1780,6 +1872,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1829,7 +1925,7 @@
           "result": "answered",
           "answers": {
             "takes_key": "none_found",
-            "key_leaves": "not_observed",
+            "key_leaves": "unknown",
             "moves_funds": "none_found"
           },
           "check_url": "https://satohub.ai/check/package/npm%3Adexpaprika-mcp"
@@ -1843,8 +1939,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "2.7.1",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -1864,6 +1960,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1911,8 +2011,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "2.0.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -1940,6 +2040,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -1987,8 +2091,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "2.0.4",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -2016,6 +2120,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -2063,8 +2171,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.7.1",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -2093,6 +2201,10 @@
         {
           "date": "2026-09-29",
           "result": "green"
+        },
+        {
+          "date": "2026-09-30",
+          "result": "green"
         }
       ]
     },
@@ -2103,7 +2215,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2122,28 +2234,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:408269fb558c458d7a4fd6901d7e218387129c22a7dd9d44440ff3f61b2dc926",
-          "previous_digest": null
+          "previous_digest": "sha256:408269fb558c458d7a4fd6901d7e218387129c22a7dd9d44440ff3f61b2dc926"
         }
       },
       "result": "lint_only",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
       "last_green": null,
       "history": [
         {
           "date": "2026-09-29",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-09-30",
           "result": "lint_only"
         }
       ]
@@ -2155,7 +2271,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2174,28 +2290,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:7d0513e1f0af9783482d5025a36de183ed29f39bd8a0d354582639e7f722cb4d",
-          "previous_digest": null
+          "previous_digest": "sha256:7d0513e1f0af9783482d5025a36de183ed29f39bd8a0d354582639e7f722cb4d"
         }
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -2207,7 +2327,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2226,9 +2346,9 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
@@ -2242,9 +2362,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -2273,6 +2393,10 @@
         {
           "date": "2026-09-29",
           "result": "green"
+        },
+        {
+          "date": "2026-09-30",
+          "result": "green"
         }
       ]
     },
@@ -2283,7 +2407,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2302,9 +2426,9 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
@@ -2318,9 +2442,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -2348,6 +2472,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -2359,7 +2487,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2378,28 +2506,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:e2c6225cdceeead8f1cd8cf8a40242ff95c58cc9dec606db4c08ee59741d843e",
-          "previous_digest": null
+          "previous_digest": "sha256:e2c6225cdceeead8f1cd8cf8a40242ff95c58cc9dec606db4c08ee59741d843e"
         }
       },
       "result": "lint_only",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
       "last_green": null,
       "history": [
         {
           "date": "2026-09-29",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-09-30",
           "result": "lint_only"
         }
       ]
@@ -2411,7 +2543,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2430,28 +2562,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:c1c48d197299aa11db79c0e12c8b81dc090ec66e46882cdc569b4349f970bfe9",
-          "previous_digest": null
+          "previous_digest": "sha256:c1c48d197299aa11db79c0e12c8b81dc090ec66e46882cdc569b4349f970bfe9"
         }
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -2463,7 +2599,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2482,28 +2618,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:8bb39f179e81fc1a1bcdd6f8e1c34b98b48c850c585345a901128625546fb4ea",
-          "previous_digest": null
+          "previous_digest": "sha256:8bb39f179e81fc1a1bcdd6f8e1c34b98b48c850c585345a901128625546fb4ea"
         }
       },
       "result": "lint_only",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
       "last_green": null,
       "history": [
         {
           "date": "2026-09-29",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-09-30",
           "result": "lint_only"
         }
       ]
@@ -2515,7 +2655,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2534,28 +2674,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:760d85f144188261a519f418bd3dc08580999c0f5ece8d50835df8925bffc9f1",
-          "previous_digest": null
+          "previous_digest": "sha256:760d85f144188261a519f418bd3dc08580999c0f5ece8d50835df8925bffc9f1"
         }
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -2567,7 +2711,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2586,28 +2730,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:baeb0ad0d2dae430f62c45510d7e9afbdf63e9fcc44477d40d46ea4966b61bfa",
-          "previous_digest": null
+          "previous_digest": "sha256:baeb0ad0d2dae430f62c45510d7e9afbdf63e9fcc44477d40d46ea4966b61bfa"
         }
       },
       "result": "lint_only",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
       "last_green": null,
       "history": [
         {
           "date": "2026-09-29",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-09-30",
           "result": "lint_only"
         }
       ]
@@ -2619,7 +2767,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2638,28 +2786,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:8235cdc761e82c62f03a9573691e8995867f08ca3dbffb4fe9923c9dd0b93cdc",
-          "previous_digest": null
+          "previous_digest": "sha256:8235cdc761e82c62f03a9573691e8995867f08ca3dbffb4fe9923c9dd0b93cdc"
         }
       },
       "result": "lint_only",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
       "last_green": null,
       "history": [
         {
           "date": "2026-09-29",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-09-30",
           "result": "lint_only"
         }
       ]
@@ -2671,7 +2823,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2690,9 +2842,9 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
@@ -2706,9 +2858,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -2737,6 +2889,10 @@
         {
           "date": "2026-09-29",
           "result": "green"
+        },
+        {
+          "date": "2026-09-30",
+          "result": "green"
         }
       ]
     },
@@ -2747,7 +2903,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2766,9 +2922,9 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
@@ -2782,9 +2938,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -2813,6 +2969,10 @@
         {
           "date": "2026-09-29",
           "result": "green"
+        },
+        {
+          "date": "2026-09-30",
+          "result": "green"
         }
       ]
     },
@@ -2823,7 +2983,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2842,28 +3002,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:967202abfeaf731211edb4c40bc046f1c58e28888aeca08176c8ea39c4aa6dd3",
-          "previous_digest": null
+          "previous_digest": "sha256:967202abfeaf731211edb4c40bc046f1c58e28888aeca08176c8ea39c4aa6dd3"
         }
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -2875,7 +3039,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2894,28 +3058,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:7fc2e0a413132712b3c29c2cbfbbc06a955c703d30a3a167f9e500cc3deeaf61",
-          "previous_digest": null
+          "previous_digest": "sha256:7fc2e0a413132712b3c29c2cbfbbc06a955c703d30a3a167f9e500cc3deeaf61"
         }
       },
       "result": "lint_only",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
       "last_green": null,
       "history": [
         {
           "date": "2026-09-29",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-09-30",
           "result": "lint_only"
         }
       ]
@@ -2927,7 +3095,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2946,28 +3114,32 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
           "check_url": "https://satohub.ai/check/package/npm%3A%40satohub%2Fkit"
         },
         "description_drift": {
-          "result": "first_seen",
+          "result": "unchanged",
           "digest": "sha256:a6e8ab41f8080ba3f98f06443a52a60d7f559ca8fdf367abab8fb23b0b689aa3",
-          "previous_digest": null
+          "previous_digest": "sha256:a6e8ab41f8080ba3f98f06443a52a60d7f559ca8fdf367abab8fb23b0b689aa3"
         }
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -2979,7 +3151,7 @@
       "source": {
         "kind": "sato-kit",
         "package": "@satohub/kit",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "repo_url": "https://github.com/satohubai/sato-hub-integrations"
       },
       "checks": {
@@ -2998,9 +3170,9 @@
           "portable": []
         },
         "custody": {
-          "result": "unknown",
+          "result": "answered",
           "answers": {
-            "takes_key": "unknown",
+            "takes_key": "none_found",
             "key_leaves": "unknown",
             "moves_funds": "unknown"
           },
@@ -3014,9 +3186,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "0.1.0",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "0.1.1",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -3044,6 +3216,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -3091,8 +3267,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "21347a28f7d8",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -3112,6 +3288,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -3159,8 +3339,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "21347a28f7d8",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -3180,6 +3360,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -3227,8 +3411,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "a2211e3f6a7c",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -3248,6 +3432,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -3295,8 +3483,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "a2211e3f6a7c",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -3316,6 +3504,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -3363,8 +3555,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "a2211e3f6a7c",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -3384,6 +3576,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -3447,8 +3643,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "46c07deae989",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -3468,6 +3664,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -3541,8 +3741,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "46c07deae989",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -3562,6 +3762,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
@@ -3609,8 +3813,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "91ee44ae113e",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -3631,6 +3835,10 @@
         {
           "date": "2026-09-29",
           "result": "green"
+        },
+        {
+          "date": "2026-09-30",
+          "result": "green"
         }
       ]
     },
@@ -3641,7 +3849,7 @@
       "source": {
         "kind": "skill",
         "package": "github:Uniswap/uniswap-ai",
-        "version": "bff480cf4617",
+        "version": "1a43e968a395",
         "repo_url": "https://github.com/Uniswap/uniswap-ai"
       },
       "checks": {
@@ -3676,9 +3884,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "bff480cf4617",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "1a43e968a395",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -3699,6 +3907,10 @@
         {
           "date": "2026-09-29",
           "result": "green"
+        },
+        {
+          "date": "2026-09-30",
+          "result": "green"
         }
       ]
     },
@@ -3709,7 +3921,7 @@
       "source": {
         "kind": "skill",
         "package": "github:Uniswap/uniswap-ai",
-        "version": "bff480cf4617",
+        "version": "1a43e968a395",
         "repo_url": "https://github.com/Uniswap/uniswap-ai"
       },
       "checks": {
@@ -3744,9 +3956,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "bff480cf4617",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "1a43e968a395",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -3775,6 +3987,10 @@
         {
           "date": "2026-09-29",
           "result": "green"
+        },
+        {
+          "date": "2026-09-30",
+          "result": "green"
         }
       ]
     },
@@ -3785,7 +4001,7 @@
       "source": {
         "kind": "skill",
         "package": "github:Uniswap/uniswap-ai",
-        "version": "bff480cf4617",
+        "version": "1a43e968a395",
         "repo_url": "https://github.com/Uniswap/uniswap-ai"
       },
       "checks": {
@@ -3820,9 +4036,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "bff480cf4617",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "1a43e968a395",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -3851,6 +4067,10 @@
         {
           "date": "2026-09-29",
           "result": "green"
+        },
+        {
+          "date": "2026-09-30",
+          "result": "green"
         }
       ]
     },
@@ -3861,7 +4081,7 @@
       "source": {
         "kind": "skill",
         "package": "github:Uniswap/uniswap-ai",
-        "version": "bff480cf4617",
+        "version": "1a43e968a395",
         "repo_url": "https://github.com/Uniswap/uniswap-ai"
       },
       "checks": {
@@ -3896,9 +4116,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "bff480cf4617",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "1a43e968a395",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-28",
@@ -3919,6 +4139,10 @@
         {
           "date": "2026-09-29",
           "result": "green"
+        },
+        {
+          "date": "2026-09-30",
+          "result": "green"
         }
       ]
     },
@@ -3929,7 +4153,7 @@
       "source": {
         "kind": "skill",
         "package": "github:Uniswap/uniswap-ai",
-        "version": "bff480cf4617",
+        "version": "1a43e968a395",
         "repo_url": "https://github.com/Uniswap/uniswap-ai"
       },
       "checks": {
@@ -3964,9 +4188,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "bff480cf4617",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "upstream_version": "1a43e968a395",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "history": [
         {
           "date": "2026-09-27",
@@ -3994,6 +4218,10 @@
         },
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
