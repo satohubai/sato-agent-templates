@@ -744,13 +744,13 @@
       "template": "base-guarded-trader",
       "framework": "plain-ts",
       "lane": "journey",
-      "last_run": "2026-09-29",
-      "last_green": "2026-09-29",
+      "last_run": "2026-09-30",
+      "last_green": "2026-09-30",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
-        "@satohub/kit": "0.1.0",
+        "@satohub/kit": "0.1.1",
         "@types/node": "22.20.4",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
@@ -761,7 +761,7 @@
         "create": {
           "ok": true,
           "template_version": "0.1.0",
-          "digest": "sha256:7516e74b74c3642c3ac7d15242895391486d28313a694417536b8d4c61092008"
+          "digest": "sha256:87b7c8c4857b76ea773290c280968513345431be2458b9cf0309aee6a3153455"
         },
         "doctor": {
           "ok": true,
@@ -776,6 +776,10 @@
       "history": [
         {
           "date": "2026-09-29",
+          "result": "green"
+        },
+        {
+          "date": "2026-09-30",
           "result": "green"
         }
       ]
