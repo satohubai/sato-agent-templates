@@ -195,6 +195,9 @@ runs:
 
     - id: custody
       uses: satohubai/preflight-action@v1
+      # Our own CI identifies itself so the Observatory never counts it as outside use of the Action.
+      env:
+        SATO_CHECK_UA: SatoHub-templates-ci/1.0
       with:
         manifest: ${{ env.TEMPLATE_DIR }}/package.json
         custody: "true"
