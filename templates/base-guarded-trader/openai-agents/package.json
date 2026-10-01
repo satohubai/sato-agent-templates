@@ -16,7 +16,7 @@
   "dependencies": {
     "@openai/agents": "0.18.0",
     "@satohub/kit": "file:vendor/satohub-kit-0.1.1.tgz",
-    "viem": "2.56.9",
+    "viem": "2.57.2",
     "zod": "4.6.5"
   },
   "devDependencies": {
