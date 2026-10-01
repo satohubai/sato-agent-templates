@@ -74,6 +74,6 @@
       "intent_ttl_s": 300,
       "scan": { "lookalike": "refuse", "token": "refuse_not_canonical", "payto_changed": "caution", "treasury_recipients": "allowlist_only", "hosted_check": false }
     },
-    "upstream": { "@satohub/kit": "0.1.1", "viem": "2.56.9", "tsx": "4.23.15", "typescript": "5.9.3" }
+    "upstream": { "@satohub/kit": "0.1.1", "viem": "2.57.2", "tsx": "4.23.15", "typescript": "5.9.3" }
   }
 }
