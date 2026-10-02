@@ -1,6 +1,6 @@
 {
   "schema": "sato.action-status/v1",
-  "updated": "2026-10-01",
+  "updated": "2026-10-02",
   "actions": [
     {
       "id": "agentkit-provider:defillama.find_protocol",
@@ -45,8 +45,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -82,6 +82,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -129,8 +133,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -166,6 +170,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -213,8 +221,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -250,6 +258,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -297,8 +309,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -326,6 +338,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -373,8 +389,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -410,6 +426,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -457,8 +477,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -486,6 +506,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -533,8 +557,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -562,6 +586,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -609,8 +637,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -638,6 +666,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -691,8 +723,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -720,6 +752,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -773,8 +809,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -802,6 +838,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -849,8 +889,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -886,6 +926,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -939,7 +983,7 @@
       "result": "red",
       "failing_step": "call",
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
+      "last_run": "2026-10-02",
       "last_green": null,
       "history": [
         {
@@ -976,6 +1020,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "red"
+        },
+        {
+          "date": "2026-10-02",
           "result": "red"
         }
       ]
@@ -1029,8 +1077,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -1058,6 +1106,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -1111,8 +1163,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -1140,6 +1192,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -1193,8 +1249,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -1222,6 +1278,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -1275,8 +1335,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -1304,6 +1364,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -1357,8 +1421,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -1386,6 +1450,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -1433,8 +1501,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -1462,6 +1530,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -1509,8 +1581,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -1538,6 +1610,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -1585,8 +1661,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.10.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -1615,6 +1691,10 @@
         {
           "date": "2026-10-01",
           "result": "green"
+        },
+        {
+          "date": "2026-10-02",
+          "result": "green"
         }
       ]
     },
@@ -1625,7 +1705,7 @@
       "source": {
         "kind": "protocol-mcp",
         "package": "dexpaprika-mcp",
-        "version": "2.7.1",
+        "version": "2.7.2",
         "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
       },
       "checks": {
@@ -1666,9 +1746,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "2.7.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "upstream_version": "2.7.2",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -1697,6 +1777,10 @@
         {
           "date": "2026-10-01",
           "result": "green"
+        },
+        {
+          "date": "2026-10-02",
+          "result": "green"
         }
       ]
     },
@@ -1707,7 +1791,7 @@
       "source": {
         "kind": "protocol-mcp",
         "package": "dexpaprika-mcp",
-        "version": "2.7.1",
+        "version": "2.7.2",
         "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
       },
       "checks": {
@@ -1742,9 +1826,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "2.7.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "upstream_version": "2.7.2",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -1781,6 +1865,10 @@
         {
           "date": "2026-10-01",
           "result": "green"
+        },
+        {
+          "date": "2026-10-02",
+          "result": "green"
         }
       ]
     },
@@ -1791,7 +1879,7 @@
       "source": {
         "kind": "protocol-mcp",
         "package": "dexpaprika-mcp",
-        "version": "2.7.1",
+        "version": "2.7.2",
         "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
       },
       "checks": {
@@ -1842,8 +1930,8 @@
       },
       "result": "red",
       "failing_step": "assert",
-      "upstream_version": "2.7.1",
-      "last_run": "2026-10-01",
+      "upstream_version": "2.7.2",
+      "last_run": "2026-10-02",
       "last_green": null,
       "history": [
         {
@@ -1881,6 +1969,10 @@
         {
           "date": "2026-10-01",
           "result": "red"
+        },
+        {
+          "date": "2026-10-02",
+          "result": "red"
         }
       ]
     },
@@ -1891,7 +1983,7 @@
       "source": {
         "kind": "protocol-mcp",
         "package": "dexpaprika-mcp",
-        "version": "2.7.1",
+        "version": "2.7.2",
         "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
       },
       "checks": {
@@ -1942,9 +2034,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "2.7.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "upstream_version": "2.7.2",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -1972,6 +2064,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -1983,7 +2079,7 @@
       "source": {
         "kind": "protocol-mcp",
         "package": "dexpaprika-mcp",
-        "version": "2.7.1",
+        "version": "2.7.2",
         "repo_url": "https://github.com/coinpaprika/dexpaprika-mcp"
       },
       "checks": {
@@ -2034,9 +2130,9 @@
       },
       "result": "green",
       "failing_step": null,
-      "upstream_version": "2.7.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "upstream_version": "2.7.2",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -2064,6 +2160,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -2111,8 +2211,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "2.0.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -2148,6 +2248,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -2195,8 +2299,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "2.0.4",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -2232,6 +2336,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -2279,8 +2387,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.7.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -2316,6 +2424,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -2363,7 +2475,7 @@
       "result": "lint_only",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
+      "last_run": "2026-10-02",
       "last_green": null,
       "history": [
         {
@@ -2376,6 +2488,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-10-02",
           "result": "lint_only"
         }
       ]
@@ -2423,8 +2539,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-29",
@@ -2436,6 +2552,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -2483,8 +2603,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -2520,6 +2640,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -2567,8 +2691,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -2604,6 +2728,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -2651,7 +2779,7 @@
       "result": "lint_only",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
+      "last_run": "2026-10-02",
       "last_green": null,
       "history": [
         {
@@ -2664,6 +2792,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-10-02",
           "result": "lint_only"
         }
       ]
@@ -2711,8 +2843,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-29",
@@ -2724,6 +2856,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -2771,7 +2907,7 @@
       "result": "lint_only",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
+      "last_run": "2026-10-02",
       "last_green": null,
       "history": [
         {
@@ -2784,6 +2920,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-10-02",
           "result": "lint_only"
         }
       ]
@@ -2831,8 +2971,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-29",
@@ -2844,6 +2984,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -2891,7 +3035,7 @@
       "result": "lint_only",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
+      "last_run": "2026-10-02",
       "last_green": null,
       "history": [
         {
@@ -2904,6 +3048,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-10-02",
           "result": "lint_only"
         }
       ]
@@ -2951,7 +3099,7 @@
       "result": "lint_only",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
+      "last_run": "2026-10-02",
       "last_green": null,
       "history": [
         {
@@ -2964,6 +3112,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-10-02",
           "result": "lint_only"
         }
       ]
@@ -3011,8 +3163,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -3048,6 +3200,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -3095,8 +3251,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -3132,6 +3288,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -3179,8 +3339,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-29",
@@ -3192,6 +3352,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -3239,7 +3403,7 @@
       "result": "lint_only",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
+      "last_run": "2026-10-02",
       "last_green": null,
       "history": [
         {
@@ -3252,6 +3416,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "lint_only"
+        },
+        {
+          "date": "2026-10-02",
           "result": "lint_only"
         }
       ]
@@ -3299,8 +3467,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-29",
@@ -3312,6 +3480,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -3359,8 +3531,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "0.1.1",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -3396,6 +3568,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -3407,17 +3583,17 @@
       "source": {
         "kind": "skill",
         "package": "github:helius-labs/core-ai",
-        "version": "21347a28f7d8",
+        "version": null,
         "repo_url": "https://github.com/helius-labs/core-ai"
       },
       "checks": {
         "conformance": {
-          "result": "pass",
-          "step": null,
-          "detail": null
+          "result": "fail",
+          "step": "fetch",
+          "detail": "GitHub answered HTTP 403"
         },
         "schema_lint": {
-          "result": "pass",
+          "result": "not_run",
           "hosts": {
             "openai": [],
             "cursor": [],
@@ -3435,15 +3611,15 @@
           "check_url": "https://satohub.ai/check/skill/helius-labs%2Fcore-ai"
         },
         "description_drift": {
-          "result": "unchanged",
-          "digest": "sha256:9d3fec50182834ca5f8fa0331d9917dccce060046b31e6f09c744774dd63875a",
+          "result": "not_run",
+          "digest": null,
           "previous_digest": "sha256:9d3fec50182834ca5f8fa0331d9917dccce060046b31e6f09c744774dd63875a"
         }
       },
-      "result": "green",
-      "failing_step": null,
-      "upstream_version": "21347a28f7d8",
-      "last_run": "2026-10-01",
+      "result": "red",
+      "failing_step": "fetch",
+      "upstream_version": null,
+      "last_run": "2026-10-02",
       "last_green": "2026-10-01",
       "history": [
         {
@@ -3473,6 +3649,10 @@
         {
           "date": "2026-10-01",
           "result": "green"
+        },
+        {
+          "date": "2026-10-02",
+          "result": "red"
         }
       ]
     },
@@ -3483,17 +3663,17 @@
       "source": {
         "kind": "skill",
         "package": "github:helius-labs/core-ai",
-        "version": "21347a28f7d8",
+        "version": null,
         "repo_url": "https://github.com/helius-labs/core-ai"
       },
       "checks": {
         "conformance": {
-          "result": "pass",
-          "step": null,
-          "detail": null
+          "result": "fail",
+          "step": "fetch",
+          "detail": "GitHub answered HTTP 403"
         },
         "schema_lint": {
-          "result": "pass",
+          "result": "not_run",
           "hosts": {
             "openai": [],
             "cursor": [],
@@ -3511,15 +3691,15 @@
           "check_url": "https://satohub.ai/check/skill/helius-labs%2Fcore-ai"
         },
         "description_drift": {
-          "result": "unchanged",
-          "digest": "sha256:e7228626da5c47dd2369405ff402dd3504d9b305a38afdc4e3a412e654f26744",
+          "result": "not_run",
+          "digest": null,
           "previous_digest": "sha256:e7228626da5c47dd2369405ff402dd3504d9b305a38afdc4e3a412e654f26744"
         }
       },
-      "result": "green",
-      "failing_step": null,
-      "upstream_version": "21347a28f7d8",
-      "last_run": "2026-10-01",
+      "result": "red",
+      "failing_step": "fetch",
+      "upstream_version": null,
+      "last_run": "2026-10-02",
       "last_green": "2026-10-01",
       "history": [
         {
@@ -3549,6 +3729,10 @@
         {
           "date": "2026-10-01",
           "result": "green"
+        },
+        {
+          "date": "2026-10-02",
+          "result": "red"
         }
       ]
     },
@@ -3595,8 +3779,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "a2211e3f6a7c",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -3624,6 +3808,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -3671,8 +3859,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "a2211e3f6a7c",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -3700,6 +3888,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -3747,8 +3939,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "a2211e3f6a7c",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -3776,6 +3968,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -3839,8 +4035,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "46c07deae989",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -3868,6 +4064,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -3941,8 +4141,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "46c07deae989",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -3971,6 +4171,10 @@
         {
           "date": "2026-10-01",
           "result": "green"
+        },
+        {
+          "date": "2026-10-02",
+          "result": "green"
         }
       ]
     },
@@ -3981,17 +4185,17 @@
       "source": {
         "kind": "skill",
         "package": "github:Polymarket/agent-skills",
-        "version": "91ee44ae113e",
+        "version": null,
         "repo_url": "https://github.com/Polymarket/agent-skills"
       },
       "checks": {
         "conformance": {
-          "result": "pass",
-          "step": null,
-          "detail": null
+          "result": "fail",
+          "step": "fetch",
+          "detail": "GitHub answered HTTP 403"
         },
         "schema_lint": {
-          "result": "pass",
+          "result": "not_run",
           "hosts": {
             "openai": [],
             "cursor": [],
@@ -4009,15 +4213,15 @@
           "check_url": "https://satohub.ai/check/skill/polymarket%2Fagent-skills"
         },
         "description_drift": {
-          "result": "unchanged",
-          "digest": "sha256:fd030f1fc2430254bc5caac62e7673bf40c15fac065a96015c75ad373116e92d",
+          "result": "not_run",
+          "digest": null,
           "previous_digest": "sha256:fd030f1fc2430254bc5caac62e7673bf40c15fac065a96015c75ad373116e92d"
         }
       },
-      "result": "green",
-      "failing_step": null,
-      "upstream_version": "91ee44ae113e",
-      "last_run": "2026-10-01",
+      "result": "red",
+      "failing_step": "fetch",
+      "upstream_version": null,
+      "last_run": "2026-10-02",
       "last_green": "2026-10-01",
       "history": [
         {
@@ -4047,6 +4251,10 @@
         {
           "date": "2026-10-01",
           "result": "green"
+        },
+        {
+          "date": "2026-10-02",
+          "result": "red"
         }
       ]
     },
@@ -4093,8 +4301,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "1a43e968a395",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -4122,6 +4330,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -4169,8 +4381,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "1a43e968a395",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -4206,6 +4418,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -4253,8 +4469,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "1a43e968a395",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -4290,6 +4506,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -4337,8 +4557,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "1a43e968a395",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-28",
@@ -4366,6 +4586,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
@@ -4413,8 +4637,8 @@
       "result": "green",
       "failing_step": null,
       "upstream_version": "1a43e968a395",
-      "last_run": "2026-10-01",
-      "last_green": "2026-10-01",
+      "last_run": "2026-10-02",
+      "last_green": "2026-10-02",
       "history": [
         {
           "date": "2026-09-27",
@@ -4450,6 +4674,10 @@
         },
         {
           "date": "2026-10-01",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-02",
           "result": "green"
         }
       ]
