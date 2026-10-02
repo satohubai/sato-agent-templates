@@ -1,4 +1,4 @@
-// Vendored from amateokap/onchain-agent lib/oda/lint.ts at
+// Vendored from Sato Hub app (private) lib/oda/lint.ts at
 // 6084d1ab487983580cfc283e2040e642136d9c02, ported to plain JS (type
 // annotations removed, nothing else changed). Edit there, then re-vendor.
 // Only lintPortableSchema and lintDescription are vendored: the nightly checks
