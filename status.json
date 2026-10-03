@@ -5,8 +5,8 @@
       "template": "base-guarded-trader",
       "framework": "agentkit",
       "lane": "latest",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -95,6 +95,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -102,8 +106,8 @@
       "template": "base-guarded-trader",
       "framework": "agentkit",
       "lane": "pinned",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -184,6 +188,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -216,8 +224,8 @@
       "template": "base-guarded-trader",
       "framework": "ai-sdk",
       "lane": "latest",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -273,6 +281,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -280,8 +292,8 @@
       "template": "base-guarded-trader",
       "framework": "ai-sdk",
       "lane": "pinned",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -323,6 +335,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -356,13 +372,13 @@
       "template": "base-guarded-trader",
       "framework": "claude-agent-sdk",
       "lane": "latest",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
-        "@anthropic-ai/claude-agent-sdk": "0.3.287",
+        "@anthropic-ai/claude-agent-sdk": "0.3.288",
         "@anthropic-ai/sdk": "0.131.0",
         "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.1",
@@ -461,6 +477,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -468,8 +488,8 @@
       "template": "base-guarded-trader",
       "framework": "claude-agent-sdk",
       "lane": "pinned",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -553,6 +573,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -588,8 +612,8 @@
       "template": "base-guarded-trader",
       "framework": "openai-agents",
       "lane": "latest",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -685,6 +709,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -692,8 +720,8 @@
       "template": "base-guarded-trader",
       "framework": "openai-agents",
       "lane": "pinned",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -775,6 +803,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -852,8 +884,8 @@
       "template": "base-guarded-trader",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -947,6 +979,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -954,8 +990,8 @@
       "template": "base-guarded-trader",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1047,6 +1083,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -1078,13 +1118,13 @@
       "template": "persona-agent",
       "framework": "claude-agent-sdk",
       "lane": "latest",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
-        "@anthropic-ai/claude-agent-sdk": "0.3.287",
+        "@anthropic-ai/claude-agent-sdk": "0.3.288",
         "@anthropic-ai/sdk": "0.131.0",
         "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.1",
@@ -1183,6 +1223,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -1190,8 +1234,8 @@
       "template": "persona-agent",
       "framework": "claude-agent-sdk",
       "lane": "pinned",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1275,6 +1319,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -1282,8 +1330,8 @@
       "template": "research-report",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1377,6 +1425,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -1384,8 +1436,8 @@
       "template": "research-report",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1473,6 +1525,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -1480,8 +1536,8 @@
       "template": "treasury-monitor",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1575,6 +1631,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -1582,8 +1642,8 @@
       "template": "treasury-monitor",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1670,6 +1730,10 @@
         },
         {
           "date": "2026-10-02",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-03",
           "result": "green"
         }
       ]
@@ -1702,8 +1766,8 @@
       "template": "x402-seller",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1757,6 +1821,10 @@
         {
           "date": "2026-10-02",
           "result": "green"
+        },
+        {
+          "date": "2026-10-03",
+          "result": "green"
         }
       ]
     },
@@ -1764,8 +1832,8 @@
       "template": "x402-seller",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-02",
-      "last_green": "2026-10-02",
+      "last_run": "2026-10-03",
+      "last_green": "2026-10-03",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1804,6 +1872,10 @@
         },
         {
           "date": "2026-10-02",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-03",
           "result": "green"
         }
       ]
