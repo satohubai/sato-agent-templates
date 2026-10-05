@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@satohub/kit": "file:vendor/satohub-kit-0.1.1.tgz",
-    "ai": "7.0.126",
+    "ai": "7.0.127",
     "viem": "2.57.2",
     "zod": "4.6.5"
   },
