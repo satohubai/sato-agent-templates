@@ -5,8 +5,8 @@
       "template": "base-guarded-trader",
       "framework": "agentkit",
       "lane": "latest",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -22,7 +22,7 @@
       "held": [
         {
           "pkg": "@types/node",
-          "pinned": "22.20.4",
+          "pinned": "22.20.5",
           "latest": "26.6.4",
           "reason": "@types/node follows the template's runtime major (Node 22); 26.6.4 is for Node 26"
         }
@@ -103,6 +103,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -110,15 +114,15 @@
       "template": "base-guarded-trader",
       "framework": "agentkit",
       "lane": "pinned",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
         "@coinbase/agentkit": "0.10.4",
         "@satohub/kit": "0.1.1",
-        "@types/node": "22.20.4",
+        "@types/node": "22.20.5",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
         "viem": "2.38.3"
@@ -200,6 +204,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -232,8 +240,8 @@
       "template": "base-guarded-trader",
       "framework": "ai-sdk",
       "lane": "latest",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -243,14 +251,14 @@
         "ai": "7.0.127",
         "tsx": "4.23.15",
         "typescript": "7.0.2",
-        "viem": "2.57.2",
+        "viem": "2.57.3",
         "zod": "4.6.5"
       },
       "attribution": null,
       "held": [
         {
           "pkg": "@types/node",
-          "pinned": "22.20.4",
+          "pinned": "22.20.5",
           "latest": "26.6.4",
           "reason": "@types/node follows the template's runtime major (Node 22); 26.6.4 is for Node 26"
         },
@@ -297,6 +305,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -304,15 +316,15 @@
       "template": "base-guarded-trader",
       "framework": "ai-sdk",
       "lane": "pinned",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
         "@satohub/kit": "0.1.1",
-        "@types/node": "22.20.4",
-        "ai": "7.0.126",
+        "@types/node": "22.20.5",
+        "ai": "7.0.127",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
         "viem": "2.57.2",
@@ -354,6 +366,10 @@
         },
         {
           "date": "2026-10-04",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-05",
           "result": "green"
         }
       ]
@@ -388,8 +404,8 @@
       "template": "base-guarded-trader",
       "framework": "claude-agent-sdk",
       "lane": "latest",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -401,7 +417,7 @@
         "@types/node": "26.6.4",
         "tsx": "4.23.15",
         "typescript": "7.0.2",
-        "viem": "2.57.2",
+        "viem": "2.57.3",
         "zod": "4.6.5"
       },
       "attribution": null,
@@ -414,7 +430,7 @@
         },
         {
           "pkg": "@types/node",
-          "pinned": "22.20.4",
+          "pinned": "22.20.5",
           "latest": "26.6.4",
           "reason": "@types/node follows the template's runtime major (Node 22); 26.6.4 is for Node 26"
         },
@@ -501,6 +517,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -508,17 +528,17 @@
       "template": "base-guarded-trader",
       "framework": "claude-agent-sdk",
       "lane": "pinned",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
-        "@anthropic-ai/claude-agent-sdk": "0.3.286",
+        "@anthropic-ai/claude-agent-sdk": "0.3.289",
         "@anthropic-ai/sdk": "0.128.0",
         "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.1",
-        "@types/node": "22.20.4",
+        "@types/node": "22.20.5",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
         "viem": "2.57.2",
@@ -600,6 +620,10 @@
         },
         {
           "date": "2026-10-04",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-05",
           "result": "green"
         }
       ]
@@ -636,8 +660,8 @@
       "template": "base-guarded-trader",
       "framework": "openai-agents",
       "lane": "latest",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -647,14 +671,14 @@
         "@types/node": "26.6.4",
         "tsx": "4.23.15",
         "typescript": "7.0.2",
-        "viem": "2.57.2",
+        "viem": "2.57.3",
         "zod": "4.6.5"
       },
       "attribution": null,
       "held": [
         {
           "pkg": "@types/node",
-          "pinned": "22.20.4",
+          "pinned": "22.20.5",
           "latest": "26.6.4",
           "reason": "@types/node follows the template's runtime major (Node 22); 26.6.4 is for Node 26"
         },
@@ -741,6 +765,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -748,15 +776,15 @@
       "template": "base-guarded-trader",
       "framework": "openai-agents",
       "lane": "pinned",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
         "@openai/agents": "0.18.0",
         "@satohub/kit": "0.1.1",
-        "@types/node": "22.20.4",
+        "@types/node": "22.20.5",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
         "viem": "2.57.2",
@@ -838,6 +866,10 @@
         },
         {
           "date": "2026-10-04",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-05",
           "result": "green"
         }
       ]
@@ -916,8 +948,8 @@
       "template": "base-guarded-trader",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -926,13 +958,13 @@
         "@types/node": "26.6.4",
         "tsx": "4.23.15",
         "typescript": "7.0.2",
-        "viem": "2.57.2"
+        "viem": "2.57.3"
       },
       "attribution": null,
       "held": [
         {
           "pkg": "@types/node",
-          "pinned": "22.20.4",
+          "pinned": "22.20.5",
           "latest": "26.6.4",
           "reason": "@types/node follows the template's runtime major (Node 22); 26.6.4 is for Node 26"
         },
@@ -1019,6 +1051,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -1026,14 +1062,14 @@
       "template": "base-guarded-trader",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
         "@satohub/kit": "0.1.1",
-        "@types/node": "22.20.4",
+        "@types/node": "22.20.5",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
         "viem": "2.57.2"
@@ -1127,6 +1163,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -1158,8 +1198,8 @@
       "template": "persona-agent",
       "framework": "claude-agent-sdk",
       "lane": "latest",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1171,7 +1211,7 @@
         "@types/node": "26.6.4",
         "tsx": "4.23.15",
         "typescript": "7.0.2",
-        "viem": "2.57.2",
+        "viem": "2.57.3",
         "zod": "4.6.5"
       },
       "attribution": null,
@@ -1184,7 +1224,7 @@
         },
         {
           "pkg": "@types/node",
-          "pinned": "22.20.4",
+          "pinned": "22.20.5",
           "latest": "26.6.4",
           "reason": "@types/node follows the template's runtime major (Node 22); 26.6.4 is for Node 26"
         },
@@ -1271,6 +1311,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -1278,17 +1322,17 @@
       "template": "persona-agent",
       "framework": "claude-agent-sdk",
       "lane": "pinned",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
-        "@anthropic-ai/claude-agent-sdk": "0.3.286",
+        "@anthropic-ai/claude-agent-sdk": "0.3.289",
         "@anthropic-ai/sdk": "0.128.0",
         "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.1",
-        "@types/node": "22.20.4",
+        "@types/node": "22.20.5",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
         "viem": "2.57.2",
@@ -1371,6 +1415,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -1378,8 +1426,8 @@
       "template": "research-report",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1388,13 +1436,13 @@
         "@types/node": "26.6.4",
         "tsx": "4.23.15",
         "typescript": "7.0.2",
-        "viem": "2.57.2"
+        "viem": "2.57.3"
       },
       "attribution": null,
       "held": [
         {
           "pkg": "@types/node",
-          "pinned": "22.20.4",
+          "pinned": "22.20.5",
           "latest": "26.6.4",
           "reason": "@types/node follows the template's runtime major (Node 22); 26.6.4 is for Node 26"
         },
@@ -1481,6 +1529,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -1488,14 +1540,14 @@
       "template": "research-report",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
         "@satohub/kit": "0.1.1",
-        "@types/node": "22.20.4",
+        "@types/node": "22.20.5",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
         "viem": "2.57.2"
@@ -1585,6 +1637,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -1592,8 +1648,8 @@
       "template": "treasury-monitor",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1602,13 +1658,13 @@
         "@types/node": "26.6.4",
         "tsx": "4.23.15",
         "typescript": "7.0.2",
-        "viem": "2.57.2"
+        "viem": "2.57.3"
       },
       "attribution": null,
       "held": [
         {
           "pkg": "@types/node",
-          "pinned": "22.20.4",
+          "pinned": "22.20.5",
           "latest": "26.6.4",
           "reason": "@types/node follows the template's runtime major (Node 22); 26.6.4 is for Node 26"
         },
@@ -1695,6 +1751,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -1702,14 +1762,14 @@
       "template": "treasury-monitor",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
         "@satohub/kit": "0.1.1",
-        "@types/node": "22.20.4",
+        "@types/node": "22.20.5",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
         "viem": "2.57.2"
@@ -1798,6 +1858,10 @@
         },
         {
           "date": "2026-10-04",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-05",
           "result": "green"
         }
       ]
@@ -1830,8 +1894,8 @@
       "template": "x402-seller",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1840,13 +1904,13 @@
         "@types/node": "26.6.4",
         "tsx": "4.23.15",
         "typescript": "7.0.2",
-        "viem": "2.57.2"
+        "viem": "2.57.3"
       },
       "attribution": null,
       "held": [
         {
           "pkg": "@types/node",
-          "pinned": "22.20.4",
+          "pinned": "22.20.5",
           "latest": "26.6.4",
           "reason": "@types/node follows the template's runtime major (Node 22); 26.6.4 is for Node 26"
         },
@@ -1893,6 +1957,10 @@
         {
           "date": "2026-10-04",
           "result": "green"
+        },
+        {
+          "date": "2026-10-05",
+          "result": "green"
         }
       ]
     },
@@ -1900,14 +1968,14 @@
       "template": "x402-seller",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-04",
-      "last_green": "2026-10-04",
+      "last_run": "2026-10-05",
+      "last_green": "2026-10-05",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
         "@satohub/kit": "0.1.1",
-        "@types/node": "22.20.4",
+        "@types/node": "22.20.5",
         "tsx": "4.23.15",
         "typescript": "5.9.3",
         "viem": "2.57.2"
@@ -1948,6 +2016,10 @@
         },
         {
           "date": "2026-10-04",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-05",
           "result": "green"
         }
       ]
