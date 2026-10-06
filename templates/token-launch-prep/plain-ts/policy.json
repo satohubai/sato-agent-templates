@@ -1,0 +1,19 @@
+{
+  "schema": "sato.policy/v1",
+  "version": 1,
+  "network": "fork",
+  "allow_chains": ["base", "base-sepolia"],
+  "allow_tokens": ["base:0x4200000000000000000000000000000000000006"],
+  "allow_contracts": [],
+  "allow_recipients": [],
+  "allow_venues": [],
+  "max_usd_per_trade": 1,
+  "max_usd_per_day": 1,
+  "max_per_trade": {},
+  "max_slippage_bps": 0,
+  "intent_ttl_s": 60,
+  "unknown_verdict": "refuse",
+  "require_simulation": true,
+  "human_approval": true,
+  "scan": { "lookalike": "refuse", "token": "refuse_not_canonical", "payto_changed": "caution", "treasury_recipients": "allowlist_only", "hosted_check": false }
+}

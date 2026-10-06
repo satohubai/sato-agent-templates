@@ -1,0 +1,10 @@
+{
+  "_note": "A non-zero CREATE2 salt and a custom interface name; everything else default. The predicted token address differs from the default-salt deploy of the same token.",
+  "input": {
+    "name": "Example Token",
+    "symbol": "EXMPL",
+    "creator": "0x000000000000000000000000000000000000dEaD",
+    "salt": "0x00000000000000000000000000000000000000000000000000000000000000a1",
+    "interface_name": "my-launch-script"
+  }
+}

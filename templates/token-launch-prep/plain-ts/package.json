@@ -1,0 +1,27 @@
+{
+  "name": "token-launch-prep",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A plain TypeScript agent that prepares a Clanker v4 token deploy on Base as an UNSIGNED transaction, simulates it on a Base fork through the Sato Kit's tx.simulate, and writes the transaction, a decoded summary and the simulation result for you to sign with your own wallet. It holds no key, signs nothing and sends nothing.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/agent.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts",
+    "fork-check": "tsx scripts/fork-check.ts",
+    "testnet-check": "tsx scripts/testnet-check.ts"
+  },
+  "dependencies": {
+    "@satohub/kit": "file:vendor/satohub-kit-0.1.1.tgz",
+    "viem": "2.57.2"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

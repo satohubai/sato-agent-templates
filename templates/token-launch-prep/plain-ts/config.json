@@ -1,0 +1,7 @@
+{
+  "chain": "base",
+  "name": "Example Token",
+  "symbol": "EXMPL",
+  "creator": "0x000000000000000000000000000000000000dEaD",
+  "description": "An example deploy prepared by token-launch-prep. Replace every field, creator first, before you sign anything."
+}

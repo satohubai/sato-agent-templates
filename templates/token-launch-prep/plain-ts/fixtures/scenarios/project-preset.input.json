@@ -1,0 +1,15 @@
+{
+  "_note": "The project preset (five liquidity positions), an ipfs image, a 0.5% static fee on each side, rewards taken in WETH only, and a sender that differs from the creator.",
+  "input": {
+    "chain": "base",
+    "name": "Example Project",
+    "symbol": "EXPRJ",
+    "creator": "0x1111111111111111111111111111111111111111",
+    "sender": "0x2222222222222222222222222222222222222222",
+    "image": "ipfs://bafkreigh2akiscaildcqabsyg3dfr6chu3fgpregiymsck7e7aqa4s52zy",
+    "description": "Scenario: the project pool preset.",
+    "pool_preset": "project",
+    "fees": { "clanker_fee_bps": 50, "paired_fee_bps": 50 },
+    "reward_token": "Paired"
+  }
+}
