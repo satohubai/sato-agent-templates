@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/satohubai/sato-agent-templates/templates/token-launch-prep/plain-ts/schemas/output.json",
+  "title": "token-launch-prep report (out/report.json)",
+  "description": "An unsigned Clanker v4 deployToken transaction, a summary decoded from its calldata, and the simulation result. `signed` and `broadcast` are always false.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["template", "template_version", "generated_at", "source_kind", "signed", "broadcast", "unsigned_tx", "summary", "simulation", "next_steps", "caveat", "sources"],
+  "properties": {
+    "template": { "const": "token-launch-prep" },
+    "template_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "generated_at": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T" },
+    "source_kind": { "enum": ["fixture", "fork", "rpc"] },
+    "signed": { "const": false },
+    "broadcast": { "const": false },
+    "unsigned_tx": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["chain", "chain_id", "to", "data", "value", "from"],
+      "properties": {
+        "chain": { "enum": ["base", "base-sepolia"] },
+        "chain_id": { "enum": [8453, 84532] },
+        "to": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "data": { "type": "string", "pattern": "^0xdf40224a[0-9a-f]*$" },
+        "value": { "const": "0" },
+        "from": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["venue", "function", "chain", "chain_id", "factory", "token", "rewards", "pool", "locker", "fee_locker", "mev_module", "sniper_fee", "extensions", "value_wei", "lines"],
+      "properties": {
+        "venue": { "const": "Clanker v4" },
+        "function": { "const": "deployToken" },
+        "chain": { "enum": ["base", "base-sepolia"] },
+        "chain_id": { "enum": [8453, 84532] },
+        "factory": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "token": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "symbol", "image", "metadata", "context", "decimals", "total_supply_base_units", "admin", "salt"],
+          "properties": {
+            "name": { "type": "string", "minLength": 1 },
+            "symbol": { "type": "string", "minLength": 1 },
+            "image": { "type": "string" },
+            "metadata": { "type": "string" },
+            "context": { "type": "string", "minLength": 1 },
+            "decimals": { "const": 18 },
+            "total_supply_base_units": { "const": "100000000000000000000000000000" },
+            "admin": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+            "salt": { "type": "string", "pattern": "^0x[0-9a-f]{64}$" }
+          }
+        },
+        "rewards": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["recipients", "total_bps"],
+          "properties": {
+            "recipients": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["recipient", "admin", "bps", "token"],
+                "properties": {
+                  "recipient": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+                  "admin": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+                  "bps": { "type": "integer", "minimum": 0, "maximum": 10000 },
+                  "token": { "enum": ["Both", "Paired", "Clanker"] }
+                }
+              }
+            },
+            "total_bps": { "const": 10000 }
+          }
+        },
+        "pool": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["paired_token", "paired_token_symbol", "hook", "start_tick", "tick_spacing", "preset", "positions", "fee"],
+          "properties": {
+            "paired_token": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+            "paired_token_symbol": { "const": "WETH" },
+            "hook": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+            "start_tick": { "type": "integer" },
+            "tick_spacing": { "type": "integer" },
+            "preset": { "enum": ["standard", "project"] },
+            "positions": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["tick_lower", "tick_upper", "position_bps"],
+                "properties": {
+                  "tick_lower": { "type": "integer" },
+                  "tick_upper": { "type": "integer" },
+                  "position_bps": { "type": "integer", "minimum": 0, "maximum": 10000 }
+                }
+              }
+            },
+            "fee": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["type", "clanker_fee_bps", "paired_fee_bps"],
+              "properties": {
+                "type": { "const": "static" },
+                "clanker_fee_bps": { "type": "integer", "minimum": 0, "maximum": 2000 },
+                "paired_fee_bps": { "type": "integer", "minimum": 0, "maximum": 2000 }
+              }
+            }
+          }
+        },
+        "locker": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "fee_locker": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "mev_module": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "sniper_fee": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["starting_fee_unibps", "ending_fee_unibps", "seconds_to_decay"],
+          "properties": {
+            "starting_fee_unibps": { "type": "integer" },
+            "ending_fee_unibps": { "type": "integer" },
+            "seconds_to_decay": { "type": "integer" }
+          }
+        },
+        "extensions": { "type": "array", "items": { "type": "object" } },
+        "value_wei": { "const": "0" },
+        "lines": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    },
+    "simulation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ok", "method", "block", "gas_estimate", "error", "as_of", "simulated_from", "predicted_token_address", "revert_name", "note"],
+      "properties": {
+        "ok": { "type": "boolean" },
+        "method": { "type": "string" },
+        "block": { "type": ["string", "null"], "pattern": "^[0-9]+$" },
+        "gas_estimate": { "type": ["string", "null"], "pattern": "^[0-9]+$" },
+        "error": { "type": ["string", "null"] },
+        "as_of": { "type": "string" },
+        "simulated_from": { "type": "string", "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "predicted_token_address": { "type": ["string", "null"], "pattern": "^0x[0-9a-fA-F]{40}$" },
+        "revert_name": { "type": ["string", "null"] },
+        "note": { "type": "string", "minLength": 1 }
+      }
+    },
+    "next_steps": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "caveat": { "type": "string", "minLength": 1 },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["fact", "url"],
+        "properties": {
+          "fact": { "type": "string" },
+          "url": { "type": "string", "pattern": "^https://" }
+        }
+      }
+    }
+  }
+}

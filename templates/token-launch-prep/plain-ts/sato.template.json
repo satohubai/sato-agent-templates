@@ -1,0 +1,77 @@
+{
+  "schema": "sato.template/v1",
+  "id": "token-launch-prep",
+  "version": "0.1.0",
+  "title": "Token launch prep: Clanker v4 on Base (plain TypeScript)",
+  "summary": "Prepares a Clanker v4 token deploy on Base as an unsigned transaction (to, data, value 0, chain id), decodes its calldata into a readable summary, and simulates it on a Base fork through the Sato Kit's tx.simulate, reporting the gas estimate, the token address the factory reports, or the revert. The creator's address is the token admin and the only reward recipient, with all 10000 bps. You sign the transaction in your own wallet if you choose to launch. Fixture mode needs no network and no key. It holds no key, signs nothing and sends nothing in any mode.",
+  "runtime": { "kind": "node", "version": "22", "entrypoint": "src/agent.ts", "package_manager": "npm" },
+  "io_schemas": { "input": "schemas/input.json", "output": "schemas/output.json" },
+  "harness": {
+    "fixture_command": ["npm", "start", "--", "--mode", "fixture"],
+    "fixtures_dir": "fixtures",
+    "output_dir": "out",
+    "max_output_bytes": 262144
+  },
+  "model_policy": null,
+  "declared_secret_names": ["ANVIL_RPC_URL", "SATO_RPC_URL_BASE"],
+  "capabilities": ["prepare:evm-unsigned-tx", "simulate:evm-tx", "read:evm-contract"],
+  "requested_permissions": ["network:rpc-read"],
+  "network": { "install": "registry-only", "test": "none" },
+  "tests": [
+    {
+      "id": "platform.fixtures",
+      "kind": "package",
+      "description": "The platform runs the fixture command over the shipped RPC recordings (no network, no key) and checks out/report.json against schemas/output.json: exit 0, signed and broadcast false, value 0, the creator alone holding 10000 bps, and a passing simulation at the recorded block with the recorded token address."
+    },
+    {
+      "id": "package.own",
+      "kind": "package",
+      "advisory": true,
+      "command": ["npm", "test"],
+      "description": "The template's own tests. Recorded, never the verdict."
+    },
+    {
+      "id": "unit.fork-check",
+      "kind": "unit",
+      "description": "Nightly in satohubai/sato-agent-templates: an anvil fork of Base at block 51800000; contract code at the Clanker v4 contracts, config.json and every scenario simulated through the kit's tx.simulate with the expected token addresses, and a deploy naming an unenabled hook reported as a revert. Holds no key; nothing is sent."
+    },
+    {
+      "id": "unit.testnet-check",
+      "kind": "unit",
+      "description": "Weekly in satohubai/sato-agent-templates: against a public Base Sepolia RPC with no key, contract code at the Clanker v4 contracts and a deploy of config.json (fresh salt) simulated through the kit. Never signs, never broadcasts."
+    }
+  ],
+  "licenses": [
+    { "name": "token-launch-prep", "license": "MIT", "url": "https://github.com/satohubai/sato-agent-templates" },
+    { "name": "@satohub/kit", "license": "MIT", "url": "https://github.com/satohubai/sato-hub-integrations" },
+    { "name": "viem", "license": "MIT", "url": "https://github.com/wevm/viem" },
+    { "name": "clanker-sdk (addresses, ABI fragments and defaults copied; not a dependency)", "license": "MIT", "url": "https://github.com/clanker-devco/clanker-sdk" }
+  ],
+  "provenance": {
+    "authored_by": "sato-hub",
+    "first_party": true,
+    "notes": "Deterministic over fixtures. Clanker v4 addresses, ABI fragments and defaults are copied from clanker-sdk 4.2.19 rather than depending on it, because the SDK includes a signing path and this template has none. Fork and rpc modes are opt-in and never run in the platform's offline test phase."
+  },
+  "template": {
+    "framework": "plain-ts",
+    "intents": ["launch"],
+    "chains": ["base", "base-sepolia"],
+    "networks": ["fork", "testnet"],
+    "default_network": "fork",
+    "slots_filled": {},
+    "swappable": [],
+    "policy_defaults": {
+      "network": "fork",
+      "allow_chains": ["base", "base-sepolia"],
+      "allow_tokens": ["base:0x4200000000000000000000000000000000000006"],
+      "max_usd_per_trade": 1,
+      "max_usd_per_day": 1,
+      "max_slippage_bps": 0,
+      "unknown_verdict": "refuse",
+      "intent_ttl_s": 60,
+      "human_approval": true,
+      "scan": { "lookalike": "refuse", "token": "refuse_not_canonical", "payto_changed": "caution", "treasury_recipients": "allowlist_only", "hosted_check": false }
+    },
+    "upstream": { "@satohub/kit": "0.1.1", "viem": "2.57.2", "tsx": "4.23.15", "typescript": "5.9.3" }
+  }
+}
