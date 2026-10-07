@@ -35,7 +35,7 @@ test("the scripted model refuses an over-cap swap through the kit's pre-flight",
   const w = new Wallet(rt, parseConfig(JSON.parse(readFileSync("config.json", "utf8"))));
   const out = await new ScriptedModel().respond({ character: loadCharacter("character.json"), memories: [], message: { connector: "discord", chat_id: "c", user: "u", text: "swap 1000 USDC to WETH" }, wallet: (r) => w.run(r) });
   assert.equal(out.wallet[0].policy_ok, false);
-  assert.match(out.reply, /REFUSED rule=max_usd_per_trade limit=25 observed=1000/);
+  assert.match(out.reply, new RegExp(`REFUSED rule=max_usd_per_trade limit=${loadPolicy("policy.json").max_usd_per_trade} observed=1000`));
 });
 
 test("the live model offers quote and prepare only", () => {

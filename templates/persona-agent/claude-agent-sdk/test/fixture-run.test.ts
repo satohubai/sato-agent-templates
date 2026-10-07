@@ -14,7 +14,7 @@ test("npm start -- --mode fixture prints replies and one named refusal, with no 
   assert.equal(r.status, 0, text);
   assert.match(text, /\[telegram\] Mira: gm ada/);
   assert.match(text, /\[discord\] Mira: Here is what I have: "my agent watches treasury balances/);
-  assert.match(text, /REFUSED rule=max_usd_per_trade limit=25 observed=1000/);
+  assert.match(text, new RegExp(`REFUSED rule=max_usd_per_trade limit=${JSON.parse(readFileSync("policy.json", "utf8")).max_usd_per_trade} observed=1000`));
   assert.match(text, /enforcement lives in the signer/);
   const report = JSON.parse(readFileSync(join(out, "report.json"), "utf8"));
   assert.equal(report.schema, "persona-agent.report/v1");

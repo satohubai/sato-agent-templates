@@ -13,6 +13,7 @@ import type { PreparedIntent } from "@satohub/kit";
 import { parseArgs, UsageError } from "../src/config.js";
 import { AttachUsageError, handOff, parseAttachArgs, runAttach, SATO_OS_AGENT_FILE } from "../src/sato-os.js";
 import { FIXTURE_CLOCK_MS, FIXTURE_TAKER } from "../src/runtime.js";
+import { recordingsPolicy } from "./goal-bound.js";
 
 const TOKEN = "sos_test_token_not_a_real_secret";
 
@@ -104,7 +105,7 @@ test("attach stores the token; sato-os mode proposes the allowed intent and neve
     assert.ok(existsSync(join(satoDir, SATO_OS_AGENT_FILE)));
 
     const out = join(dir, "out");
-    const r = await run(["--mode", "sato-os", "--data", "fixture", "--sato-dir", satoDir, "--out", out]);
+    const r = await run(["--mode", "sato-os", "--data", "fixture", "--sato-dir", satoDir, "--out", out, "--policy", recordingsPolicy()]);
     assert.equal(r.code, 0, r.text);
     assert.ok(!r.text.includes(TOKEN), "the token is never printed");
     assert.match(r.text, /REFUSED rule=max_usd_per_trade/);

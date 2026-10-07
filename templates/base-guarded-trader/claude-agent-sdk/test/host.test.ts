@@ -11,9 +11,13 @@ import { liveOptions, runLive } from "../src/live.js";
 import { DEFAULT_MODEL_ID } from "../src/config.js";
 import { MockModel, scriptedNext } from "../src/model.js";
 import { TOKENS } from "../src/tokens.js";
+import { recordingsPolicy } from "./goal-bound.js";
+
+// These tests replay the recordings' 10 USDC trade; see recordingsPolicy() in goal-bound.ts.
+const RECORDINGS_POLICY = recordingsPolicy();
 
 async function fixtureRuntime(): Promise<Runtime> {
-  const rt = await buildRuntime({ mode: "fixture", policy: loadPolicy("policy.json"), fixturesDir: "fixtures", env: {} });
+  const rt = await buildRuntime({ mode: "fixture", policy: loadPolicy(RECORDINGS_POLICY), fixturesDir: "fixtures", env: {} });
   rt.usd.eth_usd = 2695.0463635;
   return rt;
 }
@@ -86,7 +90,7 @@ test("the scripted turns quote, prepare, refuse the over-cap intent by name, and
   if (over && !over.ok) {
     assert.equal(over.error.code, "policy_refused");
     const r = (over.error.refusals ?? []) as Array<{ rule: string; limit: string; observed: string }>;
-    assert.ok(r.some((x) => x.rule === "max_usd_per_trade" && x.limit === "25" && x.observed === "1000"));
+    assert.ok(r.some((x) => x.rule === "max_usd_per_trade" && x.limit === String(loadPolicy(RECORDINGS_POLICY).max_usd_per_trade) && x.observed === "1000"));
   }
   assert.equal(done[4].approval.approved, false);
   assert.equal(done[4].envelope, null);
