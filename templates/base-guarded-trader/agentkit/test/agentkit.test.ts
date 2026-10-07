@@ -60,7 +60,7 @@ test("the over-cap swap_prepare comes back refused with rule, limit and observed
   if (env.ok) return;
   assert.equal(env.error.code, "policy_refused");
   const r = env.error.refusals!.find((x) => x.rule === "max_usd_per_trade")!;
-  assert.equal(r.limit, "25");
+  assert.equal(r.limit, String(policy.max_usd_per_trade));
   assert.equal(r.observed, "1000");
   assert.ok(env.intent?.intent_id.startsWith("si_"));
 });

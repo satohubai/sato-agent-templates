@@ -25,19 +25,31 @@ test("usdValue: USDC at 1.00, WETH at the feed, anything else unknown", () => {
   assert.equal(usdValue("base", "0x0000000000000000000000000000000000000001", "1", { eth_usd: 1 }), null);
 });
 
-test("the priced pre-flight passes 10 USDC and refuses 1000 USDC by max_usd_per_trade", () => {
+// The caps come from policy.json, not from the shipped 25 / 100: a repo generated from
+// a goal ("max $50 per trade") holds the user's caps. Amounts are picked from them.
+const TRADE_CAP = policy.max_usd_per_trade!;
+const DAY_CAP = policy.max_usd_per_day!;
+const usdcUnits = (usd: number) => Math.round(usd * 1e6).toString();
+/** 10 USDC at the shipped caps; half the tighter cap when the user's caps are lower. */
+const UNDER = Math.min(10, Math.min(TRADE_CAP, DAY_CAP) / 2);
+/** 40x the trade cap (1000 USDC at the shipped 25), a whole number of USDC. */
+const OVER = Math.ceil(TRADE_CAP) * 40;
+
+test("the priced pre-flight passes a small USDC amount and refuses 40x the cap by max_usd_per_trade", () => {
   const ev = pricedPreflight(() => ({ eth_usd: 2000 }), new SpendLedger(() => 0));
-  assert.deepEqual(ev(policy, facts("10000000")).refusals, []);
-  const r = ev(policy, facts("1000000000")).refusals.find((x) => x.rule === "max_usd_per_trade");
+  assert.deepEqual(ev(policy, facts(usdcUnits(UNDER))).refusals, []);
+  const r = ev(policy, facts(usdcUnits(OVER))).refusals.find((x) => x.rule === "max_usd_per_trade");
   assert.ok(r);
-  assert.equal(r.limit, "25");
-  assert.equal(r.observed, "1000");
+  assert.equal(r.limit, String(TRADE_CAP));
+  assert.equal(r.observed, String(OVER));
 });
 
 test("a venue's own USD value is kept, and the day's spend counts", () => {
   const ledger = new SpendLedger(() => 0);
   const ev = pricedPreflight(() => ({ eth_usd: null }), ledger);
-  assert.equal(ev(policy, facts("10000000", 30)).refusals[0]?.rule, "max_usd_per_trade");
-  ledger.add(95);
-  assert.ok(ev(policy, facts("10000000")).refusals.some((x) => x.rule === "max_usd_per_day"));
+  // The venue says the trade is worth more than the trade cap: that cap refuses it.
+  assert.ok(ev(policy, facts(usdcUnits(UNDER), TRADE_CAP + 5)).refusals.some((x) => x.rule === "max_usd_per_trade"));
+  // Spend already at the day cap: any further trade goes over max_usd_per_day.
+  ledger.add(DAY_CAP);
+  assert.ok(ev(policy, facts(usdcUnits(UNDER))).refusals.some((x) => x.rule === "max_usd_per_day"));
 });

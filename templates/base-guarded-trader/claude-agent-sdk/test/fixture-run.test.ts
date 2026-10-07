@@ -6,6 +6,7 @@ import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { GENERATED } from "./goal-bound.js";
 
 test("npm start -- --mode fixture exits 0 and shows a named refusal", () => {
   const out = mkdtempSync(join(tmpdir(), "bgt-"));
@@ -19,11 +20,17 @@ test("npm start -- --mode fixture exits 0 and shows a named refusal", () => {
   assert.equal(demo.policy_ok, false);
   assert.ok(demo.refusals.every((x: { rule: string; limit: string; observed: string }) => x.rule && x.limit && x.observed));
   assert.equal(report.executed, false);
+  // The agent asks to execute only once its own intent passed the pre-flight. Under a user's cap
+  // below its 10 USDC trade (a generated repo) that intent is refused, so the run stops short of it.
+  const own = report.intents.find((i: { demo_refusal: boolean }) => !i.demo_refusal);
+  if (!GENERATED) assert.equal(own.policy_ok, true);
   assert.equal(report.model, "scripted-turns/1");
   assert.equal(report.host.framework, "claude-agent-sdk");
   assert.equal(report.host.server, "sato-kit");
-  const exec = report.host.approvals.find((a: { tool: string }) => a.tool === "execute");
-  assert.equal(exec.hook, "ask");
-  assert.equal(exec.approved, false);
+  if (own.policy_ok) {
+    const exec = report.host.approvals.find((a: { tool: string }) => a.tool === "execute");
+    assert.equal(exec.hook, "ask");
+    assert.equal(exec.approved, false);
+  }
   assert.match(text, /no model and no Claude Code process is started/);
 });
