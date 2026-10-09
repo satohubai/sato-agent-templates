@@ -9,6 +9,9 @@ import { kitPolicy, loadPolicy } from "../src/policy.js";
 import { ledgerPreflight, SpendLedger } from "../src/spend.js";
 import { lamportsToSol, solToLamports, usdcToUsd, WSOL_MINT } from "../src/tokens.js";
 import { decide, impliedPriceUsd, loadState, saveState } from "../src/watch.js";
+import { templatePolicyFile } from "./helpers.js";
+
+const DEFAULTS = templatePolicyFile();
 
 // ── arguments: there is no way to sign from here ─────────────────────────────
 
@@ -82,11 +85,12 @@ test("tokens: SOL amounts convert exactly and round-trip", () => {
 
 // ── policy.json ──────────────────────────────────────────────────────────────
 
-test("policy: the shipped file is valid sato.policy/v1, defaults to fork and carries a per-swap and a daily cap", () => {
+test("policy: policy.json is valid sato.policy/v1 and the template defaults carry a per-swap and a daily cap", () => {
   const raw = JSON.parse(readFileSync("policy.json", "utf8"));
   const parsed = parsePolicyFile(raw);
   assert.ok(parsed.ok, parsed.ok ? "" : parsed.error);
-  const p = loadPolicy("policy.json", "fixture");
+  // The template's own defaults (a repo made from it may carry the caps from its goal instead).
+  const p = loadPolicy(DEFAULTS, "fixture");
   assert.equal(p.network, "fork");
   assert.deepEqual(p.allow_chains, ["solana"]);
   assert.deepEqual(p.allow_tokens, [`solana:${WSOL_MINT}`]);
@@ -97,7 +101,7 @@ test("policy: the shipped file is valid sato.policy/v1, defaults to fork and car
 });
 
 test("policy: live mode will not start on a fork policy; the kit is told mainnet either way", () => {
-  assert.throws(() => loadPolicy("policy.json", "live"), /says "network": "fork"/);
+  assert.throws(() => loadPolicy(DEFAULTS, "live"), /says "network": "fork"/);
   const dir = mkdtempSync(join(tmpdir(), "sgs-pol-"));
   const f = (over: object) => {
     const file = join(dir, `p${Math.random()}.json`);
@@ -106,7 +110,7 @@ test("policy: live mode will not start on a fork policy; the kit is told mainnet
   };
   assert.equal(loadPolicy(f({ network: "mainnet" }), "live").network, "mainnet");
   assert.throws(() => loadPolicy(f({ network: "testnet" }), "fixture"), /no Solana testnet/);
-  assert.equal(kitPolicy(loadPolicy("policy.json", "fixture")).network, "mainnet");
+  assert.equal(kitPolicy(loadPolicy(DEFAULTS, "fixture")).network, "mainnet");
 });
 
 test("policy: a missing cap, an unknown_verdict of allow, or a policy that does not name SOL is refused", () => {
@@ -176,7 +180,7 @@ test("spend: a ledger file that cannot be read makes the total unknown, and the 
   const l = new SpendLedger(() => 0, file);
   assert.equal(l.spentToday(), null);
   assert.match(l.problem() ?? "", /could not be read/);
-  const policy = kitPolicy(loadPolicy("policy.json", "fixture"));
+  const policy = kitPolicy(loadPolicy(DEFAULTS, "fixture"));
   const facts = { action: "solana.swap.prepare", chain: "solana", network: "mainnet", token: WSOL_MINT, token_amount_base_units: "100000000", usd_value: 10, usd_spent_today: 0, venue: "sato", slippage_bps: 50, simulation: { ok: true, method: "simulateTransaction", block: "1", gas_estimate: "1", error: null, as_of: "x" }, ttl_s: 120 } as never;
   const res = ledgerPreflight(l)(policy, facts);
   assert.equal(res.ok, false);
@@ -186,7 +190,7 @@ test("spend: a ledger file that cannot be read makes the total unknown, and the 
 test("spend: the larger of the kit's executed total and this agent's prepared total counts", () => {
   const l = new SpendLedger(() => 0);
   l.add(12);
-  const policy = kitPolicy(loadPolicy("policy.json", "fixture"));
+  const policy = kitPolicy(loadPolicy(DEFAULTS, "fixture"));
   const facts = (spent: number | null) =>
     ({ action: "solana.swap.prepare", chain: "solana", network: "mainnet", token: WSOL_MINT, token_amount_base_units: "100000000", usd_value: 10, usd_spent_today: spent, venue: "sato", slippage_bps: 50, simulation: { ok: true, method: "simulateTransaction", block: "1", gas_estimate: "1", error: null, as_of: "x" }, ttl_s: 120 }) as never;
   const a = ledgerPreflight(l)(policy, facts(0));

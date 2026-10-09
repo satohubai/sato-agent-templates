@@ -61,7 +61,7 @@ export type Tick = {
 
 /** The cap checks that run in fixture mode, so the pre-flight's refusals are visible without waiting for a drop. */
 const CAP_CHECKS = {
-  again: "cap check: the same swap again today (the daily cap)",
+  again: "cap check: the same swap once the day's room is used up (the daily cap)",
   oversize: "cap check: an oversized swap (the per-swap cap)",
 } as const;
 
@@ -124,7 +124,7 @@ export async function runTick(rt: Runtime, cfg: AgentConfig, args: Args, scenari
   const ideas: Idea[] = [];
   if (ownRuns && !skipped) ideas.push({ label: `swap ${cfg.sell_sol} SOL to USDC`, reason: decision.why, lamports: sell, demo: false, kind: "own" });
   if (rt.mode === "fixture" || args.record) {
-    ideas.push({ label: CAP_CHECKS.again, reason: "the same swap a second time in one day; the daily cap should refuse it once the first is counted", lamports: sell, demo: true, kind: "again" });
+    ideas.push({ label: CAP_CHECKS.again, reason: "the same swap after earlier swaps have used up the day's room in policy.json; the daily cap must refuse it", lamports: sell, demo: true, kind: "again" });
     ideas.push({ label: CAP_CHECKS.oversize, reason: `${scenario!.over_size_sol} SOL, far over the per-swap cap; the pre-flight must refuse it`, lamports: solToLamports(scenario!.over_size_sol), demo: true, kind: "oversize" });
   }
 
@@ -139,6 +139,15 @@ export async function runTick(rt: Runtime, cfg: AgentConfig, args: Args, scenari
   for (const idea of ideas) {
     console.log(`\n— ${idea.label}`);
     line("why", idea.reason);
+    if (idea.kind === "again") {
+      // The recordings hold one swap size, so the day's room is used up as if earlier swaps had done it: top the
+      // in-memory total up to $1 under whatever daily cap policy.json carries. Fixture and --record runs only.
+      const cap = rt.policy.max_usd_per_day ?? 0;
+      const spent = rt.ledger.spentToday() ?? 0;
+      const target = Math.max(0, cap - 1);
+      if (spent < target) rt.ledger.add(target - spent);
+      line("day so far", `${(rt.ledger.spentToday() ?? 0).toFixed(2)} USD (the first swap plus a stand-in for earlier ones) of the ${cap} USD daily cap`);
+    }
     const input = swapInput(rt, cfg, idea.lamports, cfg.venue);
 
     const quote = await rt.kit.read<SwapQuoteOutput>(ACTIONS.swapQuote, input);
@@ -159,6 +168,9 @@ export async function runTick(rt: Runtime, cfg: AgentConfig, args: Args, scenari
       continue;
     }
     printPrepared(prepared);
+    if (idea.kind === "own" && rt.mode === "fixture" && !prepared.policy.ok && prepared.policy.refusals.some((r) => r.rule === "max_usd_per_trade" || r.rule === "max_usd_per_day")) {
+      line("note", "fixture mode replays one recorded swap size (0.1 SOL). Your caps in policy.json are below its value, so it is refused. Try a smaller sell_sol with --mode live.");
+    }
 
     let file: string | null = null;
     if (!idea.demo && prepared.policy.ok && prepared.unsigned.kind === "solana_tx") {
@@ -189,8 +201,8 @@ export async function runTick(rt: Runtime, cfg: AgentConfig, args: Args, scenari
   }
 
   let failure: string | null = null;
-  if ((rt.mode === "fixture" || args.record) && !oversizeRefused) failure = "the oversized cap check was not refused: the pre-flight is not doing its job";
-  else if ((rt.mode === "fixture" || args.record) && ownOk && !againRefused) failure = "the same swap a second time today was not refused by the daily cap: the day's total is not being counted";
+  if ((rt.mode === "fixture" || args.record) && !oversizeRefused) failure = `the oversized cap check (${scenario!.over_size_sol} SOL) was not refused. Either policy.json now allows a swap that large, or the pre-flight is not doing its job`;
+  else if ((rt.mode === "fixture" || args.record) && !againRefused) failure = "the swap was not refused once the day's room was used up: the daily cap is not being counted";
   return { watch, intents: reports, handoff, failure };
 }
 

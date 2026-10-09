@@ -44,7 +44,7 @@ Exit codes: 0 when the run finished (a swap prepared, or none was due), 1 when a
 5. **Prepare and simulate.** `solana.swap.prepare` asks Jupiter for the unsigned swap transaction, the kit simulates it (`simulateTransaction`, no signature needed), and runs the policy pre-flight. A swap whose simulation fails, or could not run, is refused. The run prints the intent: id, one-sentence summary, simulation, fee disclosure and every refusal as `REFUSED rule=<id> limit=<value> observed=<value>`.
 6. **Stop.** A swap that cleared the pre-flight is written to `out/unsigned-<n>.json` with its simulation and policy result. The report is `out/report.json` (shape in `schemas/output.json`). It always says `"signed": false, "broadcast": false`.
 
-In fixture mode the run also makes two cap checks, so you can see the pre-flight refuse without waiting for a drop: the same swap a second time the same day (the daily cap) and a 10 SOL swap (the per-swap caps). The run exits 1 if either is not refused. Neither is ever written out to sign.
+In fixture mode the run also makes two cap checks, so you can see the pre-flight refuse without waiting for a drop: the same swap once the day's room is used up (the in-memory total is topped up to 1 USD under the daily cap in your `policy.json`, as if earlier swaps had used it) and a 10 SOL swap (the per-swap caps). They follow whatever caps `policy.json` carries. The run exits 1 if either is not refused. Neither is ever written out to sign. If the caps are set below the 0.1 SOL swap the recordings hold, the swap itself is refused too; fixture mode replays one swap size, so use `--mode live` to try another.
 
 ## Mainnet
 

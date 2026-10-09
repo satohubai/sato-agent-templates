@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const tpl = JSON.parse(readFileSync("sato.template.json", "utf8"));
@@ -21,7 +21,11 @@ test("sato.template.json upstream pins match the lockfile", { skip: PIN_CHECK_SK
   for (const [name, v] of Object.entries(tpl.template.upstream as Record<string, string>)) assert.equal(lock.packages[`node_modules/${name}`]?.version, v, name);
 });
 
-test("sato.template.json policy_defaults match policy.json", () => {
+// A repo made by create-sato-agent carries sato.create.json, and its policy.json holds the caps from the
+// builder's goal; the template's defaults stay in sato.template.json.
+const GENERATED = existsSync("sato.create.json") ? "generated repo: policy.json carries the caps from the goal; the defaults live in sato.template.json" : false;
+
+test("sato.template.json policy_defaults match policy.json", { skip: GENERATED }, () => {
   const policy = JSON.parse(readFileSync("policy.json", "utf8"));
   for (const [k, v] of Object.entries(tpl.template.policy_defaults)) assert.deepEqual(policy[k], v, k);
 });
@@ -39,7 +43,6 @@ test("the manifest: swap intent, Solana, fork by default, never mainnet by defau
   assert.equal(tpl.template.default_network, "fork");
   assert.equal(tpl.template.policy_defaults.network, "fork");
   assert.deepEqual(tpl.template.networks, ["fork", "mainnet"]);
-  assert.equal(JSON.parse(readFileSync("policy.json", "utf8")).network, "fork");
 });
 
 test("@solana/kit is pinned at 8 here and nowhere in the lock at another major", () => {

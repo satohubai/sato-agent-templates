@@ -13,6 +13,9 @@ import { parseArgs, parseConfig, type AgentConfig } from "../src/config.js";
 import { fixtureFetch, fixtureSolanaRpc, loadHttpFixtures, loadRpcFixtures } from "../src/fixtures.js";
 import { loadPolicy } from "../src/policy.js";
 import { buildRuntime, FIXTURE_CLOCK_MS, FIXTURE_WALLET } from "../src/runtime.js";
+import { templatePolicyFile } from "./helpers.js";
+
+const POLICY = templatePolicyFile();
 
 const cfg = (over: Record<string, unknown> = {}): AgentConfig => parseConfig({ ...JSON.parse(readFileSync("config.json", "utf8")), ...over });
 const recorded = () => fixtureSolanaRpc(loadRpcFixtures("fixtures"));
@@ -35,8 +38,8 @@ function spyRpc(over: Partial<Record<string, (params: readonly unknown[]) => unk
 }
 
 async function fixtureRun(rpc: SolanaRpc, config = cfg(), out = mkdtempSync(join(tmpdir(), "sgs-tick-"))) {
-  const args = parseArgs(["--out", out]);
-  const rt = await buildRuntime({ mode: "fixture", policy: loadPolicy("policy.json", "fixture"), fixturesDir: "fixtures", stateDir: join(out, "state"), env: {}, wallet: null, inject: { rpc } });
+  const args = parseArgs(["--out", out, "--policy", POLICY]);
+  const rt = await buildRuntime({ mode: "fixture", policy: loadPolicy(POLICY, "fixture"), fixturesDir: "fixtures", stateDir: join(out, "state"), env: {}, wallet: null, inject: { rpc } });
   const tick = await runTick(rt, config, args, loadScenario());
   return { tick, out, rt };
 }
@@ -68,14 +71,14 @@ test("a swap is simulated through simulateTransaction before anything is handed 
   assert.match(file.note, /holds no key/);
 });
 
-test("the same swap twice in one day: the second is refused by max_usd_per_day with its limit and observed value", async () => {
+test("the same swap once the day's room is used up: refused by max_usd_per_day with its limit and observed value", async () => {
   const { tick } = await fixtureRun(spyRpc().rpc);
   const again = tick.intents[1];
   assert.equal(again.policy_ok, false);
   const r = again.refusals.find((x) => x.rule === "max_usd_per_day")!;
   assert.ok(r, "max_usd_per_day refused it");
   assert.equal(r.limit, "20");
-  assert.ok(Number(r.observed) > 20 && Number(r.observed) < 25, `observed ${r.observed}`);
+  assert.ok(Number(r.observed) > 20, `observed ${r.observed}`);
   assert.equal(again.handoff_file, null, "a refused swap is never written out to sign");
 });
 
@@ -135,7 +138,7 @@ test("the day's total survives a restart, resets on a new UTC day, and a swap th
   const out = mkdtempSync(join(tmpdir(), "sgs-out-"));
   const config = cfg({ reference_price_usd: 120 });
   const args = parseArgs(["--mode", "live", "--accept-mainnet-risk", "--out", out, "--state-dir", state]);
-  const policy = loadPolicy("policy.json", "fixture"); // the file says fork; the live-mode gate is tested in policy.test.ts
+  const policy = loadPolicy(POLICY, "fixture"); // the file says fork; the live-mode gate is tested in policy.test.ts
   const make = (clock: number) =>
     buildRuntime({
       mode: "live",
@@ -170,7 +173,7 @@ test("live mode keeps the highest price seen, and re-arms from the swap's price 
   const state = mkdtempSync(join(tmpdir(), "sgs-state-"));
   const out = mkdtempSync(join(tmpdir(), "sgs-out-"));
   const args = parseArgs(["--mode", "live", "--accept-mainnet-risk", "--out", out, "--state-dir", state]);
-  const make = () => buildRuntime({ mode: "live", policy: loadPolicy("policy.json", "fixture"), fixturesDir: "fixtures", stateDir: state, env: {}, wallet: FIXTURE_WALLET, inject: { rpc: recorded(), fetch: fixtureFetch(loadHttpFixtures("fixtures")), clock: () => FIXTURE_CLOCK_MS } });
+  const make = () => buildRuntime({ mode: "live", policy: loadPolicy(POLICY, "fixture"), fixturesDir: "fixtures", stateDir: state, env: {}, wallet: FIXTURE_WALLET, inject: { rpc: recorded(), fetch: fixtureFetch(loadHttpFixtures("fixtures")), clock: () => FIXTURE_CLOCK_MS } });
   const config = cfg({ reference_price_usd: null });
 
   // No reference yet: the first run records the price and prepares nothing.

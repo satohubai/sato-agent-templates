@@ -8,12 +8,13 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { readTransaction } from "@satohub/kit";
 import { FIXTURE_WALLET } from "../src/runtime.js";
+import { templatePolicyFile } from "./helpers.js";
 
 const JUPITER_V6 = "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4";
 
 test("npm start -- --mode fixture exits 0, names its refusals, and stops at an unsigned transaction", () => {
   const out = mkdtempSync(join(tmpdir(), "sgs-"));
-  const r = spawnSync("npm", ["start", "--silent", "--", "--mode", "fixture", "--out", out], { encoding: "utf8", timeout: 120_000, env: { ...process.env, SOLANA_RPC_URL: "" } });
+  const r = spawnSync("npm", ["start", "--silent", "--", "--mode", "fixture", "--out", out, "--policy", templatePolicyFile()], { encoding: "utf8", timeout: 120_000, env: { ...process.env, SOLANA_RPC_URL: "" } });
   const text = `${r.stdout}\n${r.stderr}`;
   assert.equal(r.status, 0, text);
   assert.match(text, /REFUSED rule=max_usd_per_day limit=20 observed=\S+/);

@@ -21,7 +21,7 @@
     {
       "id": "platform.fixtures",
       "kind": "package",
-      "description": "The platform runs the fixture command over the shipped recordings (no network, no key) and checks out/report.json against schemas/output.json: exit 0, one unsigned transaction written, the same swap a second time refused by the daily cap and an oversized swap refused by the per-swap cap, each with its rule, limit and observed value."
+      "description": "The platform runs the fixture command over the shipped recordings (no network, no key) and checks out/report.json against schemas/output.json: exit 0, one unsigned transaction written, the same swap once the day's room is used up refused by the daily cap, and an oversized swap refused by the per-swap cap, each with its rule, limit and observed value."
     },
     {
       "id": "package.own",
