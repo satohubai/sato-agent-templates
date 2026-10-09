@@ -1,0 +1,19 @@
+{
+  "schema": "sato.policy/v1",
+  "version": 1,
+  "network": "fork",
+  "allow_chains": ["solana"],
+  "allow_tokens": ["solana:So11111111111111111111111111111111111111112"],
+  "allow_contracts": [],
+  "allow_recipients": [],
+  "allow_venues": [],
+  "max_usd_per_trade": 15,
+  "max_usd_per_day": 20,
+  "max_per_trade": { "solana:So11111111111111111111111111111111111111112": "500000000" },
+  "max_slippage_bps": 100,
+  "intent_ttl_s": 120,
+  "unknown_verdict": "refuse",
+  "require_simulation": true,
+  "human_approval": false,
+  "scan": { "lookalike": "refuse", "token": "refuse_not_canonical", "payto_changed": "caution", "treasury_recipients": "allowlist_only", "hosted_check": false }
+}

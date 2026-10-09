@@ -1,0 +1,107 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://lite-api.jup.ag/swap/v1/swap",
+    "body": {
+      "quoteResponse": {
+        "inputMint": "So11111111111111111111111111111111111111112",
+        "inAmount": "10000000000",
+        "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "outAmount": "1090548886",
+        "otherAmountThreshold": "1085096142",
+        "swapMode": "ExactIn",
+        "slippageBps": 50,
+        "platformFee": {
+          "amount": "1638280",
+          "feeBps": 15
+        },
+        "priceImpactPct": "0",
+        "routePlan": [
+          {
+            "swapInfo": {
+              "ammKey": "GMCJvYGf5Ex2ARiMquaBDqU6iKM8uiEQkB8jCnoNfHpC",
+              "label": "GoonFi V2",
+              "inputMint": "So11111111111111111111111111111111111111112",
+              "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+              "inAmount": "4800000000",
+              "outAmount": "524249462",
+              "updateContextSlot": "454708397"
+            },
+            "percent": 48,
+            "bps": null
+          },
+          {
+            "swapInfo": {
+              "ammKey": "Esq8mSMwJUCt1FivdLBiFrZ29JgcJz5EtjQMrF6GZnLy",
+              "label": "Obsidian",
+              "inputMint": "So11111111111111111111111111111111111111112",
+              "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+              "inAmount": "3700000000",
+              "outAmount": "404110677",
+              "updateContextSlot": "454708397"
+            },
+            "percent": 37,
+            "bps": null
+          },
+          {
+            "swapInfo": {
+              "ammKey": "7yD7gfXv49SFxhx9uTc11dEd7Nj98rGWeYMdZJgheZbG",
+              "label": "Kipseli",
+              "inputMint": "So11111111111111111111111111111111111111112",
+              "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+              "inAmount": "1500000000",
+              "outAmount": "163827027",
+              "updateContextSlot": "454708397"
+            },
+            "percent": 15,
+            "bps": null
+          }
+        ],
+        "contextSlot": 454708397,
+        "timeTaken": 0.05815501,
+        "swapUsdValue": "1091.7287275366480",
+        "mostReliableAmmsQuoteReport": {
+          "info": {
+            "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE": "1091409045",
+            "BZtgQEyS6eXUXicYPHecYQ7PybqodXQMvkjUbP4R8mUU": "1092001819"
+          }
+        },
+        "longtailMarketQuoteReport": null,
+        "useIncurredSlippageForQuoting": null,
+        "useRewards": null,
+        "otherRoutePlans": null,
+        "loadedLongtailToken": false,
+        "instructionVersion": null,
+        "transactionVersion": 0
+      },
+      "userPublicKey": "7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf",
+      "wrapAndUnwrapSol": true,
+      "feeAccount": "HnyyFHhp3LQ6VfRn1AhPHSwboYYQa1HT7REaMfzsA8gx"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "swapTransaction": "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAHC17x+CT/8OjIwwnShkiPoiVL/5hnlxjbc6t0L6WP+7EmuKqlHMzajCpmhw8hWjv8nK9cMR7BEYr5qAy6pkLPvxv5gosLwiYM6R9nyfCQV8JJ30CKMzImvsVoo3T2fm9Qsf217DMrpW6APx/HUnyBBFWWOkAyOzn2kX04CaxrmZqfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADBkZv5SEXMv/srbpyw5vnvIzlu8X3EmssQ5s6QAAAAAR51VvyMcBu7nTFbs5oFQf9sbLeo/SOUQKxzaJWvBOPBt324ddloZPZy+FGzut5rBy0he1fWzeROoz1hX7/AKlsu/qMhdVZ4xCpaCaw+HRxpGQ0faCpBclxQ/DbEbKzLoyXJY9OJInxuz0QKRSODYMLWhOZ2v8QhASOe9jb6fhZtD/6J/XX9kp0wJsfKVh53ksJqzbfyd1RSzIap7OM5ehbZKOoFWHge4ou4DulEXLM5WACsJJGoZu9l4NReegymAgFAAUCwFwVAAUACQMEFwEAAAAAAAkGAAEAEwQHAQEEAgABDAIAAAAA5AtUAgAAAAcBAQERCQYAAwAWBAcBAQYxBwABAwYWAgoGGAAQAQMODxMWGRoUBwcXHAAbEhEBAwcUFQALDQwTFgEDBwQACAgXFC3lF8uXeuOtKgMAAACXADAAA20lAAO1AQ8AAwDkC1QCAAAAlnQAQQAAAAAyAA8HAwEAAAEJAxP2eHSgLfDYc9RFsZ3gHFWXI0g1IoC70DnrAmB8wlf2A9XXmQUT0NapmLUOH7fEvxv51OIjUNwzr2F9cdBp6WMK3CKAhTB7GSlRA+rv8QOF8jHfiLgicL1h0ht4koxA8K2aYb9UuCzjJuzyDsLx0cO+QQICAwIAKw==",
+      "lastValidBlockHeight": 432745880,
+      "prioritizationFeeLamports": 99999,
+      "computeUnitLimit": 1400000,
+      "loadedAccountsDataSize": null,
+      "loadedAccountsDataSizeLimit": null,
+      "transactionVersion": 0,
+      "prioritizationType": {
+        "computeBudget": {
+          "microLamports": 71428,
+          "estimatedMicroLamports": 1034496
+        }
+      },
+      "simulationSlot": null,
+      "dynamicSlippageReport": null,
+      "simulationError": null,
+      "addressesByLookupTableAddress": null,
+      "timeTaken": 0.037115179,
+      "createAtaTimeTaken": 0.017541592
+    }
+  },
+  "recorded_at": "2026-10-09T00:43:18.205Z"
+}

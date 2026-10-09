@@ -1,0 +1,5 @@
+{
+  "note": "Fixture mode and --record only. The price a drop is measured from, and the size of the deliberately oversized cap check. Recorded for the fixed public wallet in src/runtime.ts.",
+  "reference_price_usd": 120,
+  "over_size_sol": "10"
+}

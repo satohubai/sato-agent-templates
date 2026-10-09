@@ -1,0 +1,27 @@
+{
+  "name": "solana-guarded-swapper",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A plain TypeScript agent on Solana that watches a wallet and, when the SOL price falls past a threshold, prepares a Jupiter SOL to USDC swap under a daily cap from policy.json. It simulates the unsigned transaction and stops there. `npm run preflight` checks each installed dependency against its Sato Check receipt on Solana.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/agent.ts",
+    "preflight": "tsx src/preflight/cli.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@satohub/kit": "0.1.1",
+    "@solana/kit": "8.4.0",
+    "viem": "2.57.2"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

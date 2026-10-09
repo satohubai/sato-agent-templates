@@ -1,0 +1,9 @@
+{
+  "wallet": null,
+  "sell_sol": "0.1",
+  "keep_sol": "0.05",
+  "drop_pct": 5,
+  "reference_price_usd": null,
+  "venue": "sato",
+  "slippage_bps": 50
+}

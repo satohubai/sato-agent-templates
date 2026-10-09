@@ -1,0 +1,81 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://lite-api.jup.ag/swap/v1/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v&amount=10000000000&slippageBps=50&platformFeeBps=15"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "inputMint": "So11111111111111111111111111111111111111112",
+      "inAmount": "10000000000",
+      "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+      "outAmount": "1090548886",
+      "otherAmountThreshold": "1085096142",
+      "swapMode": "ExactIn",
+      "slippageBps": 50,
+      "platformFee": {
+        "amount": "1638280",
+        "feeBps": 15
+      },
+      "priceImpactPct": "0",
+      "routePlan": [
+        {
+          "swapInfo": {
+            "ammKey": "GMCJvYGf5Ex2ARiMquaBDqU6iKM8uiEQkB8jCnoNfHpC",
+            "label": "GoonFi V2",
+            "inputMint": "So11111111111111111111111111111111111111112",
+            "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "inAmount": "4800000000",
+            "outAmount": "524249462",
+            "updateContextSlot": "454708397"
+          },
+          "percent": 48,
+          "bps": null
+        },
+        {
+          "swapInfo": {
+            "ammKey": "Esq8mSMwJUCt1FivdLBiFrZ29JgcJz5EtjQMrF6GZnLy",
+            "label": "Obsidian",
+            "inputMint": "So11111111111111111111111111111111111111112",
+            "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "inAmount": "3700000000",
+            "outAmount": "404110677",
+            "updateContextSlot": "454708397"
+          },
+          "percent": 37,
+          "bps": null
+        },
+        {
+          "swapInfo": {
+            "ammKey": "7yD7gfXv49SFxhx9uTc11dEd7Nj98rGWeYMdZJgheZbG",
+            "label": "Kipseli",
+            "inputMint": "So11111111111111111111111111111111111111112",
+            "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+            "inAmount": "1500000000",
+            "outAmount": "163827027",
+            "updateContextSlot": "454708397"
+          },
+          "percent": 15,
+          "bps": null
+        }
+      ],
+      "contextSlot": 454708397,
+      "timeTaken": 0.05815501,
+      "swapUsdValue": "1091.7287275366480",
+      "mostReliableAmmsQuoteReport": {
+        "info": {
+          "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE": "1091409045",
+          "BZtgQEyS6eXUXicYPHecYQ7PybqodXQMvkjUbP4R8mUU": "1092001819"
+        }
+      },
+      "longtailMarketQuoteReport": null,
+      "useIncurredSlippageForQuoting": null,
+      "useRewards": null,
+      "otherRoutePlans": null,
+      "loadedLongtailToken": false,
+      "instructionVersion": null,
+      "transactionVersion": 0
+    }
+  },
+  "recorded_at": "2026-10-09T00:43:18.098Z"
+}

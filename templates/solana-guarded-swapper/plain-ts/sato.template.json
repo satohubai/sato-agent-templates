@@ -1,0 +1,68 @@
+{
+  "schema": "sato.template/v1",
+  "id": "solana-guarded-swapper",
+  "version": "0.1.0",
+  "title": "Solana guarded swapper (plain TypeScript)",
+  "summary": "Watches a Solana wallet and, when the SOL price falls past a threshold, prepares a Jupiter SOL to USDC swap under a daily cap from policy.json. It uses the Sato Kit's Solana actions (solana.read, solana.swap.quote, solana.swap.prepare), simulates the unsigned transaction with simulateTransaction, runs the policy pre-flight, and stops at an unsigned transaction: there is no signer and nothing is broadcast. Fixture mode needs no network and no key. `npm run preflight` checks each installed dependency against its Sato Check receipt on Solana.",
+  "runtime": { "kind": "node", "version": "22", "entrypoint": "src/agent.ts", "package_manager": "npm" },
+  "io_schemas": { "input": "schemas/input.json", "output": "schemas/output.json" },
+  "harness": {
+    "fixture_command": ["npm", "start", "--", "--mode", "fixture"],
+    "fixtures_dir": "fixtures",
+    "output_dir": "out",
+    "max_output_bytes": 262144
+  },
+  "model_policy": null,
+  "declared_secret_names": ["SOLANA_RPC_URL", "SATO_RECEIPTS_RPC_URL"],
+  "capabilities": ["read:solana-balance", "quote:swap", "prepare:swap", "simulate:solana-tx", "read:solana-attestation"],
+  "requested_permissions": ["network:rpc-read", "network:venue-quote", "network:npm-registry-read"],
+  "network": { "install": "registry-only", "test": "none" },
+  "tests": [
+    {
+      "id": "platform.fixtures",
+      "kind": "package",
+      "description": "The platform runs the fixture command over the shipped recordings (no network, no key) and checks out/report.json against schemas/output.json: exit 0, one unsigned transaction written, the same swap a second time refused by the daily cap and an oversized swap refused by the per-swap cap, each with its rule, limit and observed value."
+    },
+    {
+      "id": "package.own",
+      "kind": "package",
+      "advisory": true,
+      "command": ["npm", "test"],
+      "description": "The template's own tests, including npm run preflight against a mocked Solana RPC, a mocked receipts API and mocked tarballs. Recorded, never the verdict."
+    }
+  ],
+  "licenses": [
+    { "name": "solana-guarded-swapper", "license": "MIT", "url": "https://github.com/satohubai/sato-agent-templates" },
+    { "name": "@satohub/kit", "license": "MIT", "url": "https://github.com/satohubai/sato-hub-integrations" },
+    { "name": "@solana/kit", "license": "MIT", "url": "https://github.com/anza-xyz/kit" },
+    { "name": "viem", "license": "MIT", "url": "https://github.com/wevm/viem" }
+  ],
+  "provenance": {
+    "authored_by": "sato-hub",
+    "first_party": true,
+    "migrated_from": null,
+    "notes": "Deterministic over fixtures recorded on Solana mainnet-beta (public RPC, Jupiter, Sato Route). The live mode is opt-in and never runs in the platform's offline test phase. No mode has a signer."
+  },
+  "template": {
+    "framework": "plain-ts",
+    "intents": ["trading", "swap"],
+    "chains": ["solana"],
+    "networks": ["fork", "mainnet"],
+    "default_network": "fork",
+    "slots_filled": { "swap": "jupiter-aggregator" },
+    "swappable": [],
+    "policy_defaults": {
+      "network": "fork",
+      "allow_chains": ["solana"],
+      "allow_tokens": ["solana:So11111111111111111111111111111111111111112"],
+      "max_usd_per_trade": 15,
+      "max_usd_per_day": 20,
+      "max_per_trade": { "solana:So11111111111111111111111111111111111111112": "500000000" },
+      "max_slippage_bps": 100,
+      "unknown_verdict": "refuse",
+      "intent_ttl_s": 120,
+      "scan": { "lookalike": "refuse", "token": "refuse_not_canonical", "payto_changed": "caution", "treasury_recipients": "allowlist_only", "hosted_check": false }
+    },
+    "upstream": { "@satohub/kit": "0.1.1", "@solana/kit": "8.4.0", "viem": "2.57.2", "tsx": "4.23.15", "typescript": "5.9.3" }
+  }
+}
