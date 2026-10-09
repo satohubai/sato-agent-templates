@@ -123,7 +123,7 @@ address = PDA of program 22zoJMtdu4tQc2PzL74ZUT7FrwgB1Udec8DdW4yw4BdG
 
 ### Where the receipt is read from
 
-`receipts.config.json` names the cluster and the Sato Hub credential and schema addresses. **It ships with `credential` and `receipt_schema` set to `null`** until Sato Hub publishes them. While they are `null`, the preflight cannot read the chain, so it asks the Sato Hub API for the same receipt (`GET <api_url>?id=<subject_id>&version=<version>`) and says so in its first lines. If a chain read fails, it falls back to the API for those packages the same way. The API is one call to a Sato Hub server, so it is the weaker source; the output always says which source answered. `--source chain` and `--source api` force one.
+`receipts.config.json` names the cluster and the Sato Hub credential and schema addresses. **It ships with Sato Hub's published mainnet credential and schema.** If `credential` or `receipt_schema` is `null`, the preflight cannot read the chain, so it asks the Sato Hub API for the same receipt (`GET <api_url>?id=<subject_id>&version=<version>`) and says so in its first lines. If a chain read fails, it falls back to the API for those packages the same way. The API is one call to a Sato Hub server, so it is the weaker source; the output always says which source answered. `--source chain` and `--source api` force one.
 
 The Solana RPC is `rpc_url` in the config, or `SATO_RECEIPTS_RPC_URL`, or the cluster's public endpoint.
 

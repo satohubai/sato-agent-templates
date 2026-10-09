@@ -1,8 +1,8 @@
 {
   "schema": "sato.template-receipts/v1",
-  "cluster": "devnet",
-  "credential": null,
-  "receipt_schema": null,
+  "cluster": "mainnet-beta",
+  "credential": "Gi171MmPkEbhRtMaafbHt2VLCc8qwE9jSPuK3FqAGenV",
+  "receipt_schema": "L4hoZipakUAeupujxv9FcJXNfkCRPJyxR6PWFN26rKh",
   "rpc_url": null,
   "api_url": "https://satohub.ai/api/check/receipt",
   "watch": [
