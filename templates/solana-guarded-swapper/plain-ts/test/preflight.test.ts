@@ -307,11 +307,14 @@ test("a tarball the registry no longer serves as locked is flagged and never com
 
 // ── config and output ────────────────────────────────────────────────────────
 
-test("receipts.config.json ships with placeholders: no credential, no schema", () => {
+test("receipts.config.json ships with Sato Hub's published mainnet credential and schema", () => {
   const cfg = parseReceiptsConfig(JSON.parse(readFileSync("receipts.config.json", "utf8")));
-  assert.equal(cfg.credential, null);
-  assert.equal(cfg.receipt_schema, null);
-  assert.equal(chainConfigured(cfg), false);
+  // Published 2026-10-09 (Solana Attestation Service, mainnet): credential "Sato Hub" and
+  // schema sato-build-receipt v1, so preflight reads receipts from chain by default.
+  assert.equal(cfg.cluster, "mainnet-beta");
+  assert.equal(cfg.credential, "Gi171MmPkEbhRtMaafbHt2VLCc8qwE9jSPuK3FqAGenV");
+  assert.equal(cfg.receipt_schema, "L4hoZipakUAeupujxv9FcJXNfkCRPJyxR6PWFN26rKh");
+  assert.equal(chainConfigured(cfg), true);
   assert.equal(cfg.api_url, "https://satohub.ai/api/check/receipt");
   assert.ok(cfg.watch.includes("@satohub/kit"));
 });
