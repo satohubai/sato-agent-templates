@@ -137,7 +137,8 @@ test("the README states the limits it must", () => {
   assert.match(readme, /It has no signer and holds no key/);
   assert.match(readme, /A quote is not a fill/i);
   assert.match(readme, /receipts\.config\.json/);
-  assert.match(readme, /ships with `credential` and `receipt_schema` set to `null`/);
+  assert.match(readme, /ships with Sato Hub's published devnet credential and schema/);
+  assert.match(readme, /If `credential` or `receipt_schema` is `null`, the preflight cannot read the chain/);
   assert.match(readme, /exits \*\*0 unless you pass `--strict`\*\*/);
   assert.match(readme, /--accept-mainnet-risk/);
 });
