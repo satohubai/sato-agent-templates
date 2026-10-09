@@ -1,0 +1,24 @@
+{
+  "schema": "sato.template-receipts/v1",
+  "cluster": "devnet",
+  "credential": null,
+  "receipt_schema": null,
+  "rpc_url": null,
+  "api_url": "https://satohub.ai/api/check/receipt",
+  "watch": [
+    "@satohub/kit",
+    "@solana/kit",
+    "@solana/keys",
+    "@solana/signers",
+    "@solana/transactions",
+    "@solana/addresses",
+    "viem",
+    "ox",
+    "@noble/curves",
+    "@noble/hashes",
+    "@noble/ciphers",
+    "@scure/base",
+    "@scure/bip32",
+    "@scure/bip39"
+  ]
+}

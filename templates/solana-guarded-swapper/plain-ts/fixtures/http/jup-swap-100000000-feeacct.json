@@ -1,0 +1,81 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://lite-api.jup.ag/swap/v1/swap",
+    "body": {
+      "quoteResponse": {
+        "inputMint": "So11111111111111111111111111111111111111112",
+        "inAmount": "100000000",
+        "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+        "outAmount": "10904735",
+        "otherAmountThreshold": "10850212",
+        "swapMode": "ExactIn",
+        "slippageBps": 50,
+        "platformFee": {
+          "amount": "16381",
+          "feeBps": 15
+        },
+        "priceImpactPct": "0",
+        "routePlan": [
+          {
+            "swapInfo": {
+              "ammKey": "82RLfDeEAoYtx3rwZF7igAQC1nGsBBvAMkygB5mcJojZ",
+              "label": "Flux",
+              "inputMint": "So11111111111111111111111111111111111111112",
+              "outputMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+              "inAmount": "100000000",
+              "outAmount": "10921116",
+              "updateContextSlot": "454708379"
+            },
+            "percent": 100,
+            "bps": null
+          }
+        ],
+        "contextSlot": 454708380,
+        "timeTaken": 0.001826723,
+        "swapUsdValue": "10.916102546042620",
+        "mostReliableAmmsQuoteReport": {
+          "info": {
+            "Czfq3xZZDmsdGdUyrNLtRhGc47cXcZtLG4crryfu44zE": "10914155",
+            "BZtgQEyS6eXUXicYPHecYQ7PybqodXQMvkjUbP4R8mUU": "10911734"
+          }
+        },
+        "longtailMarketQuoteReport": null,
+        "useIncurredSlippageForQuoting": null,
+        "useRewards": null,
+        "otherRoutePlans": null,
+        "loadedLongtailToken": false,
+        "instructionVersion": null,
+        "transactionVersion": 0
+      },
+      "userPublicKey": "7PdKhpKz7T39vZHFL1UfcYNDsLvay6hp4KPQq1aUckFf",
+      "wrapAndUnwrapSol": true,
+      "feeAccount": "HnyyFHhp3LQ6VfRn1AhPHSwboYYQa1HT7REaMfzsA8gx"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "swapTransaction": "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAGCl7x+CT/8OjIwwnShkiPoiVL/5hnlxjbc6t0L6WP+7EmuKqlHMzajCpmhw8hWjv8nK9cMR7BEYr5qAy6pkLPvxv5gosLwiYM6R9nyfCQV8JJ30CKMzImvsVoo3T2fm9Qsf217DMrpW6APx/HUnyBBFWWOkAyOzn2kX04CaxrmZqfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADBkZv5SEXMv/srbpyw5vnvIzlu8X3EmssQ5s6QAAAAAR51VvyMcBu7nTFbs5oFQf9sbLeo/SOUQKxzaJWvBOPBt324ddloZPZy+FGzut5rBy0he1fWzeROoz1hX7/AKmMlyWPTiSJ8bs9ECkUjg2DC1oTmdr/EIQEjnvY2+n4WbQ/+if11/ZKdMCbHylYed5LCas238ndUUsyGqezjOXocYQoO94V/KzmJMghHR5a6jeGFtMmHC824uMsZWfGG1cIBQAFAsBcFQAFAAkDBBcBAAAAAAAIBgABAA0EBwEBBAIAAQwCAAAAAOH1BQAAAAAHAQEBEQgGAAMADwQHAQEGFQcAAQMGDwIJBhAACwoMAQMNDwcHDizlF8uXeuOtKgEAAACdoTjIagAAAAABZAABAOH1BQAAAACfZKYAAAAAADIADwcDAQAAAQkBJSnoTmNs+KGOcGvOr9C3sx4wVY6MAnjvS0CdEtsqn+oDiotNBAGJS0o=",
+      "lastValidBlockHeight": 432745863,
+      "prioritizationFeeLamports": 99999,
+      "computeUnitLimit": 1400000,
+      "loadedAccountsDataSize": null,
+      "loadedAccountsDataSizeLimit": null,
+      "transactionVersion": 0,
+      "prioritizationType": {
+        "computeBudget": {
+          "microLamports": 71428,
+          "estimatedMicroLamports": 768088
+        }
+      },
+      "simulationSlot": null,
+      "dynamicSlippageReport": null,
+      "simulationError": null,
+      "addressesByLookupTableAddress": null,
+      "timeTaken": 0.03947842,
+      "createAtaTimeTaken": 0.019419618
+    }
+  },
+  "recorded_at": "2026-10-09T00:43:13.654Z"
+}

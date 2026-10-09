@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "solana-guarded-swapper config.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "wallet": { "type": ["string", "null"], "pattern": "^[1-9A-HJ-NP-Za-km-z]{32,44}$", "description": "Your PUBLIC Solana address: the wallet watched and the fee payer of the prepared transaction. Never a key." },
+    "sell_sol": { "type": "string", "pattern": "^(?:0|[1-9][0-9]{0,6})(?:\\.[0-9]{1,9})?$", "description": "SOL sold per swap." },
+    "keep_sol": { "type": "string", "pattern": "^(?:0|[1-9][0-9]{0,6})(?:\\.[0-9]{1,9})?$", "description": "SOL that stays in the wallet after a swap." },
+    "drop_pct": { "type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 100, "description": "Prepare a swap when SOL is at least this many percent below the reference price." },
+    "reference_price_usd": { "type": ["number", "null"], "exclusiveMinimum": 0, "description": "The price a drop is measured from. Null = the highest price this agent has seen." },
+    "venue": { "type": "string", "enum": ["sato", "direct"], "description": "sato = Sato Route, the labelled default, with a no-Sato-fee Jupiter quote alongside; direct = Jupiter only, no Sato call." },
+    "slippage_bps": { "type": "integer", "minimum": 0, "maximum": 5000 }
+  }
+}

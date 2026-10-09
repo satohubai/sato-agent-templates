@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "solana-guarded-swapper out/report.json",
+  "type": "object",
+  "required": ["schema", "mode", "user_agent", "venue", "network", "watch", "intents", "handoff", "signed", "broadcast"],
+  "properties": {
+    "schema": { "const": "solana-guarded-swapper.report/v1" },
+    "mode": { "type": "string", "enum": ["fixture", "live"] },
+    "user_agent": { "type": "string" },
+    "venue": { "type": "string", "enum": ["sato", "direct"] },
+    "network": { "const": "mainnet" },
+    "signed": { "const": false },
+    "broadcast": { "const": false },
+    "watch": {
+      "type": "object",
+      "required": ["wallet", "price_usd", "fired", "why"],
+      "properties": { "fired": { "type": "boolean" }, "why": { "type": "string" } }
+    },
+    "handoff": { "type": "array", "items": { "type": "string", "pattern": "^unsigned-[0-9]+\\.json$" } },
+    "intents": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "demo_refusal", "intent_id", "action", "summary", "policy_ok", "refusals", "unsigned"],
+        "properties": {
+          "intent_id": { "type": "string", "pattern": "^si_[A-Za-z0-9_-]{43}$" },
+          "policy_ok": { "type": "boolean" },
+          "unsigned": { "type": "object", "required": ["kind"], "properties": { "kind": { "const": "solana_tx" } } },
+          "refusals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["rule", "limit", "observed", "message"],
+              "properties": { "rule": { "type": "string" }, "limit": { "type": "string" }, "observed": { "type": "string" }, "message": { "type": "string" } }
+            }
+          }
+        }
+      }
+    }
+  }
+}
