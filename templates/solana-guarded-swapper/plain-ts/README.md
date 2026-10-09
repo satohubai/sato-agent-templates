@@ -16,7 +16,7 @@ The badge shows the last date this template's nightly checks all came back green
 npx create-sato-agent@0.1 "swap SOL to USDC on Jupiter on Solana when the price drops, under a daily cap"
 ```
 
-Naming Solana in the goal selects this template. `--chain solana` does the same once the `create-sato-agent` release you run lists `solana` as a chain. Then, in the new folder:
+Once the create engine lists this template, naming Solana in the goal selects it ("SOL" or "Solana" is enough). `--chain solana` does the same once the `create-sato-agent` release you run lists `solana` as a chain. Then, in the new folder:
 
 ```sh
 npm ci
