@@ -5,8 +5,8 @@
       "template": "base-guarded-trader",
       "framework": "agentkit",
       "lane": "latest",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -30,10 +30,6 @@
       "history": [
         {
           "date": "2026-09-28",
-          "result": "red"
-        },
-        {
-          "date": "2026-09-28",
           "result": "green"
         },
         {
@@ -147,6 +143,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -154,8 +154,8 @@
       "template": "base-guarded-trader",
       "framework": "agentkit",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -178,10 +178,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -287,6 +283,10 @@
         },
         {
           "date": "2026-10-18",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-19",
           "result": "green"
         }
       ]
@@ -328,8 +328,8 @@
       "template": "base-guarded-trader",
       "framework": "ai-sdk",
       "lane": "latest",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -461,6 +461,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -468,8 +472,8 @@
       "template": "base-guarded-trader",
       "framework": "ai-sdk",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -586,6 +590,10 @@
         },
         {
           "date": "2026-10-18",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-19",
           "result": "green"
         }
       ]
@@ -628,13 +636,13 @@
       "template": "base-guarded-trader",
       "framework": "claude-agent-sdk",
       "lane": "latest",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
-        "@anthropic-ai/claude-agent-sdk": "0.3.302",
+        "@anthropic-ai/claude-agent-sdk": "0.3.303",
         "@anthropic-ai/sdk": "0.135.0",
         "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.1",
@@ -675,10 +683,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -785,6 +789,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -792,8 +800,8 @@
       "template": "base-guarded-trader",
       "framework": "claude-agent-sdk",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -819,10 +827,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -928,6 +932,10 @@
         },
         {
           "date": "2026-10-18",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-19",
           "result": "green"
         }
       ]
@@ -972,8 +980,8 @@
       "template": "base-guarded-trader",
       "framework": "openai-agents",
       "lane": "latest",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1017,10 +1025,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -1127,6 +1131,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -1134,8 +1142,8 @@
       "template": "base-guarded-trader",
       "framework": "openai-agents",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1159,10 +1167,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -1268,6 +1272,10 @@
         },
         {
           "date": "2026-10-18",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-19",
           "result": "green"
         }
       ]
@@ -1362,8 +1370,8 @@
       "template": "base-guarded-trader",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1399,10 +1407,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -1509,6 +1513,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -1516,8 +1524,8 @@
       "template": "base-guarded-trader",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1539,10 +1547,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -1648,6 +1652,10 @@
         },
         {
           "date": "2026-10-18",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-19",
           "result": "green"
         }
       ]
@@ -1688,13 +1696,13 @@
       "template": "persona-agent",
       "framework": "claude-agent-sdk",
       "lane": "latest",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
       "resolved": {
-        "@anthropic-ai/claude-agent-sdk": "0.3.302",
+        "@anthropic-ai/claude-agent-sdk": "0.3.303",
         "@anthropic-ai/sdk": "0.135.0",
         "@modelcontextprotocol/sdk": "1.30.1",
         "@satohub/kit": "0.1.1",
@@ -1735,10 +1743,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -1845,6 +1849,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -1852,8 +1860,8 @@
       "template": "persona-agent",
       "framework": "claude-agent-sdk",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1879,10 +1887,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -1989,6 +1993,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -1996,8 +2004,8 @@
       "template": "research-report",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -2033,10 +2041,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -2143,6 +2147,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -2150,8 +2158,8 @@
       "template": "research-report",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -2173,10 +2181,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -2283,6 +2287,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -2290,11 +2298,11 @@
       "template": "solana-guarded-swapper",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-18",
+      "last_run": "2026-10-19",
       "last_green": "2026-10-12",
       "result": "red",
       "failing_step": "test",
-      "log_excerpt": "# Subtest: watch: a drop at or past the threshold fires, below it does not, and no reference or no price never fires\nok 71 - watch: a drop at or past the threshold fires, below it does not, and no reference or no price never fires\n  ---\n  duration_ms: 0.378477\n  type: 'test'\n  ...\n# Subtest: watch: state round-trips and a corrupt state file is an error, not a silent reset\nok 72 - watch: state round-trips and a corrupt state file is an error, not a silent reset\n  ---\n  duration_ms: 0.735364\n  type: 'test'\n  ...\n# Subtest: spend: totals add up within a UTC day, reset on the next, and persist to the ledger file\nok 73 - spend: totals add up within a UTC day, reset on the next, and persist to the ledger file\n  ---\n  duration_ms: 1.307633\n  type: 'test'\n  ...\n# Subtest: spend: a ledger file that cannot be read makes the total unknown, and the pre-flight refuses on unknown\nok 74 - spend: a ledger file that cannot be read makes the total unknown, and the pre-flight refuses on unknown\n  ---\n  duration_ms: 1.199251\n  type: 'test'\n  ...\n# Subtest: spend: the larger of the kit's executed total and this agent's prepared total counts\nok 75 - spend: the larger of the kit's executed total and this agent's prepared total counts\n  ---\n  duration_ms: 0.543886\n  type: 'test'\n  ...\n1..75\n# tests 75\n# suites 0\n# pass 73\n# fail 1\n# cancelled 0\n# skipped 1\n# todo 0\n# duration_ms 3157.700714\n",
+      "log_excerpt": "# Subtest: watch: a drop at or past the threshold fires, below it does not, and no reference or no price never fires\nok 71 - watch: a drop at or past the threshold fires, below it does not, and no reference or no price never fires\n  ---\n  duration_ms: 0.414031\n  type: 'test'\n  ...\n# Subtest: watch: state round-trips and a corrupt state file is an error, not a silent reset\nok 72 - watch: state round-trips and a corrupt state file is an error, not a silent reset\n  ---\n  duration_ms: 0.849391\n  type: 'test'\n  ...\n# Subtest: spend: totals add up within a UTC day, reset on the next, and persist to the ledger file\nok 73 - spend: totals add up within a UTC day, reset on the next, and persist to the ledger file\n  ---\n  duration_ms: 1.248444\n  type: 'test'\n  ...\n# Subtest: spend: a ledger file that cannot be read makes the total unknown, and the pre-flight refuses on unknown\nok 74 - spend: a ledger file that cannot be read makes the total unknown, and the pre-flight refuses on unknown\n  ---\n  duration_ms: 1.395428\n  type: 'test'\n  ...\n# Subtest: spend: the larger of the kit's executed total and this agent's prepared total counts\nok 75 - spend: the larger of the kit's executed total and this agent's prepared total counts\n  ---\n  duration_ms: 0.609665\n  type: 'test'\n  ...\n1..75\n# tests 75\n# suites 0\n# pass 73\n# fail 1\n# cancelled 0\n# skipped 1\n# todo 0\n# duration_ms 3262.853828\n",
       "resolved": {
         "@satohub/kit": "0.1.1",
         "@solana/kit": "8.5.0",
@@ -2404,6 +2412,10 @@
         {
           "date": "2026-10-18",
           "result": "red"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "red"
         }
       ]
     },
@@ -2411,8 +2423,8 @@
       "template": "solana-guarded-swapper",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -2473,6 +2485,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -2480,8 +2496,8 @@
       "template": "token-launch-prep",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -2567,6 +2583,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -2574,8 +2594,8 @@
       "template": "token-launch-prep",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -2646,6 +2666,10 @@
         },
         {
           "date": "2026-10-18",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-19",
           "result": "green"
         }
       ]
@@ -2678,8 +2702,8 @@
       "template": "treasury-monitor",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -2715,10 +2739,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -2825,6 +2845,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -2832,8 +2856,8 @@
       "template": "treasury-monitor",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -2855,10 +2879,6 @@
           "result": "green"
         },
         {
-          "date": "2026-09-28",
-          "result": "green"
-        },
-        {
           "date": "2026-09-29",
           "result": "green"
         },
@@ -2964,6 +2984,10 @@
         },
         {
           "date": "2026-10-18",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-19",
           "result": "green"
         }
       ]
@@ -3004,8 +3028,8 @@
       "template": "x402-seller",
       "framework": "plain-ts",
       "lane": "latest",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -3135,6 +3159,10 @@
         {
           "date": "2026-10-18",
           "result": "green"
+        },
+        {
+          "date": "2026-10-19",
+          "result": "green"
         }
       ]
     },
@@ -3142,8 +3170,8 @@
       "template": "x402-seller",
       "framework": "plain-ts",
       "lane": "pinned",
-      "last_run": "2026-10-18",
-      "last_green": "2026-10-18",
+      "last_run": "2026-10-19",
+      "last_green": "2026-10-19",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -3258,6 +3286,10 @@
         },
         {
           "date": "2026-10-18",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-19",
           "result": "green"
         }
       ]
