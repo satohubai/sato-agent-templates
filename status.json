@@ -1350,8 +1350,8 @@
       "template": "base-guarded-trader",
       "framework": "plain-ts",
       "lane": "journey",
-      "last_run": "2026-10-14",
-      "last_green": "2026-10-14",
+      "last_run": "2026-10-21",
+      "last_green": "2026-10-21",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1394,6 +1394,10 @@
         },
         {
           "date": "2026-10-14",
+          "result": "green"
+        },
+        {
+          "date": "2026-10-21",
           "result": "green"
         }
       ]
