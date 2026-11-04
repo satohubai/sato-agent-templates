@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { assertPolicyMatchesTemplate } from "./goal-bound.js";
 
 const tpl = JSON.parse(readFileSync("sato.template.json", "utf8"));
 const pkg = JSON.parse(readFileSync("package.json", "utf8"));
@@ -20,9 +21,8 @@ test("sato.template.json upstream pins match the lockfile", { skip: PIN_CHECK_SK
   for (const [name, v] of Object.entries(tpl.template.upstream as Record<string, string>)) assert.equal(lock.packages[`node_modules/${name}`]?.version, v, name);
 });
 
-test("sato.template.json policy_defaults match policy.json", () => {
-  const policy = JSON.parse(readFileSync("policy.json", "utf8"));
-  for (const [k, v] of Object.entries(tpl.template.policy_defaults)) assert.deepEqual(policy[k], v, k);
+test("sato.template.json policy_defaults match policy.json (a generated repo: the goal-bound invariants)", () => {
+  assertPolicyMatchesTemplate(JSON.parse(readFileSync("policy.json", "utf8")));
 });
 
 test("the fixture command in the template is the one CI runs", () => {
