@@ -294,8 +294,8 @@
       "template": "base-guarded-trader",
       "framework": "agentkit",
       "lane": "testnet",
-      "last_run": "2026-11-16",
-      "last_green": "2026-11-16",
+      "last_run": "2026-11-23",
+      "last_green": "2026-11-23",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -339,6 +339,10 @@
         },
         {
           "date": "2026-11-16",
+          "result": "green"
+        },
+        {
+          "date": "2026-11-23",
           "result": "green"
         }
       ]
@@ -645,8 +649,8 @@
       "template": "base-guarded-trader",
       "framework": "ai-sdk",
       "lane": "testnet",
-      "last_run": "2026-11-16",
-      "last_green": "2026-11-16",
+      "last_run": "2026-11-23",
+      "last_green": "2026-11-23",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -691,6 +695,10 @@
         },
         {
           "date": "2026-11-16",
+          "result": "green"
+        },
+        {
+          "date": "2026-11-23",
           "result": "green"
         }
       ]
@@ -1007,8 +1015,8 @@
       "template": "base-guarded-trader",
       "framework": "claude-agent-sdk",
       "lane": "testnet",
-      "last_run": "2026-11-16",
-      "last_green": "2026-11-16",
+      "last_run": "2026-11-23",
+      "last_green": "2026-11-23",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1055,6 +1063,10 @@
         },
         {
           "date": "2026-11-16",
+          "result": "green"
+        },
+        {
+          "date": "2026-11-23",
           "result": "green"
         }
       ]
@@ -1367,8 +1379,8 @@
       "template": "base-guarded-trader",
       "framework": "openai-agents",
       "lane": "testnet",
-      "last_run": "2026-11-16",
-      "last_green": "2026-11-16",
+      "last_run": "2026-11-23",
+      "last_green": "2026-11-23",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1413,6 +1425,10 @@
         },
         {
           "date": "2026-11-16",
+          "result": "green"
+        },
+        {
+          "date": "2026-11-23",
           "result": "green"
         }
       ]
@@ -1787,8 +1803,8 @@
       "template": "base-guarded-trader",
       "framework": "plain-ts",
       "lane": "testnet",
-      "last_run": "2026-11-16",
-      "last_green": "2026-11-16",
+      "last_run": "2026-11-23",
+      "last_green": "2026-11-23",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -1831,6 +1847,10 @@
         },
         {
           "date": "2026-11-16",
+          "result": "green"
+        },
+        {
+          "date": "2026-11-23",
           "result": "green"
         }
       ]
@@ -3069,8 +3089,8 @@
       "template": "token-launch-prep",
       "framework": "plain-ts",
       "lane": "testnet",
-      "last_run": "2026-11-16",
-      "last_green": "2026-11-16",
+      "last_run": "2026-11-23",
+      "last_green": "2026-11-23",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -3105,6 +3125,10 @@
         },
         {
           "date": "2026-11-16",
+          "result": "green"
+        },
+        {
+          "date": "2026-11-23",
           "result": "green"
         }
       ]
@@ -3407,8 +3431,8 @@
       "template": "treasury-monitor",
       "framework": "plain-ts",
       "lane": "testnet",
-      "last_run": "2026-11-16",
-      "last_green": "2026-11-16",
+      "last_run": "2026-11-23",
+      "last_green": "2026-11-23",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -3451,6 +3475,10 @@
         },
         {
           "date": "2026-11-16",
+          "result": "green"
+        },
+        {
+          "date": "2026-11-23",
           "result": "green"
         }
       ]
@@ -3753,8 +3781,8 @@
       "template": "x402-seller",
       "framework": "plain-ts",
       "lane": "testnet",
-      "last_run": "2026-11-16",
-      "last_green": "2026-11-16",
+      "last_run": "2026-11-23",
+      "last_green": "2026-11-23",
       "result": "green",
       "failing_step": null,
       "log_excerpt": null,
@@ -3797,6 +3825,10 @@
         },
         {
           "date": "2026-11-16",
+          "result": "green"
+        },
+        {
+          "date": "2026-11-23",
           "result": "green"
         }
       ]
